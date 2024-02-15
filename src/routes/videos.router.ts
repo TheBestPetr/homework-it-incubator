@@ -1,5 +1,5 @@
 import {Request, Response, Router} from 'express'
-let videos = [
+export let videos = [
     {
         id: 0,
         title: "string",
