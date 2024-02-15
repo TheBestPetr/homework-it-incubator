@@ -23,6 +23,7 @@ videosRouter.get('/', (req: Request, res: Response) => {
         res.send(404)
     }
 })
+
 videosRouter.post('/', (req: Request, res: Response) => {
     let title  = req.body.title;
     if (title.length > 40 || !title || typeof title !== 'string' || !title.trim()) {
@@ -70,6 +71,7 @@ videosRouter.post('/', (req: Request, res: Response) => {
     videos.push(newVideo)
     res.status(201).send(newVideo)
 })
+
 videosRouter.put('/:videoId', (req: Request, res: Response) => {
     let title = req.body.title;
     if (title.length > 40 || !title || typeof title !== 'string' || !title.trim()) {
@@ -113,6 +115,7 @@ videosRouter.put('/:videoId', (req: Request, res: Response) => {
         res.sendStatus(404)
     }
 })
+
 videosRouter.get('/:videoId', (req: Request, res: Response) => {
     const id = +req.params.videoId
     const video = videos.find(v => v.id === id)
@@ -122,6 +125,7 @@ videosRouter.get('/:videoId', (req: Request, res: Response) => {
         res.send(404)
     }
 })
+
 videosRouter.delete('/:videoId', (req: Request, res: Response) => {
     const id = +req.params.videoId
     const newVideo = videos.filter(v => v.id !== id)
