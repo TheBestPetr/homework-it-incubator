@@ -1,4 +1,5 @@
 import {Request, Response, Router} from 'express'
+import {HTTP_STATUSES} from "../HTTP-STATUSES/HTTP.STATUSES";
 export let videos = [
     {
         id: 0,
@@ -18,16 +19,16 @@ export const videosRouter = Router({})
 
 videosRouter.get('/', (req: Request, res: Response) => {
     if(videos) {
-        res.status(200).send(videos)
+        res.status(HTTP_STATUSES.OK_200).send(videos)
     } else {
-        res.send(404)
+        res.send(HTTP_STATUSES.NOT_FOUND_404)
     }
 })
 
 videosRouter.post('/', (req: Request, res: Response) => {
     let title  = req.body.title;
     if (title.length > 40 || !title || typeof title !== 'string' || !title.trim()) {
-        res.status(400).send({
+        res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
             errorsMessages: [{
                 message: 'Incorrect title',
                 field: 'title'
@@ -37,7 +38,7 @@ videosRouter.post('/', (req: Request, res: Response) => {
     }
     let minAgeRestriction = req.body.age;
     if (minAgeRestriction > 19 || minAgeRestriction <= 1) {
-        res.status(400).send({
+        res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
             errorsMessage: [{
                 message: "Incorrect age",
                 field: "age"
@@ -47,7 +48,7 @@ videosRouter.post('/', (req: Request, res: Response) => {
     }
     let author = req.body.author;
     if (!author || author.length > 20 || typeof author !== 'string') {
-        res.status(400).send({
+        res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
             errorsMessage: [{
                 message: "Incorrect author",
                 field: "author"
@@ -69,13 +70,13 @@ videosRouter.post('/', (req: Request, res: Response) => {
         ]
     }
     videos.push(newVideo)
-    res.status(201).send(newVideo)
+    res.status(HTTP_STATUSES.CREATED_201).send(newVideo)
 })
 
 videosRouter.put('/:videoId', (req: Request, res: Response) => {
     let title = req.body.title;
     if (title.length > 40 || !title || typeof title !== 'string' || !title.trim()) {
-        res.status(400).send({
+        res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
             errorsMessages: [{
                 message: 'Incorrect title',
                 field: 'title'
@@ -85,7 +86,7 @@ videosRouter.put('/:videoId', (req: Request, res: Response) => {
     }
     let author = req.body.author;
     if (!author || author.length > 20 || typeof author !== 'string') {
-        res.status(400).send({
+        res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
             errorsMessage: [{
                 message: "Incorrect author",
                 field: "author"
@@ -95,7 +96,7 @@ videosRouter.put('/:videoId', (req: Request, res: Response) => {
     }
     let minAgeRestriction = req.body.age;
     if (minAgeRestriction > 19 || minAgeRestriction <= 1) {
-        res.status(400).send({
+        res.status(HTTP_STATUSES.BAD_REQUEST_400).send({
             errorsMessage: [{
                 message: "Incorrect age",
                 field: "age"
@@ -110,9 +111,9 @@ videosRouter.put('/:videoId', (req: Request, res: Response) => {
         video.id = req.body.id;
         video.author = req.body.author;
         video.age = req.body.age;
-        res.status(204).send(video)
+        res.status(HTTP_STATUSES.NO_CONTENT_204).send(video)
     } else {
-        res.sendStatus(404)
+        res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
     }
 })
 
@@ -122,7 +123,7 @@ videosRouter.get('/:videoId', (req: Request, res: Response) => {
     if (video) {
         res.send(video)
     } else {
-        res.send(404)
+        res.send(HTTP_STATUSES.NOT_FOUND_404)
     }
 })
 
@@ -131,8 +132,8 @@ videosRouter.delete('/:videoId', (req: Request, res: Response) => {
     const newVideo = videos.filter(v => v.id !== id)
     if (newVideo.length < videos.length) {
         videos = newVideo
-        res.send(204)
+        res.send(HTTP_STATUSES.NO_CONTENT_204)
     } else {
-        res.send(404)
+        res.send(HTTP_STATUSES.NOT_FOUND_404)
     }
 })

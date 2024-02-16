@@ -27,7 +27,7 @@ describe('/videos', () => {
     it(`should create new video with correct data`, async () => {
         const createResponse = await request(app)
             .post('/videos')
-            .send({id: new Date(),
+            .send({id: 9999999,
                 title: 'New video',
                 author: 'Ignat',
                 canBeDownloaded: true,
@@ -41,7 +41,7 @@ describe('/videos', () => {
             .expect(201)
             const createdResponse = createResponse.body
             expect(createdResponse).toEqual({
-                id: expect.any(Number),
+                id: 9999999,
                 title: 'New video',
                 author: 'Ignat',
                 canBeDownloaded: true,
@@ -88,19 +88,6 @@ describe('/videos', () => {
                 }
             )
             .expect(204)
-            const createdResponse = createResponse.body
-            expect(createdResponse).toEqual({
-                id: 10,
-                title: 'New video',
-                author: 'Ignat',
-                canBeDownloaded: true,
-                age: 15,
-                createdAt: "2024-02-04T14:33:25.854Z",
-                publicationDate: "2024-02-04T14:33:25.854Z",
-                availableResolutions: [
-                    "P144"
-                ]
-            })
     })
     it('should delete video', async () => {
         request(app)
