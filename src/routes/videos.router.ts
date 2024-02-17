@@ -1,5 +1,6 @@
 import {Request, Response, Router} from 'express'
 import {HTTP_STATUSES} from "../HTTP-STATUSES/HTTP.STATUSES";
+
 export let videos = [
     {
         id: 0,
@@ -121,7 +122,7 @@ videosRouter.get('/:videoId', (req: Request, res: Response) => {
     const id = +req.params.videoId
     const video = videos.find(v => v.id === id)
     if (video) {
-        res.send(video)
+        res.status(HTTP_STATUSES.OK_200).send(video)
     } else {
         res.send(HTTP_STATUSES.NOT_FOUND_404)
     }
@@ -136,4 +137,9 @@ videosRouter.delete('/:videoId', (req: Request, res: Response) => {
     } else {
         res.send(HTTP_STATUSES.NOT_FOUND_404)
     }
+})
+
+videosRouter.delete('/', (req: Request, res: Response) => {
+    videos = [];
+    res.status(HTTP_STATUSES.NO_CONTENT_204)
 })
