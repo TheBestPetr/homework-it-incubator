@@ -139,7 +139,7 @@ videosRouter.delete('/:videoId', (req: Request, res: Response) => {
     }
 })
 
-videosRouter.delete('/', (req: Request, res: Response) => {
+videosRouter.delete('/testing/all-data', (req: Request, res: Response) => {
     videos = [];
     res.status(HTTP_STATUSES.NO_CONTENT_204)
 })
