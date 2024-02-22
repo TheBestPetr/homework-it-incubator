@@ -1,7 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
 import {testingRouter, videosRouter} from "../routes/videos.router";
-import {AvailableResolutionsEnum} from "../enums/AvailableResolutionsEnum";
 
 export const app = express()
 
