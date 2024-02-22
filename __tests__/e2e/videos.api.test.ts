@@ -1,16 +1,17 @@
 import request from 'supertest'
 import {app} from "../../src/settings/setting"
-import {videos} from "../../src/routes/videos.router";
+import {db} from "../../src/video-db/video-db";
+
 
 describe('/videos', () => {
     it('should return 200 and all videos', async () => {
         await request(app)
             .get('/videos')
-            .expect(200, videos)
+            .expect(200, db.videos)
     })
-    it('should return 404 for existing video', async () => {
+    it('should return 404 for not existing video', async () => {
         await request(app)
-            .get('/videos/-1')
+            .get('/videos/10062003')
             .expect(404)
     })
     it(`shouldn't create new video with incorrect data`, async () => {
@@ -19,7 +20,7 @@ describe('/videos', () => {
             .send({
                 id: new Date(),
                 title: 5,
-                author: 'hghghghghghghghghghghgh',
+                author: 0,
                 age: 33
             })
             .expect(400)
@@ -72,7 +73,7 @@ describe('/videos', () => {
             .expect(400)
     })
     it(`should update new video with correct data`, async () => {
-        const createResponse = await request(app)
+        await request(app)
             .put('/videos/0')
             .send({
                     id: 10,
