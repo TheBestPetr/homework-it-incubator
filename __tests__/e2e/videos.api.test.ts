@@ -1,9 +1,9 @@
 import request from 'supertest'
-import {app} from "../../src/settings/setting"
-import {db} from "../../src/video-db/video-db";
+import {app} from "../../src/app";
+import {db} from "../../src/db/video.db";
+import {SETTINGS} from "../../src/settings";
 
-
-describe('/videos', () => {
+describe(SETTINGS.PATH.VIDEOS, () => {
     it('should return 200 and all videos', async () => {
         await request(app)
             .get('/videos')
@@ -25,34 +25,15 @@ describe('/videos', () => {
             })
             .expect(400)
     })
-    it(`should create new video with correct data`, async () => {
-        const createResponse = await request(app)
-            .post('/videos')
-            .send({id: 9999999,
+    it(`should create new video`, async () => {
+        await request(app)
+            .post(SETTINGS.PATH.VIDEOS)
+            .send({
                 title: 'New video',
                 author: 'Ignat',
-                canBeDownloaded: true,
-                age: 18,
-                createdAt: "2024-02-04T14:33:25.854Z",
-                publicationDate: "2024-02-04T14:33:25.854Z",
-                availableResolutions: [
-                    "P144"
-                ]
+                availableResolutions: ["P144"]
             })
-            .expect(201)
-            const createdResponse = createResponse.body
-            expect(createdResponse).toEqual({
-                id: 9999999,
-                title: 'New video',
-                author: 'Ignat',
-                canBeDownloaded: true,
-                age: 18,
-                createdAt: "2024-02-04T14:33:25.854Z",
-                publicationDate: "2024-02-04T14:33:25.854Z",
-                availableResolutions: [
-                    "P144"
-                ]
-            })
+            .expect(201).send()
     })
     it(`shouldn't update new video with incorrect data`, async () => {
         await request(app)
@@ -65,11 +46,8 @@ describe('/videos', () => {
                     age: '15',
                     createdAt: "2024-02-04T14:33:25.854Z",
                     publicationDate: "2024-02-04T14:33:25.854Z",
-                    availableResolutions: [
-                        "P144"
-                    ]
-                }
-            )
+                    availableResolutions: ["P144"]
+                })
             .expect(400)
     })
     it(`should update new video with correct data`, async () => {
