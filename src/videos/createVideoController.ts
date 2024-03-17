@@ -19,13 +19,13 @@ const inputValidation = (video: InputVideoType) => {
 
     if (typeof video.author !== 'string' || video.author.length > 20 || !video.author.trim()) {
         errors.errorsMessages.push({
-            message: 'Incorrect title',
-            field: 'title'
+            message: 'Incorrect author',
+            field: 'author'
         })
     }
 
 
-    for(const resolution of video.availableResolutions) { //массив т
+    for(const resolution of video.availableResolutions) {
         const isInclude = Object.values(Resolutions).includes(resolution)
 
 
@@ -36,8 +36,7 @@ const inputValidation = (video: InputVideoType) => {
             field: 'availableResolutions'
         })
         return errors
-    }
-    }
+    }}
     return errors
 }
 
@@ -60,12 +59,12 @@ export const createVideoController = (req: Request<{}, {}, InputVideoType>, res:
         id: Date.now() + Math.random(),
         title: req.body.title,
         author: req.body.author,
-        canBeDownloaded: true,
+        canBeDownloaded: false,
         minAgeRestriction: null,
         createdAt: createVideoDay,
         publicationDate: addDay(createVideoDay, 1).toISOString(),
         availableResolutions: [...req.body.availableResolutions]
     }
-    db.videos = [...db.videos, newVideo]
+    db.videos.push(newVideo)
     res.status(201).json(newVideo)
 }
