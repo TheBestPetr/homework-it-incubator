@@ -29,6 +29,13 @@ const inputValidation = (video: CreateVideoType) => {
         })
     }
 
+    if (typeof video.canBeDownloaded !== "boolean") {
+        errors.errorsMessages.push({
+            message: 'Incorrect value(only boolean type)',
+            field: 'canBeDownloaded'
+        })
+    }
+
     if(!Array.isArray(video.availableResolutions) || video.availableResolutions.find(p => !Resolutions[p])) {
         errors.errorsMessages.push({
             message: 'Incorrect Resolutions',
@@ -51,7 +58,7 @@ export const updateVideoController = (req: Request<{id: string}, {}, UpdateVideo
         db.videos[videoToUpdate].title = req.body.title
         db.videos[videoToUpdate].author = req.body.author
         db.videos[videoToUpdate].availableResolutions = req.body.availableResolutions
-        db.videos[videoToUpdate].canBeDownloaded = false
+        db.videos[videoToUpdate].canBeDownloaded = req.body.canBeDownloaded
         db.videos[videoToUpdate].minAgeRestriction = req.body.minAgeRestriction
         db.videos[videoToUpdate].publicationDate = new Date().toISOString()
         res.status(204).json(db.videos[videoToUpdate])
