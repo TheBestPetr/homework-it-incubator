@@ -6,7 +6,7 @@ export enum Resolutions {
     P720 = 'P720',
     P1080 = 'P1080',
     P1440 = 'P1440',
-    P2160 = 'P2160',
+    P2160 = 'P2160'
 }
 
 export type OutputVideoType = {
@@ -14,10 +14,10 @@ export type OutputVideoType = {
     title: string
     author: string
     canBeDownloaded: boolean
-    minAgeRestriction: null
+    minAgeRestriction: null | number
     createdAt: string
     publicationDate: string
-    availableResolution: Resolutions[]
+    availableResolutions: Resolutions[]
 }
 
 export type InputVideoType = {
@@ -27,6 +27,15 @@ export type InputVideoType = {
 }
 
 export type CreateVideoType = {
+    title: string
+    author: string
+    availableResolutions: Resolutions[]
+    canBeDownloaded: boolean
+    minAgeRestriction: number | null
+    publicationDate: string
+}
+
+export type UpdateVideoType = {
     title: string
     author: string
     availableResolutions: Resolutions[]

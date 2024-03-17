@@ -6,8 +6,8 @@ export const deleteVideoController = (req: Request, res: Response) => {
     const deletedVideo = db.videos.filter(v => v.id !== id)
     if(db.videos.length > deletedVideo.length) {
         db.videos = deletedVideo
-        res.status(204).json({})
+        res.send(204)
     } else {
-        res.status(404).json()
+        res.send(404)
     }
 }

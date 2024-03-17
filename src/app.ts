@@ -1,6 +1,6 @@
 import express from "express"
 import {SETTINGS} from "./settings";
-import {testingRouter, videosRouter} from "./videos";
+import {testingRouter, videosRouter} from "./videos/router";
 
 export const app = express()
 

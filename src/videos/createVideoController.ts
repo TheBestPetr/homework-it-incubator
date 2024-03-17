@@ -3,6 +3,7 @@ import {InputVideoType, OutputVideoType, Resolutions} from "../input-output-type
 import {OutputErrorsType} from "../input-output-types/outputErrorsType"
 import {VideoDBType} from "../db/video.db.type";
 import {db} from "../db/video.db";
+import {addDay} from "@formkit/tempo";
 
 const inputValidation = (video: InputVideoType) => {
     const errors: OutputErrorsType = {
@@ -23,11 +24,19 @@ const inputValidation = (video: InputVideoType) => {
         })
     }
 
-    if(!Array.isArray(video.availableResolutions) || video.availableResolutions.find(p => Resolutions[p])) {
+
+    for(const resolution of video.availableResolutions) { //массив т
+        const isInclude = Object.values(Resolutions).includes(resolution)
+
+
+
+    if(!isInclude) {
         errors.errorsMessages.push({
             message: 'Incorrect Resolutions',
             field: 'availableResolutions'
         })
+        return errors
+    }
     }
     return errors
 }
@@ -49,13 +58,13 @@ export const createVideoController = (req: Request<{}, {}, InputVideoType>, res:
     const createVideoDay = new Date().toISOString()
     const newVideo: VideoDBType = {
         id: Date.now() + Math.random(),
-        author: req.body.author,
         title: req.body.title,
+        author: req.body.author,
         canBeDownloaded: true,
         minAgeRestriction: null,
         createdAt: createVideoDay,
-        publicationDate: createVideoDay/*.setDate(1)*/,
-        availableResolution: req.body.availableResolutions
+        publicationDate: addDay(createVideoDay, 1).toISOString(),
+        availableResolutions: [...req.body.availableResolutions]
     }
     db.videos = [...db.videos, newVideo]
     res.status(201).json(newVideo)

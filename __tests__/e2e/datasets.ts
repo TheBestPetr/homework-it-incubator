@@ -1,5 +1,5 @@
 import {VideoDBType} from "../../src/db/video.db.type";
-import {Resolutions} from "../../src/enums/AvailableResolutionsEnum";
+import {Resolutions} from "../../src/input-output-types/outputVideoType";
 import {DBType} from "../../src/db/video.db";
 
 export const video1: VideoDBType = {
@@ -10,7 +10,7 @@ export const video1: VideoDBType = {
     minAgeRestriction: null,
     createdAt: new Date().toISOString(),
     publicationDate: new Date().toISOString(),
-    availableResolution: [Resolutions.P1080]
+    availableResolutions: [Resolutions.P1440]
 }
 
 export const dataset1: DBType = {
