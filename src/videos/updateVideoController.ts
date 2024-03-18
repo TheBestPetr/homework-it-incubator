@@ -64,7 +64,7 @@ export const updateVideoController = (req: Request<{id: string}, {}, UpdateVideo
         return
     }
     const videoToUpdate = db.videos.findIndex(v => v.id === +req.params.id)
-    if (videoToUpdate) {
+    if (videoToUpdate !== -1) {
         db.videos[videoToUpdate].title = req.body.title
         db.videos[videoToUpdate].author = req.body.author
         db.videos[videoToUpdate].availableResolutions = req.body.availableResolutions
