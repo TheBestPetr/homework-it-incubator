@@ -70,7 +70,7 @@ export const updateVideoController = (req: Request<{id: string}, {}, UpdateVideo
         db.videos[videoToUpdate].availableResolutions = req.body.availableResolutions
         db.videos[videoToUpdate].canBeDownloaded = req.body.canBeDownloaded || false
         db.videos[videoToUpdate].minAgeRestriction = req.body.minAgeRestriction
-        db.videos[videoToUpdate].publicationDate = new Date().toISOString()
+        db.videos[videoToUpdate].publicationDate = req.body.publicationDate || new Date().toISOString()
         res.status(204).json(db.videos[videoToUpdate])
     } else {
         res.sendStatus(404)
