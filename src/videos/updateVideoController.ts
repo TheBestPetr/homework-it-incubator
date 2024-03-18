@@ -18,7 +18,7 @@ const inputValidation = (video: CreateVideoType) => {
     if (typeof video.author !== 'string' || video.author.length > 20 || !video.author.trim()) {
         errors.errorsMessages.push({
             message: 'Incorrect title',
-            field: 'title'
+            field: 'author'
         })
     }
 
