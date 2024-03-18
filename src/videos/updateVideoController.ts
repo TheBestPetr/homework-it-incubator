@@ -29,11 +29,22 @@ const inputValidation = (video: CreateVideoType) => {
         })
     }
 
-    if (typeof video.canBeDownloaded !== "boolean") {
-        errors.errorsMessages.push({
-            message: 'Incorrect value(only boolean type)',
-            field: 'canBeDownloaded'
-        })
+    if (video.canBeDownloaded) {
+        if (typeof video.canBeDownloaded !== "boolean") {
+            errors.errorsMessages.push({
+                message: 'Incorrect value(only boolean type)',
+                field: 'canBeDownloaded'
+            })
+        }
+    }
+
+    if (video.publicationDate) {
+        if(typeof video.publicationDate !== "string") {
+            errors.errorsMessages.push({
+                message: 'Incorrect date',
+                field: 'publicationDate'
+            })
+        }
     }
 
     if(!Array.isArray(video.availableResolutions) || video.availableResolutions.find(p => !Resolutions[p])) {
@@ -52,17 +63,16 @@ export const updateVideoController = (req: Request<{id: string}, {}, UpdateVideo
         res.status(400).json(errors)
         return
     }
-    const id = +req.params.id
-    const videoToUpdate = db.videos.findIndex(v => v.id === id)
+    const videoToUpdate = db.videos.findIndex(v => v.id === +req.params.id)
     if (videoToUpdate) {
         db.videos[videoToUpdate].title = req.body.title
         db.videos[videoToUpdate].author = req.body.author
         db.videos[videoToUpdate].availableResolutions = req.body.availableResolutions
-        db.videos[videoToUpdate].canBeDownloaded = req.body.canBeDownloaded
+        db.videos[videoToUpdate].canBeDownloaded = req.body.canBeDownloaded || false
         db.videos[videoToUpdate].minAgeRestriction = req.body.minAgeRestriction
         db.videos[videoToUpdate].publicationDate = new Date().toISOString()
         res.status(204).json(db.videos[videoToUpdate])
     } else {
-        res.status(404).json()
+        res.sendStatus(404)
     }
 }

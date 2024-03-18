@@ -7,6 +7,6 @@ export const findVideoController = (req: Request<{id: string}>, res: Response<Ou
     if(video) {
         res.status(200).json(video)
     } else {
-        res.status(404).json({})
+        res.send(404)
     }
 }
