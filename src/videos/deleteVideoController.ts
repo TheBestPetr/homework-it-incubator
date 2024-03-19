@@ -1,9 +1,9 @@
 import {Request, Response} from "express"
-import {db} from "../db/video.db"
+import {db} from "../db/db"
 
-export const deleteVideoController = (req: Request, res: Response) => {
-    const id = +req.params.id
-    const deletedVideo = db.videos.filter(v => v.id !== id)
+export const DeleteVideoController = (req: Request<{id: string}>,
+                                      res: Response) => {
+    const deletedVideo = db.videos.filter(v => v.id !== +req.params.id)
     if(db.videos.length > deletedVideo.length) {
         db.videos = deletedVideo
         res.send(204)

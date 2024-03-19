@@ -1,8 +1,9 @@
 import {Request, Response} from "express"
-import {db} from "../db/video.db"
-import {OutputVideoType} from "../input-output-types/outputVideoType";
+import {db} from "../db/db"
+import {VideoType} from "../input-output-types/videoType";
 
-export const getVideosController = (req: Request, res: Response<OutputVideoType[]>) => {
+export const GetVideosController = (req: Request,
+                                    res: Response<VideoType[]>) => {
     if (db.videos) {
         res.status(200).json(db.videos)
     } else {

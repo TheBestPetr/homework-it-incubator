@@ -9,7 +9,7 @@ export enum Resolutions {
     P2160 = 'P2160'
 }
 
-export type OutputVideoType = {
+export type VideoType = {
     id: number
     title: string
     author: string

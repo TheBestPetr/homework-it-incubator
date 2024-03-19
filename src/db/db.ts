@@ -1,11 +1,15 @@
-import {VideoDBType} from "./video.db.type";
+import {BlogDBType, PostDBType, VideoDbType} from "./db.type";
 
 export type DBType = {
-    videos: VideoDBType[]
+    videos: VideoDbType[]
+    blogs: BlogDBType[]
+    posts: PostDBType[]
 }
 
 export const db: DBType = {
-    videos: []
+    videos: [],
+    blogs: [],
+    posts: []
 }
 
 export const setDB = (dataset?: Partial<DBType>) => {

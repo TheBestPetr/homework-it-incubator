@@ -1,6 +1,6 @@
 import request from 'supertest'
 import {app} from "../../src/app";
-import {db} from "../../src/db/video.db";
+import {db} from "../../src/db/db";
 import {SETTINGS} from "../../src/settings";
 
 describe(SETTINGS.PATH.VIDEOS, () => {

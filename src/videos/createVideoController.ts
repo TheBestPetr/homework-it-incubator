@@ -1,12 +1,12 @@
 import {Request, Response} from "express"
-import {InputVideoType, OutputVideoType, Resolutions} from "../input-output-types/outputVideoType"
-import {OutputErrorsType} from "../input-output-types/outputErrorsType"
-import {VideoDBType} from "../db/video.db.type";
-import {db} from "../db/video.db";
+import {InputVideoType, VideoType, Resolutions} from "../input-output-types/videoType"
+import {ErrorsType} from "../input-output-types/errorsType"
+import {VideoDbType} from "../db/db.type";
+import {db} from "../db/db";
 import {addDay} from "@formkit/tempo";
 
 const inputValidation = (video: InputVideoType) => {
-    const errors: OutputErrorsType = {
+    const errors: ErrorsType = {
         errorsMessages: []
     }
 
@@ -48,14 +48,15 @@ export type QueryType = {
     search?: string
 }
 
-export const createVideoController = (req: Request<{}, {}, InputVideoType>, res: Response<OutputVideoType | OutputErrorsType>) => {
+export const CreateVideoController = (req: Request<{}, {}, InputVideoType>,
+                                      res: Response<VideoType | ErrorsType>) => {
     const errors = inputValidation(req.body)
     if (errors.errorsMessages.length) {
         res.status(400).json(errors)
         return
     }
     const createVideoDay = new Date().toISOString()
-    const newVideo: VideoDBType = {
+    const newVideo: VideoDbType = {
         id: Date.now() + Math.random(),
         title: req.body.title,
         author: req.body.author,

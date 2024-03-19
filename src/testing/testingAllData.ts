@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
-import {db} from "../db/video.db";
+import {db} from "../db/db";
 
-export const testingAllData = (req: Request, res: Response) => {
+export const TestingAllData = (req: Request, res: Response) => {
     db.videos = []
     res.send(204)
 }

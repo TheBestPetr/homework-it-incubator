@@ -1,10 +1,10 @@
 import {Request, Response} from "express";
-import {CreateVideoType, OutputVideoType, Resolutions, UpdateVideoType} from "../input-output-types/outputVideoType";
-import {OutputErrorsType} from "../input-output-types/outputErrorsType";
-import {db} from "../db/video.db";
+import {CreateVideoType, VideoType, Resolutions, UpdateVideoType} from "../input-output-types/videoType";
+import {ErrorsType} from "../input-output-types/errorsType";
+import {db} from "../db/db";
 
 const inputValidation = (video: CreateVideoType) => {
-    const errors: OutputErrorsType = {
+    const errors: ErrorsType = {
         errorsMessages: []
     }
 
@@ -56,8 +56,8 @@ const inputValidation = (video: CreateVideoType) => {
     return errors
 }
 
-export const updateVideoController = (req: Request<{id: string}, {}, UpdateVideoType>,
-                                      res: Response<OutputVideoType | OutputErrorsType>) => {
+export const UpdateVideoController = (req: Request<{id: string}, {}, UpdateVideoType>,
+                                      res: Response<VideoType | ErrorsType>) => {
     const errors = inputValidation(req.body)
     if(errors.errorsMessages.length) {
         res.status(400).json(errors)
