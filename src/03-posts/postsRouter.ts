@@ -11,12 +11,12 @@ import {
     postTitleValidator
 } from "../middlewares/postsValidationMiddleware";
 import {authMiddleware} from "../middlewares/authMiddleware";
-import {validationResultMiddleware} from "../middlewares/errorsValidationMiddleware";
+//import {errorsValidationResultMiddleware} from "../middlewares/errorsValidationMiddleware";
 
 export const postsRouter = Router()
 
 postsRouter.get('/', GetPostsController)
-postsRouter.post('/', authMiddleware, postTitleValidator, postShortDescriptionValidator, postContentValidator, /*postBlogIdValidator,*/ validationResultMiddleware, CreatePostController)
+postsRouter.post('/', authMiddleware, postTitleValidator, postShortDescriptionValidator, postContentValidator, /*postBlogIdValidator, errorsValidationResultMiddleware,*/ CreatePostController)
 postsRouter.get('/:id', FindPostController)
-postsRouter.put('/:id', authMiddleware, postTitleValidator, postShortDescriptionValidator, postContentValidator, /*postBlogIdValidator,*/ validationResultMiddleware, UpdatePostController)
+postsRouter.put('/:id', authMiddleware, postTitleValidator, postShortDescriptionValidator, postContentValidator, /*postBlogIdValidator, errorsValidationResultMiddleware,*/ UpdatePostController)
 postsRouter.delete('/:id', authMiddleware, DeletePostController)

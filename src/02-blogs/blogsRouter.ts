@@ -6,12 +6,12 @@ import {UpdateBlogController} from "./updateBlogController";
 import {DeleteBlogController} from "./deleteBlogController";
 import {blogDescriptionValidator, blogNameValidator, blogWebsiteUrlValidator} from "../middlewares/blogsValidationMiddleware";
 import {authMiddleware} from "../middlewares/authMiddleware";
-import {validationResultMiddleware} from "../middlewares/errorsValidationMiddleware";
+//import {errorsValidationResultMiddleware} from "../middlewares/errorsValidationMiddleware";
 
 export const blogsRouter = Router()
 
 blogsRouter.get('/', GetBlogsController)
-blogsRouter.post('/', authMiddleware, blogNameValidator, blogDescriptionValidator, blogWebsiteUrlValidator, validationResultMiddleware, CreateBlogController)
+blogsRouter.post('/', authMiddleware, blogNameValidator, blogDescriptionValidator, blogWebsiteUrlValidator, /*errorsValidationResultMiddleware,*/ CreateBlogController)
 blogsRouter.get('/:id', FindBlogController)
-blogsRouter.put('/:id', authMiddleware, blogNameValidator, blogDescriptionValidator, blogWebsiteUrlValidator, validationResultMiddleware, UpdateBlogController)
+blogsRouter.put('/:id', authMiddleware, blogNameValidator, blogDescriptionValidator, blogWebsiteUrlValidator, /*errorsValidationResultMiddleware,*/ UpdateBlogController)
 blogsRouter.delete('/:id', authMiddleware, DeleteBlogController)
