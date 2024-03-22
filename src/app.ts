@@ -1,9 +1,9 @@
 import express from "express"
 import {SETTINGS} from "./settings";
-import {videosRouter} from "./videos/videosRouter";
+import {videosRouter} from "./01-videos/videosRouter";
 import {testingRouter} from "./testing/testingRouter";
-import {blogsRouter} from "./blogs/blogsRouter";
-import {postsRouter} from "./posts/postsRouter";
+import {blogsRouter} from "./02-blogs/blogsRouter";
+import {postsRouter} from "./03-posts/postsRouter";
 
 export const app = express()
 
@@ -14,6 +14,7 @@ app.get('/', (req, res) => {
 })
 
 app.use(SETTINGS.PATH.VIDEOS, videosRouter)
-app.use(SETTINGS.PATH.TESTING, testingRouter)
+
 app.use(SETTINGS.PATH.BLOGS, blogsRouter)
 app.use(SETTINGS.PATH.POSTS, postsRouter)
+app.use(SETTINGS.PATH.TESTING, testingRouter)

@@ -1,13 +1,13 @@
 import {Request, Response} from "express";
-import {BlogType} from "../input-output-types/blogType";
+import {BlogType} from "../04-input-output-types/blogType";
 import {db} from "../db/db";
 
 export const FindBlogController = (req: Request<{id: string}>,
                                    res: Response<BlogType | {}>) => {
     const blog = db.blogs.findIndex(b => b.id === req.params.id)
-    if (blog) {
-        res.status(200).json(blog)
+    if (blog !== -1) {
+        res.status(200).json(db.blogs[blog])
     } else {
-        res.status(404)
+        res.sendStatus(404)
     }
 }

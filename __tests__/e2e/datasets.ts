@@ -1,5 +1,5 @@
 import {DbType} from "../../src/db/db.type";
-import {Resolutions} from "../../src/input-output-types/videoType";
+import {Resolutions} from "../../src/04-input-output-types/videoType";
 import {DBType} from "../../src/db/db";
 
 export const video1: DbType = {

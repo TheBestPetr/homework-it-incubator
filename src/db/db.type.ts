@@ -1,4 +1,4 @@
-import {Resolutions} from "../input-output-types/videoType";
+import {Resolutions} from "../04-input-output-types/videoType";
 
 
 export type VideoDbType = {

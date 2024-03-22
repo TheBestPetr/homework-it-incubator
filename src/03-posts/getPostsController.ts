@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import {PostType} from "../input-output-types/postType";
+import {PostType} from "../04-input-output-types/postType";
 import {db} from "../db/db";
 
 export const GetPostsController = (req: Request,

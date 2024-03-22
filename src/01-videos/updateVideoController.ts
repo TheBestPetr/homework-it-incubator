@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
-import {CreateVideoType, VideoType, Resolutions, UpdateVideoType} from "../input-output-types/videoType";
-import {ErrorsType} from "../input-output-types/errorsType";
+import {CreateVideoType, VideoType, Resolutions, UpdateVideoType} from "../04-input-output-types/videoType";
+import {ErrorsType} from "../04-input-output-types/errorsType";
 import {db} from "../db/db";
 
 const inputValidation = (video: CreateVideoType) => {

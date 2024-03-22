@@ -4,7 +4,7 @@ import {db} from "../../src/db/db";
 import {SETTINGS} from "../../src/settings";
 
 describe(SETTINGS.PATH.VIDEOS, () => {
-    it('should return 200 and all videos', async () => {
+    it('should return 200 and all 01-videos', async () => {
         await request(app)
             .get('/videos')
             .expect(200, db.videos)
