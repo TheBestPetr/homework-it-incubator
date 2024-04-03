@@ -1,4 +1,4 @@
-import {DbType} from "../../src/db/db.type";
+import {DbType} from "../../src/db/video-db-type";
 import {Resolutions} from "../../src/04-input-output-types/videoType";
 import {DBType} from "../../src/db/db";
 

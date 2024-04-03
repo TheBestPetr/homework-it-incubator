@@ -1,4 +1,6 @@
-import {BlogDBType, PostDBType, VideoDbType} from "./db.type";
+import {VideoDbType} from "./video-db-type";
+import {BlogDBType} from "./blog-db-type";
+import {PostDBType} from "./post-db-type";
 
 export type DBType = {
     videos: VideoDbType[]

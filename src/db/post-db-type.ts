@@ -1,4 +1,4 @@
-export type PostType = {
+export type PostDBType = {
     id: string
     title: string
     shortDescription: string
@@ -6,11 +6,4 @@ export type PostType = {
     blogId: string
     blogName: string
     createdAt: string
-}
-
-export type InputPostType = {
-    title: string
-    shortDescription: string
-    content: string
-    blogId: string
 }
