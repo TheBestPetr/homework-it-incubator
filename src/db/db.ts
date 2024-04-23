@@ -17,7 +17,11 @@ export const db: DBType = {
 export const setDB = (dataset?: Partial<DBType>) => {
     if(!dataset) {
         db.videos = []
+        db.blogs = []
+        db.posts = []
         return
     }
     db.videos = dataset.videos || db.videos
+    db.blogs = dataset.blogs || db.blogs
+    db.posts = dataset.posts || db.posts
 }

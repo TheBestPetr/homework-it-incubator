@@ -1,9 +1,12 @@
 import {Request, Response} from "express";
 import {db} from "../db/db";
+import {blogCollection, postCollection} from "../db/mongo-db";
 
 export const TestingAllData = (req: Request, res: Response) => {
     db.videos = []
     db.blogs = []
     db.posts = []
-    res.send(204)
+    blogCollection.deleteMany()
+    postCollection.deleteMany()
+    res.sendStatus(204)
 }

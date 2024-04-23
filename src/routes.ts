@@ -1,6 +1,6 @@
 import {Express} from "express";
 import {SETTINGS} from "./settings";
-import {blogsRouter} from "./blogs/blogsRouter";
+import {blogsRouter} from "./02-blogs/blogsRouter";
 import {postsRouter} from "./03-posts/postsRouter";
 import {testingRouter} from "./testing/testingRouter";
 import {videosRouter} from "./01-videos/videosRouter";

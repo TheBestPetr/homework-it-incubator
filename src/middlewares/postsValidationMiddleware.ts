@@ -1,5 +1,4 @@
 import {body} from "express-validator";
-//import {db} from "../db/db";
 
 export const postTitleValidator = body('title')
     .isString()
@@ -13,4 +12,3 @@ export const postContentValidator = body('content')
     .isString()
     .isLength({min: 1, max: 1000})
     //.withMessage({errorsMessages: [{message: 'Incorrect content', field: 'content'}]})
-//export const postBlogIdValidator = body('blogId').isString().equals(db.blogs.findIndex(b => b.id === 'blogId').toString())
