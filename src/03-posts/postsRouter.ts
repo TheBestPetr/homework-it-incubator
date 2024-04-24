@@ -6,7 +6,7 @@ import {
     updatePostController
 } from "./controllers/postsController";
 import {
-   // postBlogIdValidator,
+    // postBlogIdValidator,
     postContentValidator,
     postShortDescriptionValidator,
     postTitleValidator

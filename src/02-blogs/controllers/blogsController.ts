@@ -11,6 +11,10 @@ export const getBlogsController = async (req: Request,
 
 export const findBlogController = async (req: Request<{id: string}>,
                                          res: Response<BlogType | {}>) => {
+    if (!ObjectId.isValid(req.params.id)) {
+        res.status(404).send()
+        return
+    }
     const foundBlog = await BlogsMongoDBRepository.findById(req.params.id)
     if (foundBlog) {
         res.status(200).json(foundBlog)
@@ -27,6 +31,10 @@ export const createBlogController = async (req: Request<{}, {}, InputBlogType>,
 
 export const updateBlogController = async (req: Request<{id: string}, {}, InputBlogType>,
                                            res: Response<BlogType>) => {
+    if (!ObjectId.isValid(req.params.id)) {
+        res.status(404).send()
+        return
+    }
     const updatedBlog = await BlogsMongoDBRepository.update(req.params.id, req.body)
     if (updatedBlog) {
         res.sendStatus(204)
@@ -37,6 +45,10 @@ export const updateBlogController = async (req: Request<{id: string}, {}, InputB
 
 export const deleteBlogController = async (req: Request<{id: string}>,
                                            res: Response) => {
+    if (!ObjectId.isValid(req.params.id)) {
+        res.status(404).send()
+        return
+    }
     const isDelete = await BlogsMongoDBRepository.delete(req.params.id)
     if (isDelete) {
         res.sendStatus(204)

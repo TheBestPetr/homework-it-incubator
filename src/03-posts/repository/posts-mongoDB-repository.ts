@@ -11,31 +11,39 @@ export const PostsMongoDBRepository = {
         const objId = new ObjectId(id)
         const post = await postCollection.findOne({_id: objId})
         if (post) {
-            return post
+            const {_id, ...result} = post
+            return {...result, id: _id}
         } else {
             return null
         }
     },
 
-     async create(input: InputPostType, name: string): Promise<PostType> {
-        const newPost: PostType = {
-                 _id: new ObjectId(),
-                 ...input,
-                 blogId: new ObjectId(input.blogId),
-                 blogName: name,
-                // createdAt: new Date().toISOString()
-             }
-             await postCollection.insertOne(newPost)
-             return newPost
-     },
+    async create(input: InputPostType, name: string): Promise<PostType> {
+        const createdPost: PostType = {
+            id: new ObjectId(),
+            ...input,
+            blogId: new ObjectId(input.blogId),
+            blogName: name,
+            //createdAt: new Date().toISOString()
+        }
+        const insertedPost = await postCollection.insertOne(createdPost)
+        return {
+            id: insertedPost.insertedId,
+            title: createdPost.title,
+            shortDescription: createdPost.shortDescription,
+            content: createdPost.content,
+            blogId: createdPost.blogId,
+            blogName: createdPost.blogName
+        }
+    },
 
     async update(id: string, input: InputPostType): Promise<boolean> {
         const ObjId = new ObjectId(id)
-        const blogUpd = {
-            ...input,
-            blogId: new ObjectId(input.blogId)
-        }
-        const result = await postCollection.updateOne({_id: ObjId}, {$set: {...blogUpd}})
+        // const blogUpd = {
+        //     ...input,
+        //     blogId: new ObjectId(input.blogId)
+        // }
+        const result = await postCollection.updateOne({_id: ObjId}, {$set: {...input, blogId: new ObjectId(input.blogId)}})
         return !!result.matchedCount
     },
 

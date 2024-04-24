@@ -1,6 +1,7 @@
 import {BlogType, InputBlogType} from "../../04-input-output-types/blogType";
 import {blogCollection} from "../../db/mongo-db";
 import {ObjectId} from "mongodb";
+import {BlogDBType} from "../../db/blog-db-type";
 
 export const BlogsMongoDBRepository = {
     async find() {
@@ -11,24 +12,30 @@ export const BlogsMongoDBRepository = {
         const objId = new ObjectId(id)
         const blog = await blogCollection.findOne({_id: objId})
         if (blog) {
-            return blog
+            const {_id, ...result} = blog
+            return {...result, id: _id}
         } else {
             return null
         }
     },
 
     async create(input: InputBlogType): Promise<BlogType> {
-        const newBlog: BlogType = {
+        const createdBlog: BlogDBType = {
             id: new ObjectId(),
             ...input,
             //createdAt: new Date().toISOString(),
             //isMembership: false
         }
-        await blogCollection.insertOne(newBlog)
-        return newBlog
+        const insertedBlog = await blogCollection.insertOne(createdBlog)
+        return {
+                id: insertedBlog.insertedId,
+                name: createdBlog.name,
+                description: createdBlog.description,
+                websiteUrl: createdBlog.websiteUrl
+            }
     },
 
-    async update(id: string ,input: InputBlogType): Promise<boolean> {
+    async update(id: string, input: InputBlogType): Promise<boolean> {
         const objId = new ObjectId(id)
         const result = await blogCollection.updateOne({_id: objId}, {$set: {...input,}})
         return !!result.matchedCount

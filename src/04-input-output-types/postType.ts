@@ -1,7 +1,7 @@
 import {ObjectId} from "mongodb";
 
 export type PostType = {
-    id: string
+    id: ObjectId
     title: string
     shortDescription: string
     content: string
