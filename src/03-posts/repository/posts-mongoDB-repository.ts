@@ -39,11 +39,12 @@ export const PostsMongoDBRepository = {
 
     async update(id: string, input: InputPostType): Promise<boolean> {
         const ObjId = new ObjectId(id)
-        // const blogUpd = {
-        //     ...input,
-        //     blogId: new ObjectId(input.blogId)
-        // }
-        const result = await postCollection.updateOne({_id: ObjId}, {$set: {...input, blogId: new ObjectId(input.blogId)}})
+        const result = await postCollection.updateOne({_id: ObjId}, {
+            $set: {
+                ...input,
+                blogId: new ObjectId(input.blogId)
+            }
+        })
         return !!result.matchedCount
     },
 

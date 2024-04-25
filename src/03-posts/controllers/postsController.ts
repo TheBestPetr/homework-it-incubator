@@ -49,6 +49,10 @@ export const updatePostController = async (req: Request<{ id: string }, {}, Inpu
         res.status(404).send()
         return
     }
+    if (!ObjectId.isValid(req.body.blogId)) {
+        res.status(400).send()
+        return
+    }
     const updatedPost = await PostsMongoDBRepository.update(req.params.id, req.body)
     if (updatedPost) {
         res.sendStatus(204)

@@ -1,12 +1,13 @@
 import {Router} from "express"
 import {
-    createPostController, deletePostController,
+    createPostController,
+    deletePostController,
     findPostController,
     getPostsController,
     updatePostController
 } from "./controllers/postsController";
 import {
-    // postBlogIdValidator,
+    postBlogIdValidator,
     postContentValidator,
     postShortDescriptionValidator,
     postTitleValidator
@@ -17,7 +18,7 @@ import {errorsValidationResultMiddleware} from "../middlewares/errorsValidationM
 export const postsRouter = Router()
 
 postsRouter.get('/', getPostsController)
-postsRouter.post('/', authMiddleware, postTitleValidator, postShortDescriptionValidator, postContentValidator, /*postBlogIdValidator,*/ errorsValidationResultMiddleware, createPostController)
+postsRouter.post('/', authMiddleware, postTitleValidator, postShortDescriptionValidator, postContentValidator, postBlogIdValidator, errorsValidationResultMiddleware, createPostController)
 postsRouter.get('/:id', findPostController)
-postsRouter.put('/:id', authMiddleware, postTitleValidator, postShortDescriptionValidator, postContentValidator, /*postBlogIdValidator,*/ errorsValidationResultMiddleware, updatePostController)
+postsRouter.put('/:id', authMiddleware, postTitleValidator, postShortDescriptionValidator, postContentValidator, postBlogIdValidator, errorsValidationResultMiddleware, updatePostController)
 postsRouter.delete('/:id', authMiddleware, deletePostController)
