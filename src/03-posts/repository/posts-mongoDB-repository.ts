@@ -1,39 +1,56 @@
-import {InputPostType, PostType} from "../../04-input-output-types/postType";
+import {InputPostType, OutputPostType} from "../../04-input-output-types/postType";
 import {postCollection} from "../../db/mongo-db";
 import {ObjectId} from "mongodb";
+import {PostDBType} from "../../db/post-db-type";
 
 export const PostsMongoDBRepository = {
     async find() {
-        return await postCollection.find().toArray()
+        const posts = await postCollection.find().toArray()
+        return posts.map(post => ({
+            id: post._id.toString(),
+            title: post.title,
+            shortDescription: post.shortDescription,
+            content: post.content,
+            blogId: post.blogId,
+            blogName: post.blogName
+        }))
     },
 
-    async findById(id: string): Promise<PostType | null> {
+    async findById(id: string): Promise<OutputPostType | null> {
         const objId = new ObjectId(id)
         const post = await postCollection.findOne({_id: objId})
         if (post) {
-            const {_id, ...result} = post
-            return {...result, id: _id}
+            return {
+                id: post._id.toString(),
+                title: post.title,
+                shortDescription: post.shortDescription,
+                content: post.content,
+                blogId: post.blogId,
+                blogName: post.blogName
+                //createdAt:
+            }
         } else {
             return null
         }
     },
 
-    async create(input: InputPostType, name: string): Promise<PostType> {
-        const createdPost: PostType = {
-            id: new ObjectId(),
+    async create(input: InputPostType, name: string): Promise<OutputPostType> {
+        const createdPost: PostDBType = {
+            //id: new ObjectId(),
             ...input,
-            blogId: new ObjectId(input.blogId),
+            blogId: new ObjectId(input.blogId).toString(),
             blogName: name,
             //createdAt: new Date().toISOString()
         }
         const insertedPost = await postCollection.insertOne(createdPost)
         return {
-            id: insertedPost.insertedId,
+            id: insertedPost.insertedId.toString(),
             title: createdPost.title,
             shortDescription: createdPost.shortDescription,
             content: createdPost.content,
             blogId: createdPost.blogId,
-            blogName: createdPost.blogName
+            blogName: createdPost.blogName,
+            //createdAt: createdPost.createdAt
         }
     },
 
@@ -42,7 +59,7 @@ export const PostsMongoDBRepository = {
         const result = await postCollection.updateOne({_id: ObjId}, {
             $set: {
                 ...input,
-                blogId: new ObjectId(input.blogId)
+                blogId: new ObjectId(input.blogId).toString()
             }
         })
         return !!result.matchedCount

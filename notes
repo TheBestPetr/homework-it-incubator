@@ -1,0 +1,24 @@
+import { NextFunction, Request, Response } from "express";
+import { validationResult, ValidationError } from "express-validator";
+
+export const errorsValidationResultMiddleware = (req: Request,
+                                                 res: Response,
+                                                 next: NextFunction) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const errorResponse: { [key: string]: string } = {}; // Явное указание типа объекта ошибки
+        errors.array().forEach((error: ValidationError) => {
+            if (!errorResponse[error.param]) {
+                errorResponse[error.param] = error.msg;
+            }
+        });
+        return res.status(400).json({
+            errorsMessages: errors.array().map((item: ValidationError) => ({
+                message: item.msg,
+                field: item.param
+            }))
+        });
+    } else {
+        next();
+    }
+};

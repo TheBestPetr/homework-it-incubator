@@ -7,7 +7,7 @@ export const errorsValidationResultMiddleware = (req: Request,
     const errors: any = validationResult(req)
     if (!errors.isEmpty()) {
         res.status(400).json({
-            errorsMessages: errors.array().map((item: any) => ({
+            errorsMessages: errors.array({onlyFirstError: true}).map((item: any) => ({
                 message: item.msg,
                 field: item.path
             }))

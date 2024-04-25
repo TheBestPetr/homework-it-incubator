@@ -1,7 +1,5 @@
-import {ObjectId} from "mongodb";
-
-export type BlogType = {
-    id: ObjectId
+export type OutputBlogType = {
+    id: string
     name: string
     description: string
     websiteUrl: string

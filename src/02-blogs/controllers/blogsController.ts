@@ -1,16 +1,16 @@
 import {Request, Response} from "express"
-import {BlogType, InputBlogType} from "../../04-input-output-types/blogType";
+import {OutputBlogType, InputBlogType} from "../../04-input-output-types/blogType";
 import {BlogsMongoDBRepository} from "../repository/blogs-mongoDB-repository";
 import {ObjectId} from "mongodb";
 
 export const getBlogsController = async (req: Request,
-                                      res: Response<BlogType[]>) => {
+                                      res: Response<OutputBlogType[]>) => {
     const blogs = await BlogsMongoDBRepository.find()
     return res.status(200).json(blogs)
 }
 
 export const findBlogController = async (req: Request<{id: string}>,
-                                         res: Response<BlogType | {}>) => {
+                                         res: Response<OutputBlogType | {}>) => {
     if (!ObjectId.isValid(req.params.id)) {
         res.status(404).send()
         return
@@ -24,13 +24,13 @@ export const findBlogController = async (req: Request<{id: string}>,
 }
 
 export const createBlogController = async (req: Request<{}, {}, InputBlogType>,
-                                           res: Response<BlogType>) => {
+                                           res: Response<OutputBlogType>) => {
     const newBlog = await BlogsMongoDBRepository.create(req.body)
     res.status(201).json(newBlog)
 }
 
 export const updateBlogController = async (req: Request<{id: string}, {}, InputBlogType>,
-                                           res: Response<BlogType>) => {
+                                           res: Response<OutputBlogType>) => {
     if (!ObjectId.isValid(req.params.id)) {
         res.status(404).send()
         return
