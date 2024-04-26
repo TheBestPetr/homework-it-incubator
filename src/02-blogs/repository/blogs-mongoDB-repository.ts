@@ -37,7 +37,7 @@ export const BlogsMongoDBRepository = {
         const createdBlog: BlogDBType = {
             ...input,
             createdAt: new Date().toISOString(),
-            isMembership: true
+            isMembership: false
         }
         const insertedBlog = await blogCollection.insertOne(createdBlog)
         return {
