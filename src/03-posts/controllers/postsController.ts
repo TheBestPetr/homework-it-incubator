@@ -26,10 +26,6 @@ export const findPostController = async (req: Request<{ id: string }>,
 
 export const createPostController = async (req: Request<{ id: string }, {}, InputPostType>,
                                            res: Response<OutputPostType | {}>) => {
-    if (!ObjectId.isValid(req.body.blogId)) {
-        res.status(404).send('Incorrect type of blogId')
-        return
-    }
     const blog = await BlogsMongoDBRepository.findById(req.body.blogId)
     if (!blog) {
         res.status(400).send({errorsMessages: [{"message": "Invalid value", "field": "blogId"}]})
@@ -49,7 +45,8 @@ export const updatePostController = async (req: Request<{ id: string }, {}, Inpu
         res.status(404).send()
         return
     }
-    if (!ObjectId.isValid(req.body.blogId)) {
+    const isBlogExist = await BlogsMongoDBRepository.findById(req.body.blogId)
+    if (!isBlogExist) {
         res.status(400).send({errorsMessages: [{"message": "Invalid value", "field": "blogId"}]})
         return
     }

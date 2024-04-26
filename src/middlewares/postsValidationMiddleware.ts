@@ -1,4 +1,5 @@
-import {body} from "express-validator";
+import {body, param} from "express-validator";
+import {ObjectId} from "mongodb";
 
 export const postTitleValidator = body('title')
     .isString()
@@ -36,3 +37,7 @@ export const postContentValidator = body('content')
 export const postBlogIdValidator = body('blogId')
     .isString()
     .notEmpty()
+    .custom(value => new ObjectId(value))
+
+// export const postIdValidator = param('id')
+//     .customSanitizer(value => new ObjectId(value))
