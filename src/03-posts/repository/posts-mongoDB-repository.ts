@@ -12,7 +12,8 @@ export const PostsMongoDBRepository = {
             shortDescription: post.shortDescription,
             content: post.content,
             blogId: post.blogId,
-            blogName: post.blogName
+            blogName: post.blogName,
+            createdAt: post.createdAt
         }))
     },
 
@@ -26,8 +27,8 @@ export const PostsMongoDBRepository = {
                 shortDescription: post.shortDescription,
                 content: post.content,
                 blogId: post.blogId,
-                blogName: post.blogName
-                //createdAt:
+                blogName: post.blogName,
+                createdAt: post.createdAt
             }
         } else {
             return null
@@ -36,11 +37,10 @@ export const PostsMongoDBRepository = {
 
     async create(input: InputPostType, name: string): Promise<OutputPostType> {
         const createdPost: PostDBType = {
-            //id: new ObjectId(),
             ...input,
             blogId: new ObjectId(input.blogId).toString(),
             blogName: name,
-            //createdAt: new Date().toISOString()
+            createdAt: new Date().toISOString()
         }
         const insertedPost = await postCollection.insertOne(createdPost)
         return {
@@ -50,7 +50,7 @@ export const PostsMongoDBRepository = {
             content: createdPost.content,
             blogId: createdPost.blogId,
             blogName: createdPost.blogName,
-            //createdAt: createdPost.createdAt
+            createdAt: createdPost.createdAt
         }
     },
 

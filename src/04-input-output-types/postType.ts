@@ -5,7 +5,7 @@ export type OutputPostType = {
     content: string
     blogId: string
     blogName: string
-    //createdAt: string
+    createdAt: string
 }
 
 export type InputPostType = {

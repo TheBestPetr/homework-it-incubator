@@ -11,8 +11,8 @@ export const BlogsMongoDBRepository = {
             name: blog.name,
             description: blog.description,
             websiteUrl: blog.websiteUrl,
-            //isMembership: blog.isMembership,
-            //createdAt:blog.createdAt
+            isMembership: blog.isMembership,
+            createdAt:blog.createdAt
         }))
     },
 
@@ -25,8 +25,8 @@ export const BlogsMongoDBRepository = {
                 name: blog.name,
                 description: blog.description,
                 websiteUrl: blog.websiteUrl,
-                //isMembership: blog.isMembership,
-                //createdAt:blog.createdAt
+                isMembership: blog.isMembership,
+                createdAt:blog.createdAt
             }
         } else {
             return null
@@ -36,8 +36,8 @@ export const BlogsMongoDBRepository = {
     async create(input: InputBlogType): Promise<OutputBlogType> {
         const createdBlog: BlogDBType = {
             ...input,
-            //createdAt: new Date().toISOString(),
-            //isMembership: false
+            createdAt: new Date().toISOString(),
+            isMembership: true
         }
         const insertedBlog = await blogCollection.insertOne(createdBlog)
         return {
@@ -45,8 +45,9 @@ export const BlogsMongoDBRepository = {
             name: createdBlog.name,
             description: createdBlog.description,
             websiteUrl: createdBlog.websiteUrl,
-            //isMembership: createdBlog.isMembership,
-            //createdAt:createdBlog.createdAt
+            createdAt:createdBlog.createdAt,
+            isMembership: createdBlog.isMembership
+
         }
     },
 
