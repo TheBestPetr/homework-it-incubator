@@ -9,6 +9,7 @@ import {
 import {
     postBlogIdValidator,
     postContentValidator,
+    //postIdValidator,
     postShortDescriptionValidator,
     postTitleValidator
 } from "../middlewares/postsValidationMiddleware";
@@ -19,6 +20,6 @@ export const postsRouter = Router()
 
 postsRouter.get('/', getPostsController)
 postsRouter.post('/', authMiddleware, postTitleValidator, postShortDescriptionValidator, postContentValidator, postBlogIdValidator, errorsValidationResultMiddleware, createPostController)
-postsRouter.get('/:id', findPostController)
-postsRouter.put('/:id', authMiddleware, postTitleValidator, postShortDescriptionValidator, postContentValidator, postBlogIdValidator, errorsValidationResultMiddleware, updatePostController)
-postsRouter.delete('/:id', authMiddleware, deletePostController)
+postsRouter.get('/:id', /*postIdValidator,*/ findPostController)
+postsRouter.put('/:id', authMiddleware, /*postIdValidator,*/ postTitleValidator, postShortDescriptionValidator, postContentValidator, postBlogIdValidator, errorsValidationResultMiddleware, updatePostController)
+postsRouter.delete('/:id', authMiddleware, /*postIdValidator,*/ deletePostController)

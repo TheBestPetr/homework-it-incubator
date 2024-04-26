@@ -1,7 +1,7 @@
-import {body} from "express-validator";
+import {body, param} from "express-validator";
 import {ObjectId} from "mongodb";
-import {blogCollection} from "../db/mongo-db";
 import {BlogsMongoDBRepository} from "../02-blogs/repository/blogs-mongoDB-repository";
+import {PostsMongoDBRepository} from "../03-posts/repository/posts-mongoDB-repository";
 
 export const postTitleValidator = body('title')
     .isString()
@@ -40,7 +40,7 @@ export const postBlogIdValidator = body('blogId')
     .isString()
     .notEmpty()
     .custom (async (value) => {
-        if (!new ObjectId(value)) {
+        if (!ObjectId.isValid(value)) {
             throw new Error()
         }
         const isBlogExist = await BlogsMongoDBRepository.findById(value as string)
@@ -51,4 +51,13 @@ export const postBlogIdValidator = body('blogId')
     })
 
 // export const postIdValidator = param('id')
-//     .customSanitizer(value => new ObjectId(value))
+//     .custom(async (value) => {
+//         if (!new ObjectId(value)) {
+//             return 404
+//         }
+//         const isPostExist = await PostsMongoDBRepository.findById(value as string)
+//         if (!isPostExist) {
+//             return 404
+//         }
+//         return true
+//     })
