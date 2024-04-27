@@ -12,7 +12,7 @@ export const postCollection: Collection<PostDBType> = db.collection<PostDBType>(
 export const connectToDB = async () => {
     try {
         await client.connect()
-        console.log('connected to db')
+        console.log('Connection to db - Success')
         return true
     } catch (e) {
         console.log(e)

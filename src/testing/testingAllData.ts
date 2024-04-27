@@ -8,5 +8,5 @@ export const TestingAllData = (req: Request, res: Response) => {
     db.posts = []
     blogCollection.deleteMany()
     postCollection.deleteMany()
-    res.sendStatus(204)
+    res.status(204).send('you delete all data')
 }

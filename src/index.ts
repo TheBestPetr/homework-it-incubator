@@ -6,7 +6,7 @@ import {addRoutes} from "./routes";
 const startApp = async () => {
     addRoutes(app)
     if (!await connectToDB()) {
-        console.log('Failed connection to DB')
+        console.log('Connection to DB - Failed')
         process.exit(1)
     }
     app.listen(SETTINGS.PORT, async () => {
