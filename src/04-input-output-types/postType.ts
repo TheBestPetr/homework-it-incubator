@@ -14,3 +14,9 @@ export type InputPostType = {
     content: string
     blogId: string
 }
+
+export type InputBlogPostType = {
+    title: string
+    shortDescription: string
+    content: string
+}
