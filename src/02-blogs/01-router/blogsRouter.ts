@@ -9,7 +9,7 @@ import {
 import {authMiddleware} from "../../middlewares/authMiddleware";
 import {errorsValidationResultMiddleware} from "../../middlewares/errorsValidationMiddleware";
 import {createPostForBlogIdParams, getPostsByBlogIdParams} from "../../03-posts/02-controllers/postsController";
-import {postBodyValidation} from "../../middlewares/postsValidator";
+import {postBodyValidationForBlogIdParams} from "../../middlewares/postsValidator";
 import {blogBodyValidation} from "../../middlewares/blogsValidator";
 
 export const blogsRouter = Router()
@@ -35,6 +35,6 @@ blogsRouter.get('/:blogId/posts',
     getPostsByBlogIdParams)
 blogsRouter.post('/:blogId/posts',
     authMiddleware,
-    postBodyValidation,
+    postBodyValidationForBlogIdParams,
     errorsValidationResultMiddleware,
     createPostForBlogIdParams)

@@ -53,3 +53,41 @@ export const postBodyValidation = [
             return true
         })
 ]
+
+export const postBodyValidationForBlogIdParams = [
+    body('title')
+        .isString()
+        .notEmpty()
+        .custom(value => {
+                if (value.includes('   ')) {
+                    throw new Error()
+                }
+                return true
+            }
+        )
+        .isLength({min: 1, max: 30}),
+
+    body('shortDescription')
+        .isString()
+        .notEmpty()
+        .custom(value => {
+                if (value.includes('   ')) {
+                    throw new Error()
+                }
+                return true
+            }
+        )
+        .isLength({min: 1, max: 100}),
+
+    body('content')
+        .isString()
+        .notEmpty()
+        .custom(value => {
+                if (value.includes('   ')) {
+                    throw new Error()
+                }
+                return true
+            }
+        )
+        .isLength({min: 1, max: 1000})
+]
