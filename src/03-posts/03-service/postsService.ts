@@ -1,56 +1,12 @@
 import {postsMongoRepository} from "../04-repository/postsMongoRepository";
-import {InputBlogPostType, InputPostType, OutputPostType} from "../../04-input-output-types/postType";
+import {InputBlogPostType, InputPostType, OutputPostType} from "../../04-types/postType";
 import {ObjectId} from "mongodb";
 import {PostDBType} from "../../db/post-db-type";
-import {blogsService} from "../../02-blogs/03-service/blogsService";
+import {blogsMongoQueryRepository} from "../../02-blogs/04-repository/blogsMongoQueryRepository";
 
 export const postsService = {
-    async find() {
-        const posts = await postsMongoRepository.find()
-        return posts.map(post => ({
-            id: post._id.toString(),
-            title: post.title,
-            shortDescription: post.shortDescription,
-            content: post.content,
-            blogId: post.blogId,
-            blogName: post.blogName,
-            createdAt: post.createdAt
-        }))
-    },
-
-    async findPostsByBlogId(blogId: string){
-        const posts = await postsMongoRepository.findPostsByBlogId(blogId)
-        return posts.map(post => ({
-            id: post._id.toString(),
-            title: post.title,
-            shortDescription: post.shortDescription,
-            content: post.content,
-            blogId: post.blogId,
-            blogName: post.blogName,
-            createdAt: post.createdAt
-        }))
-    },
-
-    async findById(id: string): Promise<OutputPostType | null> {
-        const objId = new ObjectId(id)
-        const post = await postsMongoRepository.findById(objId)
-        if (post) {
-            return {
-                id: post._id.toString(),
-                title: post.title,
-                shortDescription: post.shortDescription,
-                content: post.content,
-                blogId: post.blogId,
-                blogName: post.blogName,
-                createdAt: post.createdAt
-            }
-        } else {
-            return null
-        }
-    },
-
     async create(input: InputPostType): Promise<OutputPostType> {
-        const blog = await blogsService.findById(input.blogId)
+        const blog = await blogsMongoQueryRepository.findById(input.blogId)
         const createdPost: PostDBType = {
             ...input,
             blogId: new ObjectId(input.blogId).toString(),
@@ -69,8 +25,8 @@ export const postsService = {
         }
     },
 
-    async createBlogPost(blogId: string, input: InputBlogPostType): Promise<OutputPostType> {
-        const blog = await blogsService.findById(blogId)
+    async createPostForBlogIdParams(blogId: string, input: InputBlogPostType): Promise<OutputPostType> {
+        const blog = await blogsMongoQueryRepository.findById(blogId)
         const createdPost: PostDBType = {
             ...input,
             blogId: new ObjectId(blogId).toString(),

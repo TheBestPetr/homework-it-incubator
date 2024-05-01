@@ -1,27 +1,36 @@
 import {Request, Response} from "express";
-import {InputBlogPostType, InputPostType, OutputPostType} from "../../04-input-output-types/postType";
+import {
+    InputBlogPostType,
+    InputPostQueryType,
+    InputPostType,
+    OutputPostQueryType,
+    OutputPostType
+} from "../../04-types/postType";
 import {ObjectId} from "mongodb";
 import {postsService} from "../03-service/postsService";
-import {blogsService} from "../../02-blogs/03-service/blogsService";
+import {sortNPagingPostQuery} from "../../Helpers/queryHelper";
+import {postsMongoQueryRepository} from "../04-repository/postsMongoQueryRepository";
+import {blogsMongoQueryRepository} from "../../02-blogs/04-repository/blogsMongoQueryRepository";
 
-export const getPosts = async (req: Request,// delete controller
-                                         res: Response<OutputPostType[]>) => {
-    const posts = await postsService.find()
+export const getPosts = async (req: Request<{}, {}, {}, InputPostQueryType>,
+                               res: Response<OutputPostQueryType>) => {
+    const query = sortNPagingPostQuery(req.query)
+    const posts = await postsMongoQueryRepository.find(query)
     return res.status(200).json(posts)
 }
 
-export const getPostsByBlogId = async (req: Request<{blogId: string}>,
-                                       res: Response<OutputPostType[] | {}>) => {
+export const getPostsByBlogIdParams = async (req: Request<{blogId: string}, {}, {}, InputPostQueryType>,
+                                       res: Response<OutputPostQueryType | {}>) => {
     if (!ObjectId.isValid(req.params.blogId)) {
         res.sendStatus(404)
         return
     }
-    const blog = await blogsService.findById(req.params.blogId)
+    const blog = await blogsMongoQueryRepository.findById(req.params.blogId)
     if (!blog) {
         res.sendStatus(404)
     }
-
-    const posts = await postsService.findPostsByBlogId(req.params.blogId)
+    const query = sortNPagingPostQuery(req.query)
+    const posts = await postsMongoQueryRepository.findPostsByBlogId(query, req.params.blogId)
     if (posts) {
         res.status(200).send(posts)
     } else {
@@ -35,7 +44,7 @@ export const findPostController = async (req: Request<{ id: string }>,
         res.sendStatus(404)
         return
     }
-    const foundPost = await postsService.findById(req.params.id)
+    const foundPost = await postsMongoQueryRepository.findById(req.params.id)
     if (foundPost) {
         res.status(200).json(foundPost)
     } else {
@@ -53,13 +62,13 @@ export const createPostController = async (req: Request<{ id: string }, {}, Inpu
     }
 }
 
-export const createBlogPostController = async (req: Request<{blogId: string}, {}, InputBlogPostType>,
+export const createPostForBlogIdParams = async (req: Request<{blogId: string}, {}, InputBlogPostType>,
                                                res: Response<OutputPostType | {}>) => {
     if (!ObjectId.isValid(req.params.blogId)) {
         res.sendStatus(404)
         return
     }
-    const newPost = await postsService.createBlogPost(req.params.blogId, req.body)
+    const newPost = await postsService.createPostForBlogIdParams(req.params.blogId, req.body)
     if (!newPost) {
         res.sendStatus(404)
     } else {

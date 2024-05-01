@@ -1,6 +1,4 @@
-import {body, param} from "express-validator"
-import {ObjectId} from "mongodb";
-import {blogsMongoRepository} from "../02-blogs/04-repository/blogsMongoRepository";
+import {body, query} from "express-validator"
 
 export const blogBodyValidation = [
     body('name')
@@ -32,14 +30,20 @@ export const blogBodyValidation = [
         .isLength({min: 10, max: 100})
         .matches('https://([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$')
 ]
-// export const blogIdValidator = param('id')
-//     .custom(async (value) => {
-//         if (!new ObjectId(value)) {
-//             return 404
-//         }
-//         const isBlogExist = await blogsMongoRepository.findById(value)
-//         if (!isBlogExist) {
-//             return 404
-//         }
-//         return true
-//     })
+
+export const blogQueryValidation = [
+    query('searchNameTerm')
+        .isString(),
+
+    query('sortBy')
+        .isString(),
+
+    query('sortDirection')
+        .isString(),
+
+    query('pageNumber')
+        .isString(),
+
+    query('pageSize')
+        .isString(),
+]

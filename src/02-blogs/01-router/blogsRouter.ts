@@ -8,9 +8,9 @@ import {
 } from "../02-controllers/blogsController";
 import {authMiddleware} from "../../middlewares/authMiddleware";
 import {errorsValidationResultMiddleware} from "../../middlewares/errorsValidationMiddleware";
-import {createBlogPostController, getPostsByBlogId} from "../../03-posts/02-controllers/postsController";
-import {postBodyValidation} from "../../middlewares/postsValidationMiddleware";
-import {blogBodyValidation} from "../../middlewares/blogsValidationMiddleware";
+import {createPostForBlogIdParams, getPostsByBlogIdParams} from "../../03-posts/02-controllers/postsController";
+import {postBodyValidation} from "../../middlewares/postsValidator";
+import {blogBodyValidation} from "../../middlewares/blogsValidator";
 
 export const blogsRouter = Router()
 
@@ -32,8 +32,9 @@ blogsRouter.delete('/:id',
     authMiddleware,
     deleteBlogController)
 blogsRouter.get('/:blogId/posts',
-    getPostsByBlogId)
+    getPostsByBlogIdParams)
 blogsRouter.post('/:blogId/posts',
     authMiddleware,
     postBodyValidation,
-    createBlogPostController)
+    errorsValidationResultMiddleware,
+    createPostForBlogIdParams)

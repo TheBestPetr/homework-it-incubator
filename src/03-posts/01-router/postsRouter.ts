@@ -8,7 +8,7 @@ import {
 } from "../02-controllers/postsController";
 import {authMiddleware} from "../../middlewares/authMiddleware";
 import {errorsValidationResultMiddleware} from "../../middlewares/errorsValidationMiddleware";
-import {postBodyValidation} from "../../middlewares/postsValidationMiddleware";
+import {postBodyValidation} from "../../middlewares/postsValidator";
 
 export const postsRouter = Router()
 

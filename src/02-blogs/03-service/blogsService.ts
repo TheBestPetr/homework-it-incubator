@@ -1,38 +1,9 @@
 import {blogsMongoRepository} from "../04-repository/blogsMongoRepository";
-import {InputBlogType, OutputBlogType} from "../../04-input-output-types/blogType";
+import {InputBlogType, OutputBlogType} from "../../04-types/blogType";
 import {ObjectId} from "mongodb";
 import {BlogDBType} from "../../db/blog-db-type";
 
 export const blogsService = {
-    async find() {
-        const blogs = await blogsMongoRepository.find()
-        return blogs.map(blog => ({
-            id: blog._id.toString(),
-            name: blog.name,
-            description: blog.description,
-            websiteUrl: blog.websiteUrl,
-            isMembership: blog.isMembership,
-            createdAt:blog.createdAt
-        }))
-    },
-
-    async findById(id: string): Promise<OutputBlogType | null> {
-        const objId = new ObjectId(id)
-        const blog = await blogsMongoRepository.findById(objId)
-        if (blog) {
-            return {
-                id: blog._id.toString(),
-                name: blog.name,
-                description: blog.description,
-                websiteUrl: blog.websiteUrl,
-                isMembership: blog.isMembership,
-                createdAt:blog.createdAt
-            }
-        } else {
-            return null
-        }
-    },
-
     async create(input: InputBlogType): Promise<OutputBlogType> {
         const createdBlog: BlogDBType = {
             ...input,

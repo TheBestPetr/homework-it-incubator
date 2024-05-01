@@ -1,13 +1,17 @@
 import {Request, Response} from "express"
-import {OutputBlogType, InputBlogType} from "../../04-input-output-types/blogType";
+import {OutputBlogType, InputBlogType, OutputBlogQueryType, InputBlogQueryType} from "../../04-types/blogType";
 import {ObjectId} from "mongodb";
 import {blogsService} from "../03-service/blogsService";
+import {blogsMongoQueryRepository} from "../04-repository/blogsMongoQueryRepository";
+import {blogsMongoRepository} from "../04-repository/blogsMongoRepository";
+import {sortNPagingBlogQuery} from "../../Helpers/queryHelper";
 
-export const getBlogs = async (req: Request,
-                                      res: Response<OutputBlogType[]>) => {
-    const blogs = await blogsService.find()
-    return res.status(200).json(blogs)
-}
+export const getBlogs = async (req: Request<{}, {}, {}, InputBlogQueryType>,
+                               res: Response<OutputBlogQueryType>) => {
+        const query = sortNPagingBlogQuery(req.query)
+        const blogs = await blogsMongoQueryRepository.find(query)
+        res.status(200).send(blogs)
+    }
 
 export const findBlogController = async (req: Request<{id: string}>,
                                          res: Response<OutputBlogType | {}>) => {
@@ -15,9 +19,9 @@ export const findBlogController = async (req: Request<{id: string}>,
         res.sendStatus(404)
         return
     }
-    const foundBlog = await blogsService.findById(req.params.id)
+    const foundBlog = await blogsMongoQueryRepository.findById(req.params.id)
     if (foundBlog) {
-        res.status(200).json(foundBlog)
+        res.status(200).send(foundBlog)
     } else {
         res.sendStatus(404)
     }
@@ -26,7 +30,7 @@ export const findBlogController = async (req: Request<{id: string}>,
 export const createBlogController = async (req: Request<{}, {}, InputBlogType>,
                                            res: Response<OutputBlogType>) => {
     const newBlog = await blogsService.create(req.body)
-    res.status(201).json(newBlog)
+    res.status(201).send(newBlog)
 }
 
 export const updateBlogController = async (req: Request<{id: string}, {}, InputBlogType>,

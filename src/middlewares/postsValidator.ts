@@ -1,6 +1,7 @@
-import {body, param} from "express-validator";
+import {body} from "express-validator";
 import {ObjectId} from "mongodb";
-import {blogsService} from "../02-blogs/03-service/blogsService";
+import {blogsMongoRepository} from "../02-blogs/04-repository/blogsMongoRepository";
+import {blogsMongoQueryRepository} from "../02-blogs/04-repository/blogsMongoQueryRepository";
 
 export const postBodyValidation = [
     body('title')
@@ -46,23 +47,10 @@ export const postBodyValidation = [
             if (!ObjectId.isValid(blogId)) {
                 throw new Error()
             }
-            const isBlogExist = await blogsService.findById(blogId as string)
+            const isBlogExist = await blogsMongoQueryRepository.findById(blogId)
             if (!isBlogExist) {
                 throw new Error()
             }
             return true
         })
 ]
-
-/*
-export const postBlogIdValidatorParam = param('blogId')
-    .custom(async (value) => {
-        if (!new ObjectId(value)) {
-            return 404
-        }
-        const isBlogExist = await blogsService.findById(value as string)
-        if (!isBlogExist) {
-            return 404
-        }
-        return true
-    })*/
