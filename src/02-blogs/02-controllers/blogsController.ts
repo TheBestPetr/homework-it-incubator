@@ -3,7 +3,6 @@ import {OutputBlogType, InputBlogType, OutputBlogQueryType, InputBlogQueryType} 
 import {ObjectId} from "mongodb";
 import {blogsService} from "../03-service/blogsService";
 import {blogsMongoQueryRepository} from "../04-repository/blogsMongoQueryRepository";
-import {blogsMongoRepository} from "../04-repository/blogsMongoRepository";
 import {sortNPagingBlogQuery} from "../../Helpers/queryHelper";
 
 export const getBlogs = async (req: Request<{}, {}, {}, InputBlogQueryType>,

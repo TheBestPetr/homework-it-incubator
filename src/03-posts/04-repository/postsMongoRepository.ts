@@ -1,4 +1,4 @@
-import {InputPostType, OutputPostType} from "../../04-types/postType";
+import {InputPostType} from "../../04-types/postType";
 import {postCollection} from "../../db/mongo-db";
 import {ObjectId} from "mongodb";
 import {PostDBType} from "../../db/post-db-type";

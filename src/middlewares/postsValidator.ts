@@ -1,6 +1,5 @@
 import {body} from "express-validator";
 import {ObjectId} from "mongodb";
-import {blogsMongoRepository} from "../02-blogs/04-repository/blogsMongoRepository";
 import {blogsMongoQueryRepository} from "../02-blogs/04-repository/blogsMongoQueryRepository";
 
 export const postBodyValidation = [

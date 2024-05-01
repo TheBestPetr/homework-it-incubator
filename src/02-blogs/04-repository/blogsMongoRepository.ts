@@ -1,4 +1,4 @@
-import {InputBlogType, OutputBlogType} from "../../04-types/blogType";
+import {InputBlogType} from "../../04-types/blogType";
 import {blogCollection} from "../../db/mongo-db";
 import {ObjectId} from "mongodb";
 import {BlogDBType} from "../../db/blog-db-type";
