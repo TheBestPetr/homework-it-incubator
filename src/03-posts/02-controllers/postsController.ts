@@ -64,7 +64,8 @@ export const createPostController = async (req: Request<{ id: string }, {}, Inpu
 
 export const createPostForBlogIdParams = async (req: Request<{blogId: string}, {}, InputBlogPostType>,
                                                res: Response<OutputPostType | {}>) => {
-    if (!ObjectId.isValid(req.params.blogId)) {
+    const isBlogExist = await blogsMongoQueryRepository.findById(req.params.blogId)
+    if (!ObjectId.isValid(req.params.blogId) || !isBlogExist) {
         res.sendStatus(404)
         return
     }

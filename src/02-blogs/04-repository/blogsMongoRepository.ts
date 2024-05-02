@@ -4,23 +4,6 @@ import {ObjectId} from "mongodb";
 import {BlogDBType} from "../../db/blog-db-type";
 
 export const blogsMongoRepository = {
-    // async findById(id: string): Promise<OutputBlogType | null>{
-    //     const ObjId = new ObjectId(id)
-    //     const blog = await blogCollection.findOne({_id: ObjId})
-    //     if (blog) {
-    //         return {
-    //             id: blog._id.toString(),
-    //             name: blog.name,
-    //             description: blog.description,
-    //             websiteUrl: blog.websiteUrl,
-    //             isMembership: blog.isMembership,
-    //             createdAt:blog.createdAt
-    //         }
-    //     } else {
-    //         return null
-    //     }
-    // },
-
     async create(input: BlogDBType){
         return await blogCollection.insertOne({...input})
     },
