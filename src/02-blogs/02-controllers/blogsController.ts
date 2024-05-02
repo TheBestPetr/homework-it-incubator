@@ -9,7 +9,6 @@ export const getBlogs = async (req: Request<{}, {}, {}, InputBlogQueryType>,
                                res: Response<OutputBlogQueryType>) => {
         const query = sortNPagingBlogQuery(req.query)
         const blogs = await blogsMongoQueryRepository.find(query)
-        console.log(blogs)
         res.status(200).send(blogs)
     }
 
