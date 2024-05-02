@@ -21,13 +21,10 @@ export const getPosts = async (req: Request<{}, {}, {}, InputPostQueryType>,
 
 export const getPostsByBlogIdParams = async (req: Request<{blogId: string}, {}, {}, InputPostQueryType>,
                                        res: Response<OutputPostQueryType | {}>) => {
-    if (!ObjectId.isValid(req.params.blogId)) {
+    const isBlogExist = await blogsMongoQueryRepository.findById(req.params.blogId)
+    if (!ObjectId.isValid(req.params.blogId) || !isBlogExist) {
         res.sendStatus(404)
         return
-    }
-    const blog = await blogsMongoQueryRepository.findById(req.params.blogId)
-    if (!blog) {
-        res.sendStatus(404)
     }
     const query = sortNPagingPostQuery(req.query)
     const posts = await postsMongoQueryRepository.findPostsByBlogId(query, req.params.blogId)

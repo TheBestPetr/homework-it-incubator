@@ -35,7 +35,7 @@ export const postsMongoQueryRepository = {
             .skip((query.pageNumber - 1) * query.pageSize)
             .limit(query.pageSize)
             .toArray()
-        const totalCount = await postCollection.countDocuments()
+        const totalCount = await postCollection.countDocuments({blogId: blogId})
         return {
             pagesCount: Math.ceil(totalCount / query.pageSize),
             page: query.pageNumber,

@@ -4,8 +4,11 @@ import {ObjectId} from "mongodb";
 
 export const blogsMongoQueryRepository = {
     async find(query: InputBlogQueryType): Promise<OutputBlogQueryType> {
+        const search = query.searchNameTerm
+            ? {name: {$regex: query.searchNameTerm, $options: 'i'}}
+            : {}
         const items = await blogCollection
-            .find()
+            .find(search)
             .sort(query.sortBy, query.sortDirection)
             .skip((query.pageNumber - 1) * query.pageSize)
             .limit(query.pageSize)
@@ -27,7 +30,7 @@ export const blogsMongoQueryRepository = {
         }
     },
 
-    async findById(id: string): Promise<OutputBlogType | null>{
+    async findById(id: string): Promise<OutputBlogType | null> {
         const ObjId = new ObjectId(id)
         const blog = await blogCollection.findOne({_id: ObjId})
         if (blog) {
@@ -37,7 +40,7 @@ export const blogsMongoQueryRepository = {
                 description: blog.description,
                 websiteUrl: blog.websiteUrl,
                 isMembership: blog.isMembership,
-                createdAt:blog.createdAt
+                createdAt: blog.createdAt
             }
         } else {
             return null
