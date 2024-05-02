@@ -13,7 +13,7 @@ export const blogsMongoQueryRepository = {
             .skip((query.pageNumber - 1) * query.pageSize)
             .limit(query.pageSize)
             .toArray()
-        const totalCount = await blogCollection.countDocuments()
+        const totalCount = await blogCollection.countDocuments(search)
         return {
             pagesCount: Math.ceil(totalCount / query.pageSize),
             page: query.pageNumber,

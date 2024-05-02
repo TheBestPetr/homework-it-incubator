@@ -3,12 +3,13 @@ import {OutputBlogType, InputBlogType, OutputBlogQueryType, InputBlogQueryType} 
 import {ObjectId} from "mongodb";
 import {blogsService} from "../03-service/blogsService";
 import {blogsMongoQueryRepository} from "../04-repository/blogsMongoQueryRepository";
-import {sortNPagingBlogQuery} from "../../Helpers/queryHelper";
+import {sortNPagingBlogQuery} from "../../helpers/queryHelper";
 
 export const getBlogs = async (req: Request<{}, {}, {}, InputBlogQueryType>,
                                res: Response<OutputBlogQueryType>) => {
         const query = sortNPagingBlogQuery(req.query)
         const blogs = await blogsMongoQueryRepository.find(query)
+        console.log(blogs)
         res.status(200).send(blogs)
     }
 

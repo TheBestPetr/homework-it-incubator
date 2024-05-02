@@ -8,7 +8,7 @@ import {
 } from "../../04-types/postType";
 import {ObjectId} from "mongodb";
 import {postsService} from "../03-service/postsService";
-import {sortNPagingPostQuery} from "../../Helpers/queryHelper";
+import {sortNPagingPostQuery} from "../../helpers/queryHelper";
 import {postsMongoQueryRepository} from "../04-repository/postsMongoQueryRepository";
 import {blogsMongoQueryRepository} from "../../02-blogs/04-repository/blogsMongoQueryRepository";
 
