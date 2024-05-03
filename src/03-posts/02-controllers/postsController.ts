@@ -5,7 +5,7 @@ import {
     InputPostType,
     OutputPostQueryType,
     OutputPostType
-} from "../../04-types/postType";
+} from "../../types/postType";
 import {ObjectId} from "mongodb";
 import {postsService} from "../03-service/postsService";
 import {sortNPagingPostQuery} from "../../helpers/queryHelper";
@@ -19,8 +19,8 @@ export const getPosts = async (req: Request<{}, {}, {}, InputPostQueryType>,
     return res.status(200).json(posts)
 }
 
-export const getPostsByBlogIdParams = async (req: Request<{blogId: string}, {}, {}, InputPostQueryType>,
-                                       res: Response<OutputPostQueryType | {}>) => {
+export const getPostsByBlogIdParams = async (req: Request<{ blogId: string }, {}, {}, InputPostQueryType>,
+                                             res: Response<OutputPostQueryType | {}>) => {
     const isBlogExist = await blogsMongoQueryRepository.findById(req.params.blogId)
     if (!ObjectId.isValid(req.params.blogId) || !isBlogExist) {
         res.sendStatus(404)
@@ -59,8 +59,8 @@ export const createPostController = async (req: Request<{ id: string }, {}, Inpu
     }
 }
 
-export const createPostForBlogIdParams = async (req: Request<{blogId: string}, {}, InputBlogPostType>,
-                                               res: Response<OutputPostType | {}>) => {
+export const createPostForBlogIdParams = async (req: Request<{ blogId: string }, {}, InputBlogPostType>,
+                                                res: Response<OutputPostType | {}>) => {
     const isBlogExist = await blogsMongoQueryRepository.findById(req.params.blogId)
     if (!ObjectId.isValid(req.params.blogId) || !isBlogExist) {
         res.sendStatus(404)

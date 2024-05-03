@@ -1,5 +1,5 @@
 import {Request, Response} from "express"
-import {OutputBlogType, InputBlogType, OutputBlogQueryType, InputBlogQueryType} from "../../04-types/blogType";
+import {OutputBlogType, InputBlogType, OutputBlogQueryType, InputBlogQueryType} from "../../types/blogType";
 import {ObjectId} from "mongodb";
 import {blogsService} from "../03-service/blogsService";
 import {blogsMongoQueryRepository} from "../04-repository/blogsMongoQueryRepository";
@@ -7,12 +7,12 @@ import {sortNPagingBlogQuery} from "../../helpers/queryHelper";
 
 export const getBlogs = async (req: Request<{}, {}, {}, InputBlogQueryType>,
                                res: Response<OutputBlogQueryType>) => {
-        const query = sortNPagingBlogQuery(req.query)
-        const blogs = await blogsMongoQueryRepository.find(query)
-        res.status(200).send(blogs)
-    }
+    const query = sortNPagingBlogQuery(req.query)
+    const blogs = await blogsMongoQueryRepository.find(query)
+    res.status(200).send(blogs)
+}
 
-export const findBlogController = async (req: Request<{id: string}>,
+export const findBlogController = async (req: Request<{ id: string }>,
                                          res: Response<OutputBlogType | {}>) => {
     if (!ObjectId.isValid(req.params.id)) {
         res.sendStatus(404)
@@ -32,7 +32,7 @@ export const createBlogController = async (req: Request<{}, {}, InputBlogType>,
     res.status(201).send(newBlog)
 }
 
-export const updateBlogController = async (req: Request<{id: string}, {}, InputBlogType>,
+export const updateBlogController = async (req: Request<{ id: string }, {}, InputBlogType>,
                                            res: Response<OutputBlogType>) => {
     if (!ObjectId.isValid(req.params.id)) {
         res.sendStatus(404)
@@ -46,7 +46,7 @@ export const updateBlogController = async (req: Request<{id: string}, {}, InputB
     }
 }
 
-export const deleteBlogController = async (req: Request<{id: string}>,
+export const deleteBlogController = async (req: Request<{ id: string }>,
                                            res: Response) => {
     if (!ObjectId.isValid(req.params.id)) {
         res.sendStatus(404)

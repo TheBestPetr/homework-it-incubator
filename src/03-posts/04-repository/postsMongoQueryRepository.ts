@@ -1,5 +1,5 @@
 import {postCollection} from "../../db/mongo-db";
-import {InputPostQueryType, OutputPostQueryType, OutputPostType} from "../../04-types/postType";
+import {InputPostQueryType, OutputPostQueryType, OutputPostType} from "../../types/postType";
 import {ObjectId} from "mongodb";
 
 export const postsMongoQueryRepository = {

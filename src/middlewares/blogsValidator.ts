@@ -1,17 +1,17 @@
-import {body, query} from "express-validator"
+import {body} from "express-validator"
 
 export const blogBodyValidation = [
     body('name')
-    .isString()
-    .notEmpty()
-    .custom(value => {
-            if (value.includes('   ')) {
-                throw new Error()
+        .isString()
+        .notEmpty()
+        .custom(value => {
+                if (value.includes('   ')) {
+                    throw new Error()
+                }
+                return true
             }
-            return true
-        }
-    )
-    .isLength({min: 1, max: 15}),
+        )
+        .isLength({min: 1, max: 15}),
 
     body('description')
         .isString()
@@ -29,21 +29,4 @@ export const blogBodyValidation = [
         .isString()
         .isLength({min: 10, max: 100})
         .matches('https://([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$')
-]
-
-export const blogQueryValidation = [
-    query('searchNameTerm')
-        .isString(),
-
-    query('sortBy')
-        .isString(),
-
-    query('sortDirection')
-        .isString(),
-
-    query('pageNumber')
-        .isString(),
-
-    query('pageSize')
-        .isString(),
 ]

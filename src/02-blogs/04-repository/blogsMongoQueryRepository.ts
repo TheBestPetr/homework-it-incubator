@@ -1,5 +1,5 @@
 import {blogCollection} from "../../db/mongo-db";
-import {InputBlogQueryType, OutputBlogQueryType, OutputBlogType} from "../../04-types/blogType";
+import {InputBlogQueryType, OutputBlogQueryType, OutputBlogType} from "../../types/blogType";
 import {ObjectId} from "mongodb";
 
 export const blogsMongoQueryRepository = {

@@ -1,9 +1,10 @@
-// import {BlogDBType} from "../../db/blog-db-type";
+// import {BlogInMongoDBType, OutputBlogType} from "../../../types/blogType";
+// import {BlogDBType} from "../../../db/blog-db-type";
 // import {ObjectId} from "mongodb";
 //
-// export const mapBlogToOutputBlogQueryType: any = (blog: BlogDBType, _id: ObjectId) => {
+// export const mapBlogToOutput = (blog: BlogInMongoDBType) => {
 //     return {
-//         id: _id.toString(),
+//         id: blog._id.toString(),
 //         name: blog.name,
 //         description: blog.description,
 //         websiteUrl: blog.websiteUrl,

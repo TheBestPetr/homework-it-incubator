@@ -24,7 +24,7 @@ export type OutputBlogQueryType = {
 }
 
 export type InputBlogQueryType = {
-    searchNameTerm?: string | null
+    searchNameTerm: string | null
     sortBy: string
     sortDirection: SortDirection
     pageNumber: number

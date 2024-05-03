@@ -1,4 +1,4 @@
-import {Resolutions} from "../04-types/videoType";
+import {Resolutions} from "../types/videoType";
 
 export type VideoDbType = {
     id: number

@@ -1,5 +1,5 @@
 import {blogsMongoRepository} from "../04-repository/blogsMongoRepository";
-import {InputBlogType, OutputBlogType} from "../../04-types/blogType";
+import {InputBlogType, OutputBlogType} from "../../types/blogType";
 import {ObjectId} from "mongodb";
 import {BlogDBType} from "../../db/blog-db-type";
 
@@ -16,7 +16,7 @@ export const blogsService = {
             name: createdBlog.name,
             description: createdBlog.description,
             websiteUrl: createdBlog.websiteUrl,
-            createdAt:createdBlog.createdAt,
+            createdAt: createdBlog.createdAt,
             isMembership: createdBlog.isMembership
         }
     },

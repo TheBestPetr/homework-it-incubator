@@ -1,4 +1,5 @@
 import {config} from 'dotenv'
+
 config()
 
 export const SETTINGS = {
@@ -7,12 +8,15 @@ export const SETTINGS = {
     DB_NAME: process.env.DB_NAME || '',
     DB_COLLECTION_NAME: {
         BLOG: process.env.BLOG_COLLECTION_NAME || '',
-        POST: process.env.POST_COLLECTION_NAME || ''
+        POST: process.env.POST_COLLECTION_NAME || '',
+        USER: process.env.USER_COLLECTION_NAME || ''
     },
     PATH: {
         VIDEOS: '/videos',
         TESTING: '/testing/all-data',
         BLOGS: '/blogs',
-        POSTS: '/posts'
+        POSTS: '/posts',
+        USERS: '/users',
+        AUTH: '/auth'
     }
 }

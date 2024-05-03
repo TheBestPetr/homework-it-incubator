@@ -1,5 +1,5 @@
 import {postsMongoRepository} from "../04-repository/postsMongoRepository";
-import {InputBlogPostType, InputPostType, OutputPostType} from "../../04-types/postType";
+import {InputBlogPostType, InputPostType, OutputPostType} from "../../types/postType";
 import {ObjectId} from "mongodb";
 import {PostDBType} from "../../db/post-db-type";
 import {blogsMongoQueryRepository} from "../../02-blogs/04-repository/blogsMongoQueryRepository";
