@@ -5,7 +5,7 @@ import {usersMongoQueryRepository} from "../04-repository/usersMongoQueryReposit
 import {usersService} from "../03-service/usersService";
 import {ObjectId} from "mongodb";
 
-export const getUsers = async (req: Request<{}, {}, {}, InputUserQueryType>,
+export const getUsers = async (req: Request/*<{}, {}, {}, InputUserQueryType>*/,
                                res: Response<OutputUserQueryType>) => {
     const query = sortNPagingUserQuery(req.query)
     const users = await usersMongoQueryRepository.find(query)

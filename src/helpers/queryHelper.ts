@@ -23,7 +23,14 @@ export const sortNPagingPostQuery = (query: InputPostQueryType) => {
     }
 }
 
-export const sortNPagingUserQuery = (query: InputUserQueryType) => {
+export const sortNPagingUserQuery = (query: {
+    sortBy?: string,
+    sortDirection?: string,
+    pageNumber?: string,
+    pageSize?: string,
+    searchLoginTerm?: string,
+    searchEmailTerm?: string
+}): InputUserQueryType => {
     return {
         sortBy: query.sortBy ? query.sortBy : 'createdAt',
         sortDirection: query.sortDirection ? query.sortDirection as SortDirection : 'desc',
