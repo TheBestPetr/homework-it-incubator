@@ -2,7 +2,7 @@ import {SortDirection} from "mongodb";
 import {InputBlogQueryType} from "../types/blogType";
 import {InputPostQueryType} from "../types/postType";
 import {query} from "express-validator";
-import {InputUserQueryType} from "../types/userType";
+import {InputUserQueryType, InputUserType} from "../types/userType";
 
 export const sortNPagingBlogQuery = (query: InputBlogQueryType) => {
     return {
@@ -23,7 +23,7 @@ export const sortNPagingPostQuery = (query: InputPostQueryType) => {
     }
 }
 
-export const sortNPagingUserQuery = (query: InputUserQueryType) => {
+export const sortNPagingUserQuery = (query: Partial<InputUserQueryType>) : InputUserQueryType => {
     return {
         sortBy: query.sortBy ? query.sortBy : 'createdAt',
         sortDirection: query.sortDirection ? query.sortDirection as SortDirection : 'desc',

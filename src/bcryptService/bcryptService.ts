@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt-ts'
+import bcrypt from 'bcrypt'
 
 export const bcryptService = {
     async generateHash(password: string) {
