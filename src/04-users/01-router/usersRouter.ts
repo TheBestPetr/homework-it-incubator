@@ -7,7 +7,6 @@ import {authMiddleware} from "../../middlewares/authMiddleware";
 export const usersRouter = Router()
 
 usersRouter.get('/',
-    authMiddleware,
     getUsers)
 usersRouter.post('/',
     authMiddleware,

@@ -1,11 +1,11 @@
 import {Request, Response} from "express";
-import {InputUserType, OutputUserQueryType, OutputUserType} from "../../types/userType";
+import {InputUserQueryType, InputUserType, OutputUserQueryType, OutputUserType} from "../../types/userType";
 import {sortNPagingUserQuery} from "../../helpers/queryHelper";
 import {usersMongoQueryRepository} from "../04-repository/usersMongoQueryRepository";
 import {usersService} from "../03-service/usersService";
 import {ObjectId} from "mongodb";
 
-export const getUsers = async (req: Request,
+export const getUsers = async (req: Request<{}, {}, {}, InputUserQueryType>,
                                res: Response<OutputUserQueryType>) => {
     const query = sortNPagingUserQuery(req.query)
     const users = await usersMongoQueryRepository.find(query)
