@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import {InputUserQueryType, InputUserType, OutputUserQueryType, OutputUserType} from "../../types/userType";
+import {InputUserType, OutputUserQueryType, OutputUserType} from "../../types/userType";
 import {sortNPagingUserQuery} from "../../helpers/queryHelper";
 import {usersMongoQueryRepository} from "../04-repository/usersMongoQueryRepository";
 import {usersService} from "../03-service/usersService";
