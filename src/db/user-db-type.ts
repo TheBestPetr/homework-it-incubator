@@ -1,6 +1,6 @@
 export type UserDbType = {
     login: string
-    password: string
+    passwordHash: string
     email: string
     createdAt: string
 }

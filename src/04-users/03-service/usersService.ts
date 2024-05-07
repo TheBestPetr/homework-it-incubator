@@ -1,13 +1,14 @@
-import {InputUserType, OutputUserType} from "../../types/usersType";
+import {InputUserType, OutputUserType} from "../../types/userType";
 import {UserDbType} from "../../db/user-db-type";
 import {usersMongoRepository} from "../04-repository/usersMongoRepository";
-import {ObjectId} from "mongodb";
+import {bcryptService} from "../../bcryptService/bcryptService";
 
 export const usersService = {
     async create(input: InputUserType): Promise<OutputUserType> {
+        const passwordHash = await bcryptService.generateHash(input.password)
         const createdUser: UserDbType = {
             login: input.login,
-            password: input.password,
+            passwordHash: passwordHash,
             email: input.email,
             createdAt: new Date().toISOString()
         }
@@ -21,8 +22,7 @@ export const usersService = {
     },
 
     async delete(id: string): Promise<boolean> {
-        const ObjId = new ObjectId(id)
-        const result = await usersMongoRepository.delete(ObjId)
+        const result = await usersMongoRepository.delete(id)
         return result.deletedCount === 1
     }
 }

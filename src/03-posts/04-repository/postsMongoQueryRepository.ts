@@ -54,8 +54,7 @@ export const postsMongoQueryRepository = {
     },
 
     async findById(id: string): Promise<OutputPostType | null> {
-        const ObjId = new ObjectId(id)
-        const post = await postCollection.findOne({_id: ObjId})
+        const post = await postCollection.findOne({_id: new ObjectId(id)})
         if (post) {
             return {
                 id: post._id.toString(),

@@ -8,11 +8,11 @@ export const blogsMongoRepository = {
         return await blogCollection.insertOne({...input})
     },
 
-    async update(id: ObjectId, input: InputBlogType) {
-        return await blogCollection.updateOne({_id: id}, {$set: {...input,}})
+    async update(id: string, input: InputBlogType) {
+        return await blogCollection.updateOne({_id: new ObjectId(id)}, {$set: {...input,}})
     },
 
-    async delete(id: ObjectId) {
-        return await blogCollection.deleteOne({_id: id})
+    async delete(id: string) {
+        return await blogCollection.deleteOne({_id: new ObjectId(id)})
     }
 }

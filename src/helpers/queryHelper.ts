@@ -2,7 +2,7 @@ import {SortDirection} from "mongodb";
 import {InputBlogQueryType} from "../types/blogType";
 import {InputPostQueryType} from "../types/postType";
 import {query} from "express-validator";
-import {InputUserQueryType} from "../types/usersType";
+import {InputUserQueryType} from "../types/userType";
 
 export const sortNPagingBlogQuery = (query: InputBlogQueryType) => {
     return {

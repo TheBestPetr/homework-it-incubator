@@ -8,8 +8,8 @@ export const postsMongoRepository = {
         return await postCollection.insertOne(input)
     },
 
-    async update(id: ObjectId, input: InputPostType) {
-        return await postCollection.updateOne({_id: id}, {
+    async update(id: string, input: InputPostType) {
+        return await postCollection.updateOne({_id: new ObjectId(id)}, {
             $set: {
                 ...input,
                 blogId: new ObjectId(input.blogId).toString()
@@ -17,7 +17,7 @@ export const postsMongoRepository = {
         })
     },
 
-    async delete(id: ObjectId) {
-        return await postCollection.deleteOne({_id: id})
+    async delete(id: string) {
+        return await postCollection.deleteOne({_id: new ObjectId(id)})
     }
 }

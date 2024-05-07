@@ -31,8 +31,7 @@ export const blogsMongoQueryRepository = {
     },
 
     async findById(id: string): Promise<OutputBlogType | null> {
-        const ObjId = new ObjectId(id)
-        const blog = await blogCollection.findOne({_id: ObjId})
+        const blog = await blogCollection.findOne({_id: new ObjectId(id)})
         if (blog) {
             return {
                 id: blog._id.toString(),

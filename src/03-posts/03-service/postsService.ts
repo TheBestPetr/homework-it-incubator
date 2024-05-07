@@ -46,14 +46,12 @@ export const postsService = {
     },
 
     async update(id: string, input: InputPostType): Promise<boolean> {
-        const ObjId = new ObjectId(id)
-        const result = await postsMongoRepository.update(ObjId, input)
+        const result = await postsMongoRepository.update(id, input)
         return !!result.matchedCount
     },
 
     async delete(id: string): Promise<boolean> {
-        const ObjId = new ObjectId(id)
-        const result = await postsMongoRepository.delete(ObjId)
+        const result = await postsMongoRepository.delete(id)
         return result.deletedCount === 1
     }
 }

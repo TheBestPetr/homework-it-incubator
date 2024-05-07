@@ -4,8 +4,10 @@ import {authService} from "../03-servise/authService";
 
 export const createAuth = async (req: Request<{}, {}, InputLoginType>,
                                  res: Response) => {
-    const auth = await authService.create(req.body)
-    if(!auth) {
+    const userId = await authService.checkCredentials(req.body)
+    if (!userId) {
         res.sendStatus(401)
+        return
     }
+    res.sendStatus(204)
 }

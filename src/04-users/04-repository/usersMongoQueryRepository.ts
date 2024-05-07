@@ -1,4 +1,4 @@
-import {InputUserQueryType, OutputUserQueryType} from "../../types/usersType";
+import {InputUserQueryType, OutputUserQueryType} from "../../types/userType";
 import {usersCollection} from "../../db/mongo-db";
 
 export const usersMongoQueryRepository = {

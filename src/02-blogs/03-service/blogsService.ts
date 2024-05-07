@@ -1,6 +1,5 @@
 import {blogsMongoRepository} from "../04-repository/blogsMongoRepository";
 import {InputBlogType, OutputBlogType} from "../../types/blogType";
-import {ObjectId} from "mongodb";
 import {BlogDBType} from "../../db/blog-db-type";
 
 export const blogsService = {
@@ -22,14 +21,12 @@ export const blogsService = {
     },
 
     async update(id: string, input: InputBlogType): Promise<boolean> {
-        const objId = new ObjectId(id)
-        const result = await blogsMongoRepository.update(objId, input)
+        const result = await blogsMongoRepository.update(id, input)
         return !!result.matchedCount
     },
 
     async delete(id: string): Promise<boolean> {
-        const ObjId = new ObjectId(id)
-        const result = await blogsMongoRepository.delete(ObjId)
+        const result = await blogsMongoRepository.delete(id)
         return result.deletedCount === 1
     }
 }
