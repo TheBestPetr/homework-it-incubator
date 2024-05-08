@@ -7,15 +7,15 @@ export const usersMongoQueryRepository = {
             ? {email: {$regex: query.searchEmailTerm, $options: 'i'}}
             : {}
         const searchWithLogin = query.searchLoginTerm
-            ? {login: {$regex: query.searchLoginTerm, options: 'i'}}
+            ? {login: {$regex: query.searchLoginTerm, $options: 'i'}}
             : {}
         const items = await usersCollection
-            .find({$or: [{email: searchWithEmail}, {login: searchWithLogin}]})
+            .find({$or: [searchWithEmail, searchWithLogin]})
             .sort(query.sortBy, query.sortDirection)
             .skip((query.pageNumber - 1) * query.pageSize)
             .limit(query.pageSize)
             .toArray()
-        const totalCount = await usersCollection.countDocuments({$or: [{email: searchWithEmail}, {login: searchWithLogin}]})
+        const totalCount = await usersCollection.countDocuments({$or: [searchWithEmail, searchWithLogin]})
         return {
             pagesCount: Math.ceil(totalCount / query.pageSize),
             page: query.pageNumber,
