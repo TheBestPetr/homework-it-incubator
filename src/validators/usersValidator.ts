@@ -1,4 +1,4 @@
-import {body} from "express-validator";
+import {body, header} from "express-validator";
 
 export const userBodyValidation = [
     body('login')

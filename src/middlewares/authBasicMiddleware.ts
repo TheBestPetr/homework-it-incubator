@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from "express";
 
 const AUTH = 'admin:qwerty'
-export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
+export const authBasicMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const auth = req.headers['authorization'] as string
     if (!auth) {
         res

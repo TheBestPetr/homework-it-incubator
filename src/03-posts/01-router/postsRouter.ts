@@ -6,26 +6,36 @@ import {
     getPosts,
     updatePostController
 } from "../02-controllers/postsController";
-import {authMiddleware} from "../../middlewares/authMiddleware";
-import {errorsValidationResultMiddleware} from "../../middlewares/errorsValidationMiddleware";
-import {postBodyValidation} from "../../middlewares/postsValidator";
+import {authBasicMiddleware} from "../../middlewares/authBasicMiddleware";
+import {errorsValidationResultMiddleware} from "../../validators/errorsValidationMiddleware";
+import {postBodyValidation} from "../../validators/postsValidator";
+import {createCommentController, getCommentsByPostIdParams} from "../../06-comments/02-controllers/commentsController";
+import {commentBodyValidation} from "../../validators/commentsValidator";
+import {authBearerMiddleware} from "../../middlewares/authBearerMiddleware";
 
 export const postsRouter = Router()
 
 postsRouter.get('/',
     getPosts)
 postsRouter.post('/',
-    authMiddleware,
+    authBasicMiddleware,
     postBodyValidation,
     errorsValidationResultMiddleware,
     createPostController)
 postsRouter.get('/:id',
     findPostController)
 postsRouter.put('/:id',
-    authMiddleware,
+    authBasicMiddleware,
     postBodyValidation,
     errorsValidationResultMiddleware,
     updatePostController)
 postsRouter.delete('/:id',
-    authMiddleware,
+    authBasicMiddleware,
     deletePostController)
+postsRouter.post('/:postId/comments',
+    authBearerMiddleware,
+    commentBodyValidation,
+    errorsValidationResultMiddleware,
+    createCommentController)
+postsRouter.get('/:postId/comments',
+    getCommentsByPostIdParams)

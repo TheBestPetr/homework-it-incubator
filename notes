@@ -1,0 +1,12 @@
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at new NodeError (node:internal/errors:406:5)
+    at ServerResponse.setHeader (node:_http_outgoing:652:11)
+    at ServerResponse.header (D:\IT\IT-INCUBATOR Учеба\1-Sprint\homework\node_modules\express\lib\response.js:794:10)
+    at ServerResponse.contentType (D:\IT\IT-INCUBATOR Учеба\1-Sprint\homework\node_modules\express\lib\response.js:624:15)
+    at ServerResponse.sendStatus (D:\IT\IT-INCUBATOR Учеба\1-Sprint\homework\node_modules\express\lib\response.js:373:8)
+    at D:\IT\IT-INCUBATOR Учеба\1-Sprint\homework\dist\05-auth\02-controllers\authController.js:32:13
+    at Generator.next (<anonymous>)
+    at fulfilled (D:\IT\IT-INCUBATOR Учеба\1-Sprint\homework\dist\05-auth\02-controllers\authController.js:5:58)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  code: 'ERR_HTTP_HEADERS_SENT'
+}

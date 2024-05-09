@@ -3,6 +3,7 @@ import {InputBlogQueryType} from "../types/blogType";
 import {InputPostQueryType} from "../types/postType";
 import {query} from "express-validator";
 import {InputUserQueryType, InputUserType} from "../types/userType";
+import {InputCommentQueryType, InputCommentType} from "../types/commentType";
 
 export const sortNPagingBlogQuery = (query: InputBlogQueryType) => {
     return {
@@ -23,7 +24,7 @@ export const sortNPagingPostQuery = (query: InputPostQueryType) => {
     }
 }
 
-export const sortNPagingUserQuery = (query: Partial<InputUserQueryType>) : InputUserQueryType => {
+export const sortNPagingUserQuery = (query: Partial<InputUserQueryType>): InputUserQueryType => {
     return {
         sortBy: query.sortBy ? query.sortBy : 'createdAt',
         sortDirection: query.sortDirection ? query.sortDirection as SortDirection : 'desc',
@@ -31,5 +32,14 @@ export const sortNPagingUserQuery = (query: Partial<InputUserQueryType>) : Input
         pageSize: query.pageSize ? +query.pageSize : 10,
         searchLoginTerm: query.searchLoginTerm ? query.searchLoginTerm : null,
         searchEmailTerm: query.searchEmailTerm ? query.searchEmailTerm : null
+    }
+}
+
+export const sortNPagingCommentQuery = (query: Partial<InputCommentQueryType>): InputCommentQueryType => {
+    return {
+        pageNumber: query.pageNumber ? query.pageNumber : 1,
+        pageSize: query.pageSize ? query.pageSize : 10,
+        sortBy: query.sortBy ? query.sortBy : 'createdAt',
+        sortDirection: query.sortDirection ? query.sortDirection as SortDirection : 'desc'
     }
 }

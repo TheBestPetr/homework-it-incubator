@@ -1,9 +1,14 @@
 import {Router} from "express";
-import {createAuth} from "../02-controllers/authController";
-import {authValidation} from "../../middlewares/authValidator";
+import {getUserInfo, loginUser} from "../02-controllers/authController";
+import {authBodyValidation} from "../../validators/authValidator";
+import {authBearerMiddleware} from "../../middlewares/authBearerMiddleware";
 
 export const authRouter = Router()
 
 authRouter.post('/login',
-    authValidation,
-    createAuth)
+    authBodyValidation,
+    loginUser)
+
+authRouter.get('/me',
+    authBearerMiddleware,
+    getUserInfo)

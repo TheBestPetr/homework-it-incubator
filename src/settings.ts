@@ -9,7 +9,8 @@ export const SETTINGS = {
     DB_COLLECTION_NAME: {
         BLOG: process.env.BLOG_COLLECTION_NAME || '',
         POST: process.env.POST_COLLECTION_NAME || '',
-        USER: process.env.USER_COLLECTION_NAME || ''
+        USER: process.env.USER_COLLECTION_NAME || '',
+        COMMENT: process.env.COMMENT_COLLECTION_NAME || ''
     },
     PATH: {
         VIDEOS: '/videos',
@@ -17,6 +18,8 @@ export const SETTINGS = {
         BLOGS: '/blogs',
         POSTS: '/posts',
         USERS: '/users',
-        AUTH: '/auth'
-    }
+        AUTH: '/auth',
+        COMMENTS: '/comments'
+    },
+    JWT_SECRET: process.env.JWT_SECRET || '123'
 }

@@ -1,5 +1,7 @@
 import {InputUserQueryType, OutputUserQueryType} from "../../types/userType";
-import {usersCollection} from "../../db/mongo-db";
+import {userCollection} from "../../db/mongo-db";
+import {meDBType} from "../../db/me-db-type";
+import {ObjectId} from "mongodb";
 
 export const usersMongoQueryRepository = {
     async find(query: InputUserQueryType): Promise<OutputUserQueryType> {
@@ -9,13 +11,13 @@ export const usersMongoQueryRepository = {
         const searchWithLogin = query.searchLoginTerm
             ? {login: {$regex: query.searchLoginTerm, $options: 'i'}}
             : {}
-        const items = await usersCollection
+        const items = await userCollection
             .find({$or: [searchWithEmail, searchWithLogin]})
             .sort(query.sortBy, query.sortDirection)
             .skip((query.pageNumber - 1) * query.pageSize)
             .limit(query.pageSize)
             .toArray()
-        const totalCount = await usersCollection.countDocuments({$or: [searchWithEmail, searchWithLogin]})
+        const totalCount = await userCollection.countDocuments({$or: [searchWithEmail, searchWithLogin]})
         return {
             pagesCount: Math.ceil(totalCount / query.pageSize),
             page: query.pageNumber,
@@ -28,5 +30,21 @@ export const usersMongoQueryRepository = {
                 createdAt: user.createdAt
             }))
         }
+    },
+
+    async findWithLoginOrEmail(loginOrEmail: string) {
+        return await userCollection.findOne({$or: [{'login': loginOrEmail}, {'email': loginOrEmail}]})
+    },
+
+    async findWithId(userId: string): Promise<meDBType | null> {
+        const user = await userCollection.findOne({_id: new ObjectId(userId)})
+        if (user) {
+            return {
+                email: user.email,
+                login: user.login,
+                userId: user._id.toString()
+            }
+        }
+        return null
     }
 }

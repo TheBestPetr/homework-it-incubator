@@ -1,7 +1,7 @@
 import {body} from "express-validator";
 import {usersMongoRepository} from "../04-users/04-repository/usersMongoRepository";
 
-export const authValidation = [
+export const authBodyValidation = [
     body('loginOrEmail')
         .isString()
         .custom(async value => {
@@ -14,5 +14,6 @@ export const authValidation = [
 
     body('password')
         .isString()
-        .isLength({min: 3, max: 10})
+        .isLength({min: 6, max: 20})
 ]
+
