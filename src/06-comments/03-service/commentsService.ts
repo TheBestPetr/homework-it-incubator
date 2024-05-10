@@ -36,10 +36,8 @@ export const commentsService = {
 
     async isUserCanDoThis(userId: string, commentId: string): Promise<boolean> {
         const comment = await commentsMongoQueryRepository.findById(commentId)
-        if (userId !== comment?.commentatorInfo.userId) {
-            return false
-        }
-        return true
+        return userId === comment?.commentatorInfo.userId;
+
     },
 
     async delete(id: string) {

@@ -10,7 +10,7 @@ export const loginUser = async (req: Request<{}, {}, InputLoginType>,
     const user = await authService.checkCredentials(req.body)
     if (user) {
         const token = await jwtService.createJWT(user)
-        res.status(200).send(token)
+        res.status(200).send({'accessToken': token})
         return
     }
     res.sendStatus(401)
