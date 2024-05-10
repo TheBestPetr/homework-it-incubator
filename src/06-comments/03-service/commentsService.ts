@@ -3,7 +3,6 @@ import {usersMongoQueryRepository} from "../../04-users/04-repository/usersMongo
 import {CommentDbType} from "../../db/comment-db-type";
 import {commentsMongoRepository} from "../04-repository/commentsMongoRepository";
 import {commentsMongoQueryRepository} from "../04-repository/commentsMongoQueryRepository";
-import {postsMongoRepository} from "../../03-posts/04-repository/postsMongoRepository";
 
 export const commentsService = {
     async create(content: InputCommentType, commentatorId: string, postId: string): Promise<OutputCommentType> {
