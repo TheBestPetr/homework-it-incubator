@@ -11,9 +11,6 @@ import {commentsService} from "../03-service/commentsService";
 import {commentsMongoQueryRepository} from "../04-repository/commentsMongoQueryRepository";
 import {sortNPagingCommentQuery} from "../../helpers/queryHelper";
 import {ObjectId} from "mongodb";
-import exp from "node:constants";
-import {usersMongoRepository} from "../../04-users/04-repository/usersMongoRepository";
-import {usersService} from "../../04-users/03-service/usersService";
 
 export const getCommentsByPostIdParams = async (req: Request<{ postId: string }, {}, Partial<InputCommentQueryType>>,
                                                 res: Response<OutputCommentQueryType>) => {
