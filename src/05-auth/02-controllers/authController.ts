@@ -11,6 +11,7 @@ export const loginUser = async (req: Request<{}, {}, InputLoginType>,
     if (user) {
         const token = await jwtService.createJWT(user)
         res.status(200).send(token)
+        return
     }
     res.sendStatus(401)
 }
