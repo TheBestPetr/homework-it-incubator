@@ -30,7 +30,7 @@ export const commentsService = {
 
     async update(input: InputCommentType, commentId: string): Promise<boolean> {
         const result = await commentsMongoRepository.update(input, commentId)
-        return !result.matchedCount
+        return !!result.matchedCount
     },
 
     async isUserCanDoThis(userId: string, commentId: string): Promise<boolean> {

@@ -1,5 +1,5 @@
 import {CommentDbType} from "../../db/comment-db-type";
-import {commentCollection, postCollection} from "../../db/mongo-db";
+import {commentCollection} from "../../db/mongo-db";
 import {ObjectId} from "mongodb";
 import {InputCommentType} from "../../types/commentType";
 
@@ -8,8 +8,8 @@ export const commentsMongoRepository = {
         return await commentCollection.insertOne(comment)
     },
 
-    async update(input: InputCommentType, id: string) {
-        return await commentCollection.updateOne({_id: new ObjectId(id)}, {$set: {...input}})
+    async update(input: InputCommentType, commentId: string) {
+        return await commentCollection.updateOne({_id: new ObjectId(commentId)}, {$set: {content: input.content}})
     },
 
     async delete(id: string) {

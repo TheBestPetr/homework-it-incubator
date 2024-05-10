@@ -40,7 +40,7 @@ export const getCommentById = async (req: Request<{ id: string }>,
 
 export const createCommentController = async (req: Request<{ postId: string }, {}, InputCommentType>,
                                               res: Response<OutputCommentType>) => {
-    if (!req.params.postId || !ObjectId.isValid(req.params.postId)) {
+    if (!req.params.postId || !ObjectId.isValid(req.params.postId) || !req.headers.authorization) {
         res.sendStatus(404)
         return
     }
@@ -74,9 +74,8 @@ export const updateCommentController = async (req: Request<{ commentId: string }
     if (!updatedComment) {
         res.sendStatus(404)
         return
-    } else {
-        res.sendStatus(204)
     }
+    res.sendStatus(204)
 }
 
 export const deleteCommentController = async (req: Request<{ commentId: string }>,
