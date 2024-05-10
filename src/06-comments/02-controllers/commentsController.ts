@@ -74,16 +74,17 @@ export const updateCommentController = async (req: Request<{ commentId: string }
         return
     }
     const updatedComment = await commentsService.update(req.body, req.params.commentId)
-    if (updatedComment) {
-        res.sendStatus(204)
-    } else {
+    if (!updatedComment) {
         res.sendStatus(404)
+        return
+    } else {
+        res.sendStatus(204)
     }
 }
 
 export const deleteCommentController = async (req: Request<{ commentId: string }>,
                                               res: Response) => {
-    if (!ObjectId.isValid(req.params.commentId)) {
+    if (!ObjectId.isValid(req.params.commentId) || !req.params.commentId) {
         res.status(404).send()
         return
     }
