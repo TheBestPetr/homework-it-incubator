@@ -20,6 +20,7 @@ export const getCommentsByPostIdParams = async (req: Request<{ postId: string },
         return
     }
     const query = sortNPagingCommentQuery(req.query)
+    console.log(query)
     const comments = await commentsMongoQueryRepository.findCommentsByPostId(req.params.postId, query)
     if (comments) {
         res.status(200).send(comments)
