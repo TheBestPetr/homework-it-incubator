@@ -14,7 +14,7 @@ export const authBearerMiddleware = (req: Request,
         res.sendStatus(401)
         return
     }
-    header(bearer[1]).not().isJWT()
+    header('authorization').isJWT()
     req.headers.authorization = bearer[1]
     next()
 }

@@ -20,7 +20,6 @@ export const getCommentsByPostIdParams = async (req: Request<{ postId: string },
         return
     }
     const query = sortNPagingCommentQuery(req.query)
-    console.log(query)
     const comments = await commentsMongoQueryRepository.findCommentsByPostId(req.params.postId, query)
     if (comments) {
         res.status(200).send(comments)
@@ -65,6 +64,11 @@ export const updateCommentController = async (req: Request<{ commentId: string }
         res.sendStatus(404)
         return
     }
+    const comment = await commentsMongoQueryRepository.findById(req.params.commentId)
+    if (!comment) {
+        res.sendStatus(404)
+        return
+    }
     const userId = await jwtService.getUserIdByToken(req.headers.authorization!)
     const isUserCanDoThis = await commentsService.isUserCanDoThis(userId, req.params.commentId)
     if (!isUserCanDoThis) {
@@ -83,6 +87,11 @@ export const deleteCommentController = async (req: Request<{ commentId: string }
                                               res: Response) => {
     if (!ObjectId.isValid(req.params.commentId) || !req.params.commentId) {
         res.status(404).send()
+        return
+    }
+    const comment = await commentsMongoQueryRepository.findById(req.params.commentId)
+    if (!comment) {
+        res.sendStatus(404)
         return
     }
     const userId = await jwtService.getUserIdByToken(req.headers.authorization!)
