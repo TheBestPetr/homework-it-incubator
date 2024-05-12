@@ -14,7 +14,14 @@ export const authBearerMiddleware = (req: Request,
         res.sendStatus(401)
         return
     }
-    header('authorization').isJWT()
+    header('authorization')
+        .custom(value => {
+            const token = value.split(' ')[1]
+            if (token.isJWT()) {
+                return 401
+            }
+            return true
+        })
     req.headers.authorization = bearer[1]
     next()
 }
