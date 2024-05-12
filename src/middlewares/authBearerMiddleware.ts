@@ -17,7 +17,7 @@ export const authBearerMiddleware = (req: Request,
     header('authorization')
         .custom(value => {
             const token = value.split(' ')[1]
-            if (token.isJWT()) {
+            if (token.not().isJWT()) {
                 return 401
             }
             return true
