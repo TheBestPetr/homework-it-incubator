@@ -70,6 +70,10 @@ export const updateCommentController = async (req: Request<{ commentId: string }
         return
     }
     const userId = await jwtService.getUserIdByToken(req.headers.authorization!)
+    if (!userId) {
+        res.sendStatus(401)
+        return
+    }
     const isUserCanDoThis = await commentsService.isUserCanDoThis(userId, req.params.commentId)
     if (!isUserCanDoThis) {
         res.sendStatus(403)
@@ -95,6 +99,10 @@ export const deleteCommentController = async (req: Request<{ commentId: string }
         return
     }
     const userId = await jwtService.getUserIdByToken(req.headers.authorization!)
+    if (!userId) {
+        res.sendStatus(401)
+        return
+    }
     const isUserCanDoThis = await commentsService.isUserCanDoThis(userId, req.params.commentId)
     if (!isUserCanDoThis) {
         res.sendStatus(403)
