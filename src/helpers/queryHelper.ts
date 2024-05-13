@@ -1,9 +1,8 @@
 import {SortDirection} from "mongodb";
 import {InputBlogQueryType} from "../types/blogType";
 import {InputPostQueryType} from "../types/postType";
-import {query} from "express-validator";
-import {InputUserQueryType, InputUserType} from "../types/userType";
-import {InputCommentQueryType, InputCommentType} from "../types/commentType";
+import {InputUserQueryType} from "../types/userType";
+import {InputCommentQueryType} from "../types/commentType";
 
 export const sortNPagingBlogQuery = (query: InputBlogQueryType) => {
     return {
