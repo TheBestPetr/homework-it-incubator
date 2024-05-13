@@ -37,8 +37,8 @@ export const sortNPagingUserQuery = (query: Partial<InputUserQueryType>): InputU
 
 export const sortNPagingCommentQuery = (query: Partial<InputCommentQueryType>): InputCommentQueryType => {
     return {
-        pageNumber: query.pageNumber ? query.pageNumber : 1,
-        pageSize: query.pageSize ? query.pageSize : 10,
+        pageNumber: query.pageNumber ? +query.pageNumber : 1,
+        pageSize: query.pageSize ? +query.pageSize : 10,
         sortBy: query.sortBy ? query.sortBy : 'createdAt',
         sortDirection: query.sortDirection ? query.sortDirection as SortDirection : 'desc'
     }
