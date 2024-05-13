@@ -1,5 +1,5 @@
 import {Request, Response, NextFunction} from "express";
-import {header} from "express-validator";
+import {jwtService} from "../application/jwtService/jwtService";
 
 export const authBearerMiddleware = (req: Request,
                                      res: Response,
@@ -10,18 +10,12 @@ export const authBearerMiddleware = (req: Request,
         return
     }
     const bearer = bearerHeader.split(' ')
-    if (bearer[0] !== 'Bearer' || bearer.length > 3) {
+    const userId = jwtService.getUserIdByToken(bearer[1])
+    const splitBearer = bearer[1].split('.')
+    if (bearer[0] !== 'Bearer' || bearer.length > 3 || !userId || splitBearer.length !== 3) {
         res.sendStatus(401)
         return
     }
-    header('authorization')
-        .custom(value => {
-            const token = value.split(' ')[1]
-            if (!token.contains('.')) {
-                return 401
-            }
-            return true
-        })
     req.headers.authorization = bearer[1]
     next()
 }

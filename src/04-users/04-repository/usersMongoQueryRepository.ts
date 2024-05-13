@@ -36,7 +36,7 @@ export const usersMongoQueryRepository = {
         return await userCollection.findOne({$or: [{'login': loginOrEmail}, {'email': loginOrEmail}]})
     },
 
-    async findWithId(userId: string): Promise<meDBType | null> {
+    async findById(userId: string): Promise<meDBType | null> {
         const user = await userCollection.findOne({_id: new ObjectId(userId)})
         if (user) {
             return {

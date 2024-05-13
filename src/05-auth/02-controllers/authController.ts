@@ -20,7 +20,7 @@ export const getUserInfo = async (req: Request,
                                   res: Response<meDBType | {}>) => {
     const userId = await jwtService.getUserIdByToken(req.headers.authorization!)
     if (userId) {
-        const user = await usersMongoQueryRepository.findWithId(userId)
+        const user = await usersMongoQueryRepository.findById(userId)
         if (user) {
             res.status(200).send(user)
             return

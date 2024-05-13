@@ -6,7 +6,7 @@ import {commentsMongoQueryRepository} from "../04-repository/commentsMongoQueryR
 
 export const commentsService = {
     async create(content: InputCommentType, commentatorId: string, postId: string): Promise<OutputCommentType> {
-        const user = await usersMongoQueryRepository.findWithId(commentatorId)
+        const user = await usersMongoQueryRepository.findById(commentatorId)
         const newComment: CommentDbType = {
             postId: postId,
             content: content.content,
@@ -24,7 +24,7 @@ export const commentsService = {
                 userId: user!.userId,
                 userLogin: user!.login
             },
-            createdAt: new Date().toISOString()
+            createdAt: newComment.createdAt
         }
     },
 
