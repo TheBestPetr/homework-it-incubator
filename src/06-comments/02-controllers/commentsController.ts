@@ -14,8 +14,12 @@ import {ObjectId} from "mongodb";
 
 export const getCommentsByPostIdParams = async (req: Request<{ postId: string }, {}, Partial<InputCommentQueryType>>,
                                                 res: Response<OutputCommentQueryType>) => {
+    if (!ObjectId.isValid(req.params.postId)) {
+        res.sendStatus(404)
+        return
+    }
     const isPostExist = await postsMongoQueryRepository.findById(req.params.postId)
-    if (!ObjectId.isValid(req.params.postId) || !isPostExist) {
+    if (!isPostExist) {
         res.sendStatus(404)
         return
     }
