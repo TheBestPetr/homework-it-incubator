@@ -62,7 +62,7 @@ export const authConfirmRegistrationBodyValidation = [
         .notEmpty()
         .custom(async code => {
             const user = await usersMongoQueryRepository.findByConfirmationCode(code)
-            if (!user && user!.emailConfirmation.expirationDate! < new Date().toISOString() && !user!.emailConfirmation.isConfirmed) {
+            if (!user || user!.emailConfirmation.expirationDate! < new Date().toISOString() || user!.emailConfirmation.isConfirmed) {
                 throw new Error()
             }
             return true
@@ -75,7 +75,7 @@ export const authResendingEmailValidation = [
         .notEmpty()
         .custom(async email => {
             const user = await usersMongoQueryRepository.findByLoginOrEmail(email)
-            if (!user && user!.emailConfirmation.isConfirmed) {
+            if (!user || user!.emailConfirmation.isConfirmed) {
                 throw new Error()
             }
             return true

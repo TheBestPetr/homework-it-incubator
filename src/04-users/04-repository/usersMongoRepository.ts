@@ -11,7 +11,7 @@ export const usersMongoRepository = {
         return await userCollection.deleteOne({_id: new ObjectId(id)})
     },
 
-    async updateEmailStatus(id: string, input: Object) {
+    async updateEmailConfirmation(id: string, input: Object) {
         return await userCollection.updateOne({_id: new ObjectId(id)}, {
             $set: {
                 ...input

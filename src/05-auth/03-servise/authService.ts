@@ -38,7 +38,7 @@ export const authService = {
         }
         await usersMongoRepository.create(createdUser)
 
-        nodemailerService.sendEmail(createdUser.email, 'User registration', createdUser.emailConfirmation!.confirmationCode!)
+        nodemailerService.sendEmail(createdUser.email, 'User registration code', createdUser.emailConfirmation!.confirmationCode!)
             .catch((error) => {
                 console.error('Send email error', error)
             })
@@ -51,7 +51,7 @@ export const authService = {
             user.emailConfirmation.confirmationCode = undefined
             user.emailConfirmation.expirationDate = undefined
             user.emailConfirmation.isConfirmed = true
-            const result = await usersMongoRepository.updateEmailStatus(user._id.toString(), user)
+            const result = await usersMongoRepository.updateEmailConfirmation(user._id.toString(), user)
             return result.modifiedCount === 1
         }
         return false
@@ -65,15 +65,15 @@ export const authService = {
                 hours: 1,
                 minutes: 2
             }).toISOString()
-            const result = await usersMongoRepository.updateEmailStatus(user._id.toString(), user)
+            const result = await usersMongoRepository.updateEmailConfirmation(user._id.toString(), user)
             if (result) {
-                nodemailerService.sendEmail(user.email, 'User registration', user.emailConfirmation!.confirmationCode)
+                nodemailerService.sendEmail(user.email, 'User registration new code', user.emailConfirmation!.confirmationCode)
                     .catch((error) => {
                         console.error(error)
                     })
             }
-            return false
+            return true
         }
-        return true
+        return false
     }
 }
