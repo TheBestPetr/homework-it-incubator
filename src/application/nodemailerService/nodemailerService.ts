@@ -15,7 +15,7 @@ export const nodemailerService = {
             subject: subject,
             html: `<h1>Thanks for your registration</h1> 
                 <p>To finish registration please follow the link below: 
-                    <a href=\'https://some-front.com/confirm-registration?${confirmationCode}\'> complete registration </a> 
+                    <a href=\'https://some-front.com/confirm-registration?code=${confirmationCode}\'> complete registration </a> 
                 </p>`
         })
         return !!info
