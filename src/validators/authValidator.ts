@@ -62,7 +62,7 @@ export const authConfirmRegistrationBodyValidation = [
         .notEmpty()
         .custom(async code => {
             const user = await usersMongoQueryRepository.findByConfirmationCode(code)
-            if (!user && user!.emailConfirmation.expirationDate! < new Date().toISOString()) {
+            if (!user && user!.emailConfirmation.expirationDate! < new Date().toISOString() && !user!.emailConfirmation.isConfirmed) {
                 throw new Error()
             }
             return true
