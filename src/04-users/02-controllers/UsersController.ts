@@ -14,7 +14,7 @@ export const getUsers = async (req: Request<{}, {}, {}, Partial<InputUserQueryTy
 
 export const createUserController = async (req: Request<{}, {}, InputUserType>,
                                            res: Response<OutputUserType>) => {
-    const user = await usersService.create(req.body)
+    const user = await usersService.createSuperUser(req.body)
     res.status(201).send(user)
 }
 

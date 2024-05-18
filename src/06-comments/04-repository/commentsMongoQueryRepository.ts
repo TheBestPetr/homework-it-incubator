@@ -1,7 +1,6 @@
 import {InputCommentQueryType, OutputCommentQueryType, OutputCommentType} from "../../types/commentType";
 import {commentCollection} from "../../db/mongo-db";
 import {ObjectId} from "mongodb";
-import {postsMongoQueryRepository} from "../../03-posts/04-repository/postsMongoQueryRepository";
 
 export const commentsMongoQueryRepository = {
     async findById(id: string): Promise<OutputCommentType | null> {

@@ -1,11 +1,12 @@
 import {body} from "express-validator";
-import {usersMongoRepository} from "../04-users/04-repository/usersMongoRepository";
+import {usersMongoQueryRepository} from "../04-users/04-repository/usersMongoQueryRepository";
 
-export const authBodyValidation = [
+export const authLoginBodyValidation = [
     body('loginOrEmail')
         .isString()
+        .notEmpty()
         .custom(async value => {
-            const isExist = await usersMongoRepository.isLoginOrEmailExist(value)
+            const isExist = await usersMongoQueryRepository.findByLoginOrEmail(value)
             if (!isExist) {
                 throw new Error()
             }
@@ -14,6 +15,70 @@ export const authBodyValidation = [
 
     body('password')
         .isString()
+        .notEmpty()
         .isLength({min: 6, max: 20})
 ]
 
+export const authRegistrationBodyValidation = [
+    body('login')
+        .isString()
+        .notEmpty()
+        .isLength({min: 3, max: 10})
+        .custom(async value => {
+            const isExist = await usersMongoQueryRepository.findByLoginOrEmail(value)
+            if (isExist) {
+                throw new Error()
+            }
+            return true
+        }),
+
+    body('password')
+        .isString()
+        .notEmpty()
+        .isLength({min: 6, max: 20})
+        .custom(value => {
+            if (value.includes('   ')) {
+                throw new Error()
+            }
+            return true
+        }),
+
+    body('email')
+        .isString()
+        .notEmpty()
+        .custom(async value => {
+            const isExist = await usersMongoQueryRepository.findByLoginOrEmail(value)
+            if (isExist) {
+                throw new Error()
+            }
+            return true
+        })
+        .matches('[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$')
+]
+
+export const authConfirmRegistrationBodyValidation = [
+    body('code')
+        .isString()
+        .notEmpty()
+        .custom(async code => {
+            const user = await usersMongoQueryRepository.findByConfirmationCode(code)
+            if (!user && user!.emailConfirmation.expirationDate! < new Date().toISOString()) {
+                throw new Error()
+            }
+            return true
+        })
+]
+
+export const authResendingEmailValidation = [
+    body('email')
+        .isString()
+        .notEmpty()
+        .custom(async email => {
+            const user = await usersMongoQueryRepository.findByLoginOrEmail(email)
+            if (!user || user!.emailConfirmation.isConfirmed) {
+                throw new Error()
+            }
+            return true
+        })
+        .matches('[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$')
+]

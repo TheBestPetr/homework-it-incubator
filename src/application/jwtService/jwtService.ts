@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken'
 import {SETTINGS} from "../../settings";
-import {ObjectId} from "mongodb";
 
 export const jwtService = {
     async createJWT(userId: string) {

@@ -4,13 +4,16 @@ import {usersMongoRepository} from "../04-repository/usersMongoRepository";
 import {bcryptService} from "../../bcryptService/bcryptService";
 
 export const usersService = {
-    async create(input: InputUserType): Promise<OutputUserType> {
+    async createSuperUser(input: InputUserType): Promise<OutputUserType> {
         const passwordHash = await bcryptService.generateHash(input.password)
         const createdUser: UserDbType = {
             login: input.login,
             passwordHash: passwordHash,
             email: input.email,
-            createdAt: new Date().toISOString()
+            createdAt: new Date().toISOString(),
+            emailConfirmation: {
+                isConfirmed: true
+            }
         }
         const insertedUser = await usersMongoRepository.create(createdUser)
         return {

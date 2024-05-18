@@ -40,14 +40,6 @@ const inputValidation = (video: InputVideoType) => {
     return errors
 }
 
-export type ParamType = {
-    id: string
-}
-
-export type QueryType = {
-    search?: string
-}
-
 export const CreateVideoController = (req: Request<{}, {}, InputVideoType>,
                                       res: Response<VideoType | ErrorsType>) => {
     const errors = inputValidation(req.body)

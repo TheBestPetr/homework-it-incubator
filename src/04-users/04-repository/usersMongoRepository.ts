@@ -1,7 +1,6 @@
 import {userCollection} from "../../db/mongo-db";
 import {UserDbType} from "../../db/user-db-type";
 import {ObjectId} from "mongodb";
-import {InputLoginType} from "../../types/authType";
 
 export const usersMongoRepository = {
     async create(input: UserDbType) {
@@ -12,7 +11,11 @@ export const usersMongoRepository = {
         return await userCollection.deleteOne({_id: new ObjectId(id)})
     },
 
-    async isLoginOrEmailExist(input: InputLoginType) {
-        return await userCollection.find({$or: [{'login': input.loginOrEmail}, {'email': input.loginOrEmail}]})
+    async updateEmailStatus(id: string, input: Object) {
+        return await userCollection.updateOne({_id: new ObjectId(id)}, {
+            $set: {
+                ...input
+            }
+        })
     }
 }

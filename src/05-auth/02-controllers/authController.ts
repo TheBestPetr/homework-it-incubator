@@ -4,6 +4,7 @@ import {authService} from "../03-servise/authService";
 import {jwtService} from "../../application/jwtService/jwtService";
 import {meDBType} from "../../db/me-db-type";
 import {usersMongoQueryRepository} from "../../04-users/04-repository/usersMongoQueryRepository";
+import {InputUserType} from "../../types/userType";
 
 export const loginUser = async (req: Request<{}, {}, InputLoginType>,
                                 res: Response) => {
@@ -27,4 +28,34 @@ export const getUserInfo = async (req: Request,
         }
     }
     res.sendStatus(404)
+}
+
+export const userRegistration = async (req: Request<{}, {}, InputUserType>,
+                                       res: Response) => {
+    const newUser = await authService.registerUser(req.body)
+    if (!newUser) {
+        res.sendStatus(403)
+        return
+    }
+    res.sendStatus(204)
+}
+
+export const userRegistrationConfirmation = async (req: Request<{}, {}, {'code': string}>,
+                                                   res: Response) => {
+    const isUserVerified = await authService.confirmUserEmail(req.body.code)
+    if (isUserVerified) {
+        res.sendStatus(204)
+        return
+    }
+    res.sendStatus(403)
+}
+
+export const userRegistrationEmailResending = async (req: Request<{}, {}, {'email': string}>,
+                                                     res: Response) => {
+    const isUserVerified = await authService.confirmUserEmailResending(req.body.email)
+    if (isUserVerified) {
+        res.sendStatus(204)
+        return
+    }
+    res.sendStatus(403)
 }

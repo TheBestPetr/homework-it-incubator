@@ -32,7 +32,7 @@ export const usersMongoQueryRepository = {
         }
     },
 
-    async findWithLoginOrEmail(loginOrEmail: string) {
+    async findByLoginOrEmail(loginOrEmail: string) {
         return await userCollection.findOne({$or: [{'login': loginOrEmail}, {'email': loginOrEmail}]})
     },
 
@@ -44,6 +44,14 @@ export const usersMongoQueryRepository = {
                 login: user.login,
                 userId: user._id.toString()
             }
+        }
+        return null
+    },
+
+    async findByConfirmationCode(code: string) {
+        const user = await userCollection.findOne({"emailConfirmation.confirmationCode": code})
+        if (user) {
+            return user
         }
         return null
     }
