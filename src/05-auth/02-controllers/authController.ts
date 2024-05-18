@@ -34,7 +34,7 @@ export const userRegistration = async (req: Request<{}, {}, InputUserType>,
                                        res: Response) => {
     const newUser = await authService.registerUser(req.body)
     if (!newUser) {
-        res.sendStatus(403)
+        res.sendStatus(400)
         return
     }
     res.sendStatus(204)
@@ -47,7 +47,7 @@ export const userRegistrationConfirmation = async (req: Request<{}, {}, {'code':
         res.sendStatus(204)
         return
     }
-    res.sendStatus(403)
+    res.sendStatus(400)
 }
 
 export const userRegistrationEmailResending = async (req: Request<{}, {}, {'email': string}>,
@@ -57,5 +57,5 @@ export const userRegistrationEmailResending = async (req: Request<{}, {}, {'emai
         res.sendStatus(204)
         return
     }
-    res.sendStatus(403)
+    res.sendStatus(400)
 }

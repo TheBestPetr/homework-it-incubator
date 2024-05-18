@@ -75,7 +75,7 @@ export const authResendingEmailValidation = [
         .notEmpty()
         .custom(async email => {
             const user = await usersMongoQueryRepository.findByLoginOrEmail(email)
-            if (!user || user!.emailConfirmation.isConfirmed) {
+            if (!user || !user!.emailConfirmation.isConfirmed) {
                 throw new Error()
             }
             return true

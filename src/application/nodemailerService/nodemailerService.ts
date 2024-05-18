@@ -13,10 +13,11 @@ export const nodemailerService = {
             from: 'Ignat <process.env.EMAIL_ACCOUNT_USER>',
             to: email,
             subject: subject,
-            html: `<h1>Thanks for your registration</h1> +
-                <p>To finish registration please follow the link below: 
-                    <a href=\'https://somesite.com/confirm-email?code=${confirmationCode}\'> complete registration </a> 
-                </p>`
+            html: confirmationCode
+            // html: `<h1>Thanks for your registration</h1> +
+            //     <p>To finish registration please follow the link below:
+            //         <a href=\'https://somesite.com/confirm-email?code=${confirmationCode}\'> complete registration </a>
+            //     </p>`
         })
         return !!info
     }
