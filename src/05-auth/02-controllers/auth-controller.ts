@@ -5,7 +5,6 @@ import {jwtService} from "../../application/jwt-service/jwt-service";
 import {meDBType} from "../../types/db-types/me-db-type";
 import {usersMongoQueryRepository} from "../../04-users/04-repository/users-mongo-query-repository";
 import {InputUserType} from "../../types/input-output-types/user-type";
-import {refreshTokenMongoRepository} from "../04-repository/refresh-token-mongo-repository";
 
 export const loginUser = async (req: Request<{}, {}, InputLoginType>,
                                 res: Response) => {
