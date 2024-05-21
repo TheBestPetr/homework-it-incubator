@@ -10,7 +10,8 @@ export const SETTINGS = {
         BLOG: process.env.BLOG_COLLECTION_NAME || '',
         POST: process.env.POST_COLLECTION_NAME || '',
         USER: process.env.USER_COLLECTION_NAME || '',
-        COMMENT: process.env.COMMENT_COLLECTION_NAME || ''
+        COMMENT: process.env.COMMENT_COLLECTION_NAME || '',
+        REFRESH_TOKEN_BLACKLIST: process.env.REFRESH_TOKEN_BLACKLIST_COLLECTION_NAME || ''
     },
     PATH: {
         VIDEOS: '/videos',
@@ -21,5 +22,5 @@ export const SETTINGS = {
         AUTH: '/auth',
         COMMENTS: '/comments'
     },
-    JWT_SECRET: process.env.JWT_SECRET || '123'
+    JWT_SECRET: process.env.JWT_SECRET || ''
 }

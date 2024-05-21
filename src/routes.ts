@@ -1,12 +1,12 @@
 import {Express} from "express";
 import {SETTINGS} from "./settings";
-import {blogsRouter} from "./02-blogs/01-router/blogsRouter";
-import {postsRouter} from "./03-posts/01-router/postsRouter";
-import {testingRouter} from "./testing/testingRouter";
+import {blogsRouter} from "./02-blogs/01-router/blogs-router";
+import {postsRouter} from "./03-posts/01-router/posts-router";
+import {testingRouter} from "./testing/testing-router";
 import {videosRouter} from "./01-videos/videosRouter";
-import {usersRouter} from "./04-users/01-router/usersRouter";
-import {authRouter} from "./05-auth/01-router/authRouter";
-import {commentsRouter} from "./06-comments/01-router/commentsRouter";
+import {usersRouter} from "./04-users/01-router/users-router";
+import {authRouter} from "./05-auth/01-router/auth-router";
+import {commentsRouter} from "./06-comments/01-router/comments-router";
 
 export const addRoutes = (app: Express) => {
     app.use(SETTINGS.PATH.BLOGS, blogsRouter)

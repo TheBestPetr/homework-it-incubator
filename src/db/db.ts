@@ -1,8 +1,8 @@
-import {VideoDbType} from "./video-db-type";
-import {BlogDBType} from "./blog-db-type";
-import {PostDBType} from "./post-db-type";
-import {UserDbType} from "./user-db-type";
-import {CommentDbType} from "./comment-db-type";
+import {VideoDbType} from "../types/db-types/video-db-type";
+import {BlogDBType} from "../types/db-types/blog-db-type";
+import {PostDBType} from "../types/db-types/post-db-type";
+import {UserDbType} from "../types/db-types/user-db-type";
+import {CommentDbType} from "../types/db-types/comment-db-type";
 
 export type DBType = {
     videos: VideoDbType[]

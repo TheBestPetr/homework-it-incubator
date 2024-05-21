@@ -1,7 +1,7 @@
 import {Request, Response} from "express"
-import {InputVideoType, VideoType, Resolutions} from "../types/videoType"
-import {ErrorsType} from "../types/errorsType"
-import {VideoDbType} from "../db/video-db-type";
+import {InputVideoType, VideoType, Resolutions} from "../types/input-output-types/video-type"
+import {ErrorsType} from "../types/input-output-types/errors-type"
+import {VideoDbType} from "../types/db-types/video-db-type";
 import {db} from "../db/db";
 import {addDay} from "@formkit/tempo";
 
