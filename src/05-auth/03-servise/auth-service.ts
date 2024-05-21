@@ -9,7 +9,6 @@ import {usersMongoRepository} from "../../04-users/04-repository/users-mongo-rep
 import {nodemailerService} from "../../application/nodemaile-service/nodemailer-service";
 import {jwtService} from "../../application/jwt-service/jwt-service";
 import {refreshTokenMongoRepository} from "../04-repository/refresh-token-mongo-repository";
-import {RefreshTokenBlacklistDbType} from "../../types/db-types/refresh-token-blacklist-db-type";
 import {TokensType} from "../../types/applicationTypes/token-type";
 
 export const authService = {

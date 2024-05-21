@@ -1,5 +1,4 @@
 import {refreshTokenBlacklistCollection} from "../../db/mongo-db";
-import {RefreshTokenBlacklistDbType} from "../../types/db-types/refresh-token-blacklist-db-type";
 
 export const refreshTokenMongoRepository = {
     async addTokenInBlacklist(token: string) {
