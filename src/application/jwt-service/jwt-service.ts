@@ -3,11 +3,11 @@ import {SETTINGS} from "../../settings";
 
 export const jwtService = {
     async createAccessToken(userId: string) {
-        return jwt.sign({userId: userId}, SETTINGS.JWT_SECRET, {expiresIn: '10m'})
+        return jwt.sign({userId: userId}, SETTINGS.JWT_SECRET, {expiresIn: '10s'})
     },
 
     async createRefreshToken(userId: string) {
-        return jwt.sign({userId: userId}, SETTINGS.JWT_SECRET, {expiresIn: '50m'})
+        return jwt.sign({userId: userId}, SETTINGS.JWT_SECRET, {expiresIn: '20s'})
     },
 
     async getUserIdByToken(token: string) {
