@@ -81,8 +81,8 @@ export const authService = {
         return false
     },
 
-    async createNewTokens(refreshToken: RefreshTokenBlacklistDbType): Promise<TokensType | null> {
-        const userId = await jwtService.getUserIdByToken(refreshToken.token)
+    async createNewTokens(refreshToken: string): Promise<TokensType | null> {
+        const userId = await jwtService.getUserIdByToken(refreshToken)
         if (!userId) {
             return null
         }

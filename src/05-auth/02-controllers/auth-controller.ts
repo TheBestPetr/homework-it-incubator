@@ -64,13 +64,14 @@ export const userRegistrationEmailResending = async (req: Request<{}, {}, { 'ema
 }
 
 export const createNewTokensController = async (req: Request,
-                                            res: Response) => {
-    const isTokenOk = await refreshTokenMongoRepository.isTokenInBlacklist(req.cookies.token)
-    if (isTokenOk) {
+                                                res: Response) => {
+    const token = req.cookies.token
+    const isTokenInBlacklist = await refreshTokenMongoRepository.isTokenInBlacklist(token)
+    if (isTokenInBlacklist) {
         res.sendStatus(401)
         return
     }
-    const newTokens = await authService.createNewTokens(req.cookies.token)
+    const newTokens = await authService.createNewTokens(token)
     if (!newTokens) {
         res.sendStatus(401)
         return
@@ -81,16 +82,15 @@ export const createNewTokensController = async (req: Request,
 
 export const userLogout = async (req: Request,
                                  res: Response) => {
-    const userId = await jwtService.getUserIdByToken(req.cookies.token)
     const token = req.cookies.token
-    const isTokenValid = await refreshTokenMongoRepository.isTokenInBlacklist(token)
-    console.log(isTokenValid)
-    if (userId || !isTokenValid) {
-        const result = await refreshTokenMongoRepository.addTokenInBlacklist(token)
-        console.log(result)
-        res.sendStatus(204)
+    const userId = await jwtService.getUserIdByToken(token)
+    const isTokenInBlacklist = await refreshTokenMongoRepository.isTokenInBlacklist(token)
+    if (isTokenInBlacklist || !userId) {
+        res.sendStatus(401)
         return
     }
-    res.sendStatus(401)
-
+    const result = await refreshTokenMongoRepository.addTokenInBlacklist(token)
+    console.log(result)
+    res.sendStatus(204)
+    return
 }
