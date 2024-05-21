@@ -81,15 +81,25 @@ export const authService = {
     },
 
     async createNewTokens(refreshToken: string): Promise<TokensType | null> {
+        const isTokenInBlacklist = await refreshTokenMongoRepository.isTokenInBlacklist(refreshToken)
         const userId = await jwtService.getUserIdByToken(refreshToken)
-        if (!userId) {
+        if (!userId || isTokenInBlacklist) {
             return null
         }
         await refreshTokenMongoRepository.addTokenInBlacklist(refreshToken)
         return {
-            accessToken: await jwtService.createAccessToken(userId),
-            refreshToken: await jwtService.createRefreshToken(userId)
+            accessToken: await jwtService.createAccessJWTToken(userId),
+            refreshToken: await jwtService.createRefreshJWTToken(userId)
         }
+    },
 
+    async logoutUser(refreshToken: string): Promise<boolean> {
+        const userId = await jwtService.getUserIdByToken(refreshToken)
+        const isTokenInBlacklist = await refreshTokenMongoRepository.isTokenInBlacklist(refreshToken)
+        if (!userId || isTokenInBlacklist) {
+            return false
+        }
+        await refreshTokenMongoRepository.addTokenInBlacklist(refreshToken)
+        return true
     }
 }

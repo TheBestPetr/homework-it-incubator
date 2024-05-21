@@ -11,10 +11,10 @@ export const loginUser = async (req: Request<{}, {}, InputLoginType>,
                                 res: Response) => {
     const userId = await authService.checkCredentials(req.body)
     if (userId) {
-        const accessToken = await jwtService.createAccessToken(userId)
-        const refreshToken = await jwtService.createRefreshToken(userId)
-        res.cookie('token', refreshToken, {httpOnly: true, secure: true})
-        res.status(200).send({'accessToken': accessToken})
+        const accessToken = await jwtService.createAccessJWTToken(userId)
+        const refreshToken = await jwtService.createRefreshJWTToken(userId)
+        res.cookie('refreshToken', refreshToken, {httpOnly: true, secure: true})
+        res.status(200).send({accessToken})
         return
     }
     res.sendStatus(401)
@@ -30,7 +30,7 @@ export const getUserInfo = async (req: Request,
             return
         }
     }
-    res.sendStatus(404)
+    res.sendStatus(401)
 }
 
 export const userRegistration = async (req: Request<{}, {}, InputUserType>,
@@ -65,32 +65,22 @@ export const userRegistrationEmailResending = async (req: Request<{}, {}, { 'ema
 
 export const createNewTokensController = async (req: Request,
                                                 res: Response) => {
-    const token = req.cookies.token
-    const isTokenInBlacklist = await refreshTokenMongoRepository.isTokenInBlacklist(token)
-    if (isTokenInBlacklist) {
-        res.sendStatus(401)
-        return
-    }
-    const newTokens = await authService.createNewTokens(token)
+    const newTokens = await authService.createNewTokens(req.cookies.refreshToken)
     if (!newTokens) {
         res.sendStatus(401)
         return
     }
-    res.cookie('token', newTokens.refreshToken, {httpOnly: true, secure: true})
+    res.cookie('refreshToken', newTokens.refreshToken, {httpOnly: true, secure: true})
     res.status(200).send({'accessToken': newTokens.accessToken})
 }
 
 export const userLogout = async (req: Request,
                                  res: Response) => {
-    const token = req.cookies.token
-    const userId = await jwtService.getUserIdByToken(token)
-    const isTokenInBlacklist = await refreshTokenMongoRepository.isTokenInBlacklist(token)
-    if (isTokenInBlacklist || !userId) {
-        res.sendStatus(401)
+    const isUserLogout = await authService.logoutUser(req.cookies.refreshToken)
+    if (isUserLogout) {
+        res.sendStatus(204)
         return
     }
-    const result = await refreshTokenMongoRepository.addTokenInBlacklist(token)
-    console.log(result)
-    res.sendStatus(204)
+    res.sendStatus(401)
     return
 }
