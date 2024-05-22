@@ -1,7 +1,4 @@
 /.idea
 dist
 node_modules
-__tests__
-notes
 .env
-/.env
