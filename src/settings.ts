@@ -4,7 +4,7 @@ config()
 
 export const SETTINGS = {
     PORT: process.env.PORT || 3000,
-    MONGO_URL: process.env.MONGO_URL || 'mongo://0.0.0.0:27017',
+    MONGO_URL: process.env.MONGO_URL || '',
     DB_NAME: process.env.DB_NAME || '',
     DB_COLLECTION_NAME: {
         BLOG: process.env.BLOG_COLLECTION_NAME || '',

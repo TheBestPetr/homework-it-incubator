@@ -1,9 +1,10 @@
 import express from "express"
 import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
 
 export const app = express()
 
-app.use(express.json())
+app.use(bodyParser.json())
 app.use(cookieParser())
 
 app.get('/', (req, res) => {
