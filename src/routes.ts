@@ -7,6 +7,7 @@ import {videosRouter} from "./01-videos/videosRouter";
 import {usersRouter} from "./04-users/01-router/users-router";
 import {authRouter} from "./05-auth/01-router/auth-router";
 import {commentsRouter} from "./06-comments/01-router/comments-router";
+import {devicesRouter} from "./07-security/01-router/devices-router";
 
 export const addRoutes = (app: Express) => {
     app.use(SETTINGS.PATH.BLOGS, blogsRouter)
@@ -16,4 +17,5 @@ export const addRoutes = (app: Express) => {
     app.use(SETTINGS.PATH.USERS, usersRouter)
     app.use(SETTINGS.PATH.AUTH, authRouter)
     app.use(SETTINGS.PATH.COMMENTS, commentsRouter)
+    app.use(SETTINGS.PATH.DEVICES, devicesRouter)
 }

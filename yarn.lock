@@ -2448,6 +2448,11 @@ locate-path@^5.0.0:
   dependencies:
     p-locate "^4.1.0"
 
+lodash.clonedeep@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
+  integrity sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ==
+
 lodash.includes@^4.3.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/lodash.includes/-/lodash.includes-4.3.0.tgz#60bb98a87cb923c68ca1e51325483314849f553f"
@@ -3386,6 +3391,13 @@ update-browserslist-db@^1.0.13:
   dependencies:
     escalade "^3.1.1"
     picocolors "^1.0.0"
+
+user-agents@^1.1.214:
+  version "1.1.214"
+  resolved "https://registry.yarnpkg.com/user-agents/-/user-agents-1.1.214.tgz#a79f128b4f4338f798ea22aad1304cfa17912f67"
+  integrity sha512-6imd8kybVSaq6yAPE6rLGRpMpmT8cxR5FskztOhrr7q74CRhXnwPs8FDZK1scSwZr0KMJut/Q0XlYNsNMe9g1Q==
+  dependencies:
+    lodash.clonedeep "^4.5.0"
 
 util-deprecate@^1.0.1:
   version "1.0.2"

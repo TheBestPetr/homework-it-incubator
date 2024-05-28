@@ -10,10 +10,9 @@ export const loginUser = async (req: Request<{}, {}, InputLoginType>,
                                 res: Response) => {
     const userId = await authService.checkCredentials(req.body)
     if (userId) {
-        const accessToken = await jwtService.createAccessJWTToken(userId)
-        const refreshToken = await jwtService.createRefreshJWTToken(userId)
-        res.cookie('refreshToken', refreshToken, {httpOnly: true, secure: true})
-        res.status(200).send({accessToken})
+        const tokens = await authService.loginUser(userId, req.ip!, req.headers['user-agent']!)
+        res.cookie('refreshToken', tokens?.refreshToken, {httpOnly: true, secure: true})
+        res.status(200).send(tokens?.accessToken)
         return
     }
     res.sendStatus(401)

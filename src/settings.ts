@@ -11,7 +11,9 @@ export const SETTINGS = {
         POST: process.env.POST_COLLECTION_NAME || '',
         USER: process.env.USER_COLLECTION_NAME || '',
         COMMENT: process.env.COMMENT_COLLECTION_NAME || '',
-        REFRESH_TOKEN_BLACKLIST: process.env.REFRESH_TOKEN_BLACKLIST_COLLECTION_NAME || ''
+        DEVICE: process.env.DEVICE_COLLECTION_NAME || '',
+        REFRESH_TOKEN_BLACKLIST: process.env.REFRESH_TOKEN_BLACKLIST_COLLECTION_NAME || '',
+        REQ_COUNTER: process.env.REQ_COUNTER_COLLECTION_NAME || ''
     },
     PATH: {
         VIDEOS: '/videos',
@@ -20,7 +22,8 @@ export const SETTINGS = {
         POSTS: '/posts',
         USERS: '/users',
         AUTH: '/auth',
-        COMMENTS: '/comments'
+        COMMENTS: '/comments',
+        DEVICES: '/security/devices'
     },
     JWT_SECRET: process.env.JWT_SECRET || ''
 }

@@ -2,9 +2,9 @@ import {Request, Response} from "express";
 import {db} from "../db/db";
 import {
     blogCollection,
-    commentCollection,
+    commentCollection, deviceCollection,
     postCollection,
-    refreshTokenBlacklistCollection,
+    refreshTokenBlacklistCollection, reqCountCollection,
     userCollection
 } from "../db/mongo-db";
 
@@ -16,6 +16,9 @@ export const TestingAllData = (req: Request, res: Response) => {
     postCollection.deleteMany()
     userCollection.deleteMany()
     commentCollection.deleteMany()
+    deviceCollection.deleteMany()
     refreshTokenBlacklistCollection.deleteMany()
+    deviceCollection.deleteMany()
+    reqCountCollection.deleteMany()
     res.status(204).send('you delete all data')
 }

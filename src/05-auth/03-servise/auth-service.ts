@@ -10,17 +10,39 @@ import {nodemailerService} from "../../application/nodemaile-service/nodemailer-
 import {jwtService} from "../../application/jwt-service/jwt-service";
 import {refreshTokenMongoRepository} from "../04-repository/refresh-token-mongo-repository";
 import {TokensType} from "../../types/applicationTypes/token-type";
+import {devicesService} from "../../07-security/03-service/devices-service";
+import {DeviceDBType} from "../../types/db-types/device-db-type";
 
 export const authService = {
     async checkCredentials(input: InputLoginType): Promise<string | null> {
         const user = await usersMongoQueryRepository.findByLoginOrEmail(input.loginOrEmail)
         if (user) {
-            const isPassCorrect = await bcryptService.checkPassword(input.password, user!.passwordHash)
+            const isPassCorrect = await bcryptService.checkPassword(input.password, user.passwordHash)
             if (isPassCorrect) {
                 return user._id.toString()
             }
         }
         return null
+    },
+
+    async loginUser(userId: string, ip: string, deviceName: string): Promise<TokensType> {
+        const newDeviceId = randomUUID().toString()
+        const accessToken = await jwtService.createAccessJWTToken(userId)
+        const refreshToken = await jwtService.createRefreshJWTToken(userId, newDeviceId)
+        const iatNExp = await jwtService.getTokenIatNExp(refreshToken)
+        const newDevice: DeviceDBType = {
+            userId: userId,
+            deviceId: newDeviceId,
+            iat: new Date(iatNExp!.iat * 1000).toISOString(),
+            deviceName: deviceName,
+            ip: ip,
+            exp: new Date(iatNExp!.exp * 1000).toISOString()
+        }
+        await devicesService.addDevice(newDevice)
+        return {
+            accessToken: accessToken,
+            refreshToken: refreshToken
+        }
     },
 
     async registerUser(input: InputUserType): Promise<boolean> {
@@ -83,13 +105,19 @@ export const authService = {
     async createNewTokens(refreshToken: string): Promise<TokensType | null> {
         const isTokenInBlacklist = await refreshTokenMongoRepository.isTokenInBlacklist(refreshToken)
         const userId = await jwtService.getUserIdByToken(refreshToken)
+        const deviceId = await jwtService.getDeviceIdByToken(refreshToken)
+        const oldIat = await jwtService.getTokenIatNExp(refreshToken)
         if (!userId || isTokenInBlacklist) {
             return null
         }
         await refreshTokenMongoRepository.addTokenInBlacklist(refreshToken)
+        const newAccessToken = await jwtService.createAccessJWTToken(userId)
+        const newRefreshToken = await jwtService.createRefreshJWTToken(userId, deviceId)
+        const iatNExp = await jwtService.getTokenIatNExp(refreshToken)
+        await devicesService.updateDeviceIatNExp(deviceId, new Date(oldIat!.iat * 1000).toISOString(), new Date(iatNExp!.iat * 1000).toISOString(), new Date(iatNExp!.exp * 1000).toISOString())
         return {
-            accessToken: await jwtService.createAccessJWTToken(userId),
-            refreshToken: await jwtService.createRefreshJWTToken(userId)
+            accessToken: newAccessToken,
+            refreshToken: newRefreshToken
         }
     },
 
