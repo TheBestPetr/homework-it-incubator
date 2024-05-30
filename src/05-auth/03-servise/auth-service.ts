@@ -12,6 +12,8 @@ import {refreshTokenMongoRepository} from "../04-repository/refresh-token-mongo-
 import {TokensType} from "../../types/applicationTypes/token-type";
 import {devicesService} from "../../07-security/03-service/devices-service";
 import {DeviceDBType} from "../../types/db-types/device-db-type";
+import {devicesMongoRepository} from "../../07-security/04-repository/devices-mongo-repository";
+import {devicesMongoQueryRepository} from "../../07-security/04-repository/devices-mongo-query-repository";
 
 export const authService = {
     async checkCredentials(input: InputLoginType): Promise<string | null> {
@@ -107,13 +109,14 @@ export const authService = {
         const userId = await jwtService.getUserIdByToken(refreshToken)
         const deviceId = await jwtService.getDeviceIdByToken(refreshToken)
         const oldIat = await jwtService.getTokenIatNExp(refreshToken)
-        if (!userId || isTokenInBlacklist) {
+        const isDeviceExist = await devicesMongoQueryRepository.findSessionByDeviceId(deviceId)
+        if (!userId || isTokenInBlacklist || !isDeviceExist) {
             return null
         }
         await refreshTokenMongoRepository.addTokenInBlacklist(refreshToken)
         const newAccessToken = await jwtService.createAccessJWTToken(userId)
         const newRefreshToken = await jwtService.createRefreshJWTToken(userId, deviceId)
-        const iatNExp = await jwtService.getTokenIatNExp(refreshToken)
+        const iatNExp = await jwtService.getTokenIatNExp(newRefreshToken)
         await devicesService.updateDeviceIatNExp(deviceId, new Date(oldIat!.iat * 1000).toISOString(), new Date(iatNExp!.iat * 1000).toISOString(), new Date(iatNExp!.exp * 1000).toISOString())
         return {
             accessToken: newAccessToken,
@@ -124,9 +127,12 @@ export const authService = {
     async logoutUser(refreshToken: string): Promise<boolean> {
         const userId = await jwtService.getUserIdByToken(refreshToken)
         const isTokenInBlacklist = await refreshTokenMongoRepository.isTokenInBlacklist(refreshToken)
-        if (!userId || isTokenInBlacklist) {
+        const deviceId = await jwtService.getDeviceIdByToken(refreshToken)
+        const isDeviceExist = await devicesMongoQueryRepository.findSessionByDeviceId(deviceId)
+        if (!userId || isTokenInBlacklist || !isDeviceExist) {
             return false
         }
+        await devicesMongoRepository.deleteSessionByDeviceId(deviceId)
         await refreshTokenMongoRepository.addTokenInBlacklist(refreshToken)
         return true
     }
