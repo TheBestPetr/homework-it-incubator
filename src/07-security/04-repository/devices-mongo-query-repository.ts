@@ -1,11 +1,16 @@
 import {OutputDeviceType} from "../../types/input-output-types/device-type";
 import {deviceCollection} from "../../db/mongo-db";
 import {jwtService} from "../../application/jwt-service/jwt-service";
+import {refreshTokenMongoRepository} from "../../05-auth/04-repository/refresh-token-mongo-repository";
 
 export const devicesMongoQueryRepository = {
-    async findActiveSessions(refreshToken: string): Promise<OutputDeviceType[]> {
+    async findActiveSessions(refreshToken: string): Promise<OutputDeviceType[] | null> {
+        const isTokenInBlackList = await refreshTokenMongoRepository.isTokenInBlacklist(refreshToken)
         const userId = await jwtService.getUserIdByToken(refreshToken)
         const activeSessions = await deviceCollection.find({userId: userId}).toArray()
+        if (!userId || !activeSessions || isTokenInBlackList) {
+            return null
+        }
         return activeSessions.map(device => ({
             ip: device.ip,
             title: device.deviceName,

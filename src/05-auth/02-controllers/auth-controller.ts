@@ -12,7 +12,7 @@ export const loginUser = async (req: Request<{}, {}, InputLoginType>,
     if (userId) {
         const tokens = await authService.loginUser(userId, req.ip!, req.headers['user-agent']!)
         res.cookie('refreshToken', tokens?.refreshToken, {httpOnly: true, secure: true})
-        res.status(200).send(tokens?.accessToken)
+        res.status(200).send({'accessToken': tokens.accessToken})
         return
     }
     res.sendStatus(401)

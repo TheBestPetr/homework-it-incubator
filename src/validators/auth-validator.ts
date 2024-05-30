@@ -4,14 +4,7 @@ import {usersMongoQueryRepository} from "../04-users/04-repository/users-mongo-q
 export const authLoginBodyValidation = [
     body('loginOrEmail')
         .isString()
-        .notEmpty()
-        .custom(async value => {
-            const isExist = await usersMongoQueryRepository.findByLoginOrEmail(value)
-            if (!isExist) {
-                throw new Error()
-            }
-            return true
-        }),
+        .notEmpty(),
 
     body('password')
         .isString()
