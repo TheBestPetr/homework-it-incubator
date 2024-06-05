@@ -65,7 +65,7 @@ export const authService = {
         }
         await usersMongoRepository.create(createdUser)
 
-        nodemailerService.sendEmail(createdUser.email, 'User registration code', createdUser.emailConfirmation!.confirmationCode!)
+        nodemailerService.sendRegistrationEmail(createdUser.email, 'User registration code', createdUser.emailConfirmation!.confirmationCode!)
             .catch((error) => {
                 console.error('Send email error', error)
             })
@@ -79,7 +79,7 @@ export const authService = {
             user.emailConfirmation.expirationDate = undefined
             user.emailConfirmation.isConfirmed = true
             const result = await usersMongoRepository.updateEmailConfirmation(user._id.toString(), user)
-            return result.modifiedCount === 1
+            return result.matchedCount === 1
         }
         return false
     },
@@ -90,11 +90,11 @@ export const authService = {
             user.emailConfirmation.confirmationCode = randomUUID()
             user.emailConfirmation.expirationDate = add(new Date(), {
                 hours: 1,
-                minutes: 2
+                minutes: 1
             }).toISOString()
             const result = await usersMongoRepository.updateEmailConfirmation(user._id.toString(), user)
             if (result) {
-                nodemailerService.sendEmail(user.email, 'User registration new code', user.emailConfirmation!.confirmationCode)
+                nodemailerService.sendRegistrationEmail(user.email, 'User registration new code', user.emailConfirmation!.confirmationCode)
                     .catch((error) => {
                         console.error(error)
                     })
@@ -135,5 +135,30 @@ export const authService = {
         await devicesMongoRepository.deleteSessionByDeviceId(deviceId)
         await refreshTokenMongoRepository.addTokenInBlacklist(refreshToken)
         return true
+    },
+
+    async passwordRecovery(email: string): Promise<boolean> {
+        const user = await usersMongoQueryRepository.findByLoginOrEmail(email)
+        if (user) {
+            user.passwordRecovery = {}
+            user.passwordRecovery.recoveryCode = randomUUID()
+            user.passwordRecovery.expirationDate = add(new Date(), {
+                hours: 1,
+                minutes: 1
+            }).toISOString()
+            const result = await usersMongoRepository.passwordRecoveryConfirmation(email, user)
+            if (result) {
+                nodemailerService.sendPasswordRecoveryEmail(email, 'password recovery code', user!.passwordRecovery!.recoveryCode)
+                    .catch((error) => {
+                        console.error(error)
+                    })
+                return true
+            }
+        }
+        return false
+    },
+
+    async newPasswordConfirmation(password: string, recoveryCode: string) {
+
     }
 }

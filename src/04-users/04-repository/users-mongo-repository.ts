@@ -17,5 +17,13 @@ export const usersMongoRepository = {
                 ...input
             }
         })
+    },
+
+    async passwordRecoveryConfirmation(email: string, input: Object) {
+        return await userCollection.updateOne({email: email}, {
+            $set: {
+                ...input
+            }
+        })
     }
 }

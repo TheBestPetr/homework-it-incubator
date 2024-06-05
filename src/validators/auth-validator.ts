@@ -75,3 +75,20 @@ export const authResendingEmailValidation = [
         })
         .matches('[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$')
 ]
+export const authEmailBodyValidation = [
+    body('email')
+        .isString()
+        .notEmpty()
+        .matches('[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$')
+]
+
+export const authNewPasswordBodyValidation = [
+    body('newPassword')
+        .isString()
+        .notEmpty()
+        .isLength({min: 6, max: 20}),
+
+    body('recoveryCode')
+        .isString()
+        .notEmpty()
+]

@@ -7,6 +7,7 @@ import {CommentDbType} from "../types/db-types/comment-db-type"
 import {RefreshTokenBlacklistDbType} from "../types/applicationTypes/refresh-token-blacklist-db-type"
 import {DeviceDBType} from "../types/db-types/device-db-type";
 import {ReqDbType} from "../types/applicationTypes/req-db-type";
+import mongoose from "mongoose";
 
 const client: MongoClient = new MongoClient(SETTINGS.MONGO_URL)
 export const db: Db = client.db(SETTINGS.DB_NAME)
@@ -21,11 +22,13 @@ export const reqCountCollection: Collection<ReqDbType> = db.collection<ReqDbType
 
 export const connectToDB = async () => {
     try {
+       // await mongoose.connect(SETTINGS.MONGO_URL)
         await client.connect()
         console.log('Connection to db - Success')
         return true
     } catch (e) {
         console.log(e)
+        //await mongoose.disconnect()
         await client.close()
         return false
     }

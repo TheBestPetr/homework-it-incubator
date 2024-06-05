@@ -82,3 +82,24 @@ export const userLogout = async (req: Request,
     res.sendStatus(401)
     return
 }
+
+export const passwordRecovery = async (req: Request<{}, {}, { email: string }>,
+                                       res: Response) => {
+    const isEmailSend = await authService.passwordRecovery(req.body.email)
+    if (!isEmailSend) {
+        console.error('Email not be sand')
+        res.sendStatus(204)
+        return
+    }
+    res.sendStatus(204)
+}
+
+export const newPasswordConfirmation = async (req: Request<{}, {}, { newPassword: string, recoveryCode: string }>,
+                                              res: Response) => {
+    const isNewPasswordConfirm = await authService.newPasswordConfirmation(req.body.newPassword, req.body.recoveryCode)
+    if (!isNewPasswordConfirm) {
+        console.error()
+        return
+    }
+    res.sendStatus(204)
+}
