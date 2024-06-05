@@ -73,7 +73,7 @@ export const authService = {
     },
 
     async confirmUserEmail(confirmationCode: string): Promise<boolean> {
-        const user = await usersMongoQueryRepository.findByConfirmationCode(confirmationCode)
+        const user = await usersMongoQueryRepository.findByEmailConfirmationCode(confirmationCode)
         if (user) {
             user.emailConfirmation.confirmationCode = undefined
             user.emailConfirmation.expirationDate = undefined
@@ -140,15 +140,16 @@ export const authService = {
     async passwordRecovery(email: string): Promise<boolean> {
         const user = await usersMongoQueryRepository.findByLoginOrEmail(email)
         if (user) {
-            user.passwordRecovery = {}
-            user.passwordRecovery.recoveryCode = randomUUID()
-            user.passwordRecovery.expirationDate = add(new Date(), {
-                hours: 1,
-                minutes: 1
-            }).toISOString()
+            user.passwordRecovery = {
+                recoveryCode: randomUUID(),
+                expirationDate: add(new Date(), {
+                    hours: 1,
+                    minutes: 1
+                }).toISOString()
+            }
             const result = await usersMongoRepository.passwordRecoveryConfirmation(email, user)
             if (result) {
-                nodemailerService.sendPasswordRecoveryEmail(email, 'password recovery code', user!.passwordRecovery!.recoveryCode)
+                nodemailerService.sendPasswordRecoveryEmail(email, 'password recovery code', user.passwordRecovery.recoveryCode!)
                     .catch((error) => {
                         console.error(error)
                     })
@@ -159,6 +160,12 @@ export const authService = {
     },
 
     async newPasswordConfirmation(password: string, recoveryCode: string) {
-
+        const user = await usersMongoQueryRepository.findByPasswordRecoveryCode(recoveryCode)
+        const oldPasswordHash = user?.passwordHash
+        if (!user) {
+            return false
+        }
+        user.passwordHash = await bcryptService.generateHash(password)
+        return oldPasswordHash !== user.passwordHash
     }
 }

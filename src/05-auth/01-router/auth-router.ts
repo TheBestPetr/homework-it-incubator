@@ -2,14 +2,17 @@ import {Router} from "express";
 import {
     createNewTokensController,
     getUserInfo,
-    loginUser, /*newPasswordConfirmation*/ passwordRecovery, userLogout,
+    loginUser,
+    newPasswordConfirmation,
+    passwordRecovery,
+    userLogout,
     userRegistration,
     userRegistrationConfirmation,
     userRegistrationEmailResending
 } from "../02-controllers/auth-controller";
 import {
     authConfirmRegistrationBodyValidation, authEmailBodyValidation,
-    authLoginBodyValidation,
+    authLoginBodyValidation, authNewPasswordBodyValidation,
     authRegistrationBodyValidation, authResendingEmailValidation,
 } from "../../validators/auth-validator";
 import {authBearerMiddleware} from "../../middlewares/auth-bearer-middleware";
@@ -54,6 +57,7 @@ authRouter.post('/logout',
 
 authRouter.post('/new-password',
     reqIpCounterMiddleware,
+    authNewPasswordBodyValidation,
     newPasswordConfirmation
     )
 

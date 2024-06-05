@@ -54,7 +54,7 @@ export const authConfirmRegistrationBodyValidation = [
         .isString()
         .notEmpty()
         .custom(async code => {
-            const user = await usersMongoQueryRepository.findByConfirmationCode(code)
+            const user = await usersMongoQueryRepository.findByEmailConfirmationCode(code)
             if (!user || user!.emailConfirmation.expirationDate! < new Date().toISOString() || user!.emailConfirmation.isConfirmed) {
                 throw new Error()
             }
@@ -91,4 +91,11 @@ export const authNewPasswordBodyValidation = [
     body('recoveryCode')
         .isString()
         .notEmpty()
+        .custom(async code => {
+            const user = await usersMongoQueryRepository.findByPasswordRecoveryCode(code)
+            if (!user || user!.passwordRecovery!.expirationDate! < new Date().toISOString()) {
+                throw new Error()
+            }
+            return true
+        })
 ]

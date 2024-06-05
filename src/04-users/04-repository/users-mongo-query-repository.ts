@@ -48,8 +48,16 @@ export const usersMongoQueryRepository = {
         return null
     },
 
-    async findByConfirmationCode(code: string) {
-        const user = await userCollection.findOne({"emailConfirmation.confirmationCode": code})
+    async findByEmailConfirmationCode(code: string) {
+        const user = await userCollection.findOne({'emailConfirmation.confirmationCode': code})
+        if (user) {
+            return user
+        }
+        return null
+    },
+
+    async findByPasswordRecoveryCode (code: string) {
+        const user = await userCollection.findOne({'passwordRecovery.recoveryCode': code})
         if (user) {
             return user
         }

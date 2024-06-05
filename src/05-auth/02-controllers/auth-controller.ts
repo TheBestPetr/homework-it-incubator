@@ -98,7 +98,7 @@ export const newPasswordConfirmation = async (req: Request<{}, {}, { newPassword
                                               res: Response) => {
     const isNewPasswordConfirm = await authService.newPasswordConfirmation(req.body.newPassword, req.body.recoveryCode)
     if (!isNewPasswordConfirm) {
-        console.error()
+        res.sendStatus(400)
         return
     }
     res.sendStatus(204)
