@@ -165,7 +165,11 @@ export const authService = {
         if (!user) {
             return false
         }
-        user.passwordHash = await bcryptService.generateHash(password)
-        return oldPasswordHash !== user.passwordHash
+        const newPasswordHash = await bcryptService.generateHash(password)
+        if (oldPasswordHash === newPasswordHash) {
+            return false
+        }
+        await usersMongoRepository.updatePasswordRecovery(user._id.toString(), newPasswordHash)
+        return true
     }
 }

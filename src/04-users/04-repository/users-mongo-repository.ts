@@ -25,5 +25,14 @@ export const usersMongoRepository = {
                 ...input
             }
         })
+    },
+
+    async updatePasswordRecovery(userId: string, newPasswordHash: string) {
+        await userCollection.updateOne({_id: new ObjectId(userId)}, {
+            $set: {
+                passwordHash: newPasswordHash,
+                passwordRecovery: undefined
+            }
+        })
     }
 }

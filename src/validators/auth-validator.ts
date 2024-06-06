@@ -86,7 +86,13 @@ export const authNewPasswordBodyValidation = [
     body('newPassword')
         .isString()
         .notEmpty()
-        .isLength({min: 6, max: 20}),
+        .isLength({min: 6, max: 20})
+        .custom(value => {
+            if (value.includes('   ')) {
+                throw new Error()
+            }
+            return true
+        }),
 
     body('recoveryCode')
         .isString()

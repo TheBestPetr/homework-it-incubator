@@ -11,9 +11,12 @@ import {
     userRegistrationEmailResending
 } from "../02-controllers/auth-controller";
 import {
-    authConfirmRegistrationBodyValidation, authEmailBodyValidation,
-    authLoginBodyValidation, authNewPasswordBodyValidation,
-    authRegistrationBodyValidation, authResendingEmailValidation,
+    authConfirmRegistrationBodyValidation,
+    authEmailBodyValidation,
+    authLoginBodyValidation,
+    authNewPasswordBodyValidation,
+    authRegistrationBodyValidation,
+    authResendingEmailValidation,
 } from "../../validators/auth-validator";
 import {authBearerMiddleware} from "../../middlewares/auth-bearer-middleware";
 import {errorsValidationResultMiddleware} from "../../middlewares/errors-validation-middleware";
@@ -58,10 +61,11 @@ authRouter.post('/logout',
 authRouter.post('/new-password',
     reqIpCounterMiddleware,
     authNewPasswordBodyValidation,
-    newPasswordConfirmation
-    )
+    errorsValidationResultMiddleware,
+    newPasswordConfirmation)
 
 authRouter.post('/password-recovery',
     reqIpCounterMiddleware,
     authEmailBodyValidation,
+    errorsValidationResultMiddleware,
     passwordRecovery)

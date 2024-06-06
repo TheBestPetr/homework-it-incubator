@@ -87,7 +87,7 @@ export const passwordRecovery = async (req: Request<{}, {}, { email: string }>,
                                        res: Response) => {
     const isEmailSend = await authService.passwordRecovery(req.body.email)
     if (!isEmailSend) {
-        console.error('Email not be sand')
+        console.log('Email not be sand')
         res.sendStatus(204)
         return
     }
