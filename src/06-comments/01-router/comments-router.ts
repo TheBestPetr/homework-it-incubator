@@ -18,3 +18,7 @@ commentsRouter.put('/:commentId',
 commentsRouter.delete('/:commentId',
     authBearerMiddleware,
     deleteCommentController)
+
+commentsRouter.put('/:commentId/like-status',
+    authBearerMiddleware,
+    )

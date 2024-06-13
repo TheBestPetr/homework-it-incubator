@@ -1,18 +1,18 @@
-import {userCollection} from "../../db/mongo-db";
+import {UserModel} from "../../db/mongo/mongo-db";
 import {UserDbType} from "../../types/db-types/user-db-type";
 import {ObjectId} from "mongodb";
 
 export const usersMongoRepository = {
     async create(input: UserDbType) {
-        return await userCollection.insertOne(input)
+        return UserModel.create(input)
     },
 
     async delete(id: string) {
-        return await userCollection.deleteOne({_id: new ObjectId(id)})
+        return UserModel.deleteOne({_id: new ObjectId(id)})
     },
 
     async updateEmailConfirmation(id: string, input: Object) {
-        return await userCollection.updateOne({_id: new ObjectId(id)}, {
+        return UserModel.updateOne({_id: new ObjectId(id)}, {
             $set: {
                 ...input
             }
@@ -20,18 +20,18 @@ export const usersMongoRepository = {
     },
 
     async passwordRecoveryConfirmation(email: string, input: Object) {
-        return await userCollection.updateOne({email: email}, {
+        return UserModel.updateOne({email: email}, {
             $set: {
                 ...input
             }
         })
     },
 
-    async updatePasswordRecovery(userId: string, newPasswordHash: string) {
-        await userCollection.updateOne({_id: new ObjectId(userId)}, {
+    async updatePasswordRecovery(userId: string, newPasswordHash: string, input: Object) {
+        return UserModel.updateOne({_id: new ObjectId(userId)}, {
             $set: {
                 passwordHash: newPasswordHash,
-                passwordRecovery: undefined
+                ...input
             }
         })
     }

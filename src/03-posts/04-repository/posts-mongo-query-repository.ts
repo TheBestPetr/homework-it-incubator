@@ -1,16 +1,16 @@
-import {postCollection} from "../../db/mongo-db";
+import {PostModel} from "../../db/mongo/mongo-db";
 import {InputPostQueryType, OutputPostQueryType, OutputPostType} from "../../types/input-output-types/post-type";
 import {ObjectId} from "mongodb";
 
 export const postsMongoQueryRepository = {
     async find(query: InputPostQueryType): Promise<OutputPostQueryType> {
-        const items = await postCollection
+        const items = await PostModel
             .find()
-            .sort(query.sortBy, query.sortDirection)
+            .sort({[`${query.sortBy}`]: query.sortDirection})
             .skip((query.pageNumber - 1) * query.pageSize)
             .limit(query.pageSize)
-            .toArray()
-        const totalCount = await postCollection.countDocuments()
+            .lean()
+        const totalCount = await PostModel.countDocuments()
         return {
             pagesCount: Math.ceil(totalCount / query.pageSize),
             page: query.pageNumber,
@@ -29,13 +29,13 @@ export const postsMongoQueryRepository = {
     },
 
     async findPostsByBlogId(query: InputPostQueryType, blogId: string): Promise<OutputPostQueryType> {
-        const items = await postCollection
+        const items = await PostModel
             .find({blogId: blogId})
-            .sort(query.sortBy, query.sortDirection)
+            .sort({[`${query.sortBy}`]: query.sortDirection})
             .skip((query.pageNumber - 1) * query.pageSize)
             .limit(query.pageSize)
-            .toArray()
-        const totalCount = await postCollection.countDocuments({blogId: blogId})
+            .lean()
+        const totalCount = await PostModel.countDocuments({blogId: blogId})
         return {
             pagesCount: Math.ceil(totalCount / query.pageSize),
             page: query.pageNumber,
@@ -54,7 +54,7 @@ export const postsMongoQueryRepository = {
     },
 
     async findById(id: string): Promise<OutputPostType | null> {
-        const post = await postCollection.findOne({_id: new ObjectId(id)})
+        const post = await PostModel.findOne({_id: new ObjectId(id)}).lean()
         if (post) {
             return {
                 id: post._id.toString(),

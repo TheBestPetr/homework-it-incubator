@@ -1,5 +1,10 @@
 import {Request, Response} from "express"
-import {OutputBlogType, InputBlogType, OutputBlogQueryType, InputBlogQueryType} from "../../types/input-output-types/blog-type";
+import {
+    OutputBlogType,
+    InputBlogType,
+    OutputBlogQueryType,
+    InputBlogQueryType
+} from "../../types/input-output-types/blog-type";
 import {ObjectId} from "mongodb";
 import {blogsService} from "../03-service/blogs-service";
 import {blogsMongoQueryRepository} from "../04-repository/blogs-mongo-query-repository";
@@ -34,6 +39,7 @@ export const createBlogController = async (req: Request<{}, {}, InputBlogType>,
 
 export const updateBlogController = async (req: Request<{ id: string }, {}, InputBlogType>,
                                            res: Response<OutputBlogType>) => {
+    console.log(req.body)
     if (!ObjectId.isValid(req.params.id)) {
         res.sendStatus(404)
         return
@@ -41,9 +47,8 @@ export const updateBlogController = async (req: Request<{ id: string }, {}, Inpu
     const updatedBlog = await blogsService.update(req.params.id, req.body)
     if (updatedBlog) {
         res.sendStatus(204)
-    } else {
-        res.sendStatus(404)
     }
+    res.sendStatus(404)
 }
 
 export const deleteBlogController = async (req: Request<{ id: string }>,

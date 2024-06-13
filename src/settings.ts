@@ -13,7 +13,7 @@ export const SETTINGS = {
         COMMENT: process.env.COMMENT_COLLECTION_NAME || '',
         DEVICE: process.env.DEVICE_COLLECTION_NAME || '',
         REFRESH_TOKEN_BLACKLIST: process.env.REFRESH_TOKEN_BLACKLIST_COLLECTION_NAME || '',
-        REQ_COUNTER: process.env.REQ_COUNTER_COLLECTION_NAME || ''
+        REQ_COUNT: process.env.REQ_COUNT_COLLECTION_NAME || ''
     },
     PATH: {
         VIDEOS: '/videos',

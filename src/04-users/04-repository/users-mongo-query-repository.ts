@@ -1,5 +1,5 @@
 import {InputUserQueryType, OutputUserQueryType} from "../../types/input-output-types/user-type";
-import {userCollection} from "../../db/mongo-db";
+import {UserModel} from "../../db/mongo/mongo-db";
 import {meDBType} from "../../types/db-types/me-db-type";
 import {ObjectId} from "mongodb";
 
@@ -11,13 +11,13 @@ export const usersMongoQueryRepository = {
         const searchWithLogin = query.searchLoginTerm
             ? {login: {$regex: query.searchLoginTerm, $options: 'i'}}
             : {}
-        const items = await userCollection
+        const items = await UserModel
             .find({$or: [searchWithEmail, searchWithLogin]})
-            .sort(query.sortBy, query.sortDirection)
+            .sort({[`${query.sortBy}`]: query.sortDirection})
             .skip((query.pageNumber - 1) * query.pageSize)
             .limit(query.pageSize)
-            .toArray()
-        const totalCount = await userCollection.countDocuments({$or: [searchWithEmail, searchWithLogin]})
+            .lean()
+        const totalCount = await UserModel.countDocuments({$or: [searchWithEmail, searchWithLogin]})
         return {
             pagesCount: Math.ceil(totalCount / query.pageSize),
             page: query.pageNumber,
@@ -33,11 +33,11 @@ export const usersMongoQueryRepository = {
     },
 
     async findByLoginOrEmail(loginOrEmail: string) {
-        return await userCollection.findOne({$or: [{'login': loginOrEmail}, {'email': loginOrEmail}]})
+        return UserModel.findOne({$or: [{'login': loginOrEmail}, {'email': loginOrEmail}]}).lean()
     },
 
     async findById(userId: string): Promise<meDBType | null> {
-        const user = await userCollection.findOne({_id: new ObjectId(userId)})
+        const user = await UserModel.findOne({_id: new ObjectId(userId)}).lean()
         if (user) {
             return {
                 email: user.email,
@@ -49,7 +49,7 @@ export const usersMongoQueryRepository = {
     },
 
     async findByEmailConfirmationCode(code: string) {
-        const user = await userCollection.findOne({'emailConfirmation.confirmationCode': code})
+        const user = await UserModel.findOne({'emailConfirmation.confirmationCode': code}).lean()
         if (user) {
             return user
         }
@@ -57,7 +57,7 @@ export const usersMongoQueryRepository = {
     },
 
     async findByPasswordRecoveryCode (code: string) {
-        const user = await userCollection.findOne({'passwordRecovery.recoveryCode': code})
+        const user = await UserModel.findOne({'passwordRecovery.recoveryCode': code}).lean()
         if (user) {
             return user
         }

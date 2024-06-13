@@ -1,16 +1,19 @@
+export type PasswordRecoveryType = {
+    recoveryCode?: string
+    expirationDate?: string
+}
+
+export type EmailConfirmationType = {
+    confirmationCode?: string
+    expirationDate?: string
+    isConfirmed: boolean
+}
+
 export type UserDbType = {
     login: string
     passwordHash: string
-    passwordRecovery?: {
-        recoveryCode?: string
-        expirationDate?: string
-    }
+    passwordRecovery?: PasswordRecoveryType
     email: string
     createdAt: string
-    emailConfirmation: {
-        confirmationCode?: string
-        expirationDate?: string
-        isConfirmed: boolean
-    }
-
+    emailConfirmation: EmailConfirmationType
 }

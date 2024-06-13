@@ -1,18 +1,18 @@
 import {InputBlogType} from "../../types/input-output-types/blog-type";
-import {blogCollection} from "../../db/mongo-db";
+import {BlogModel} from "../../db/mongo/mongo-db";
 import {ObjectId} from "mongodb";
 import {BlogDBType} from "../../types/db-types/blog-db-type";
 
 export const blogsMongoRepository = {
     async create(input: BlogDBType) {
-        return await blogCollection.insertOne({...input})
+        return BlogModel.create({...input})
     },
 
     async update(id: string, input: InputBlogType) {
-        return await blogCollection.updateOne({_id: new ObjectId(id)}, {$set: {...input,}})
+        return BlogModel.updateOne({_id: new ObjectId(id)}, {$set: {...input}})
     },
 
     async delete(id: string) {
-        return await blogCollection.deleteOne({_id: new ObjectId(id)})
+        return BlogModel.deleteOne({_id: new ObjectId(id)})
     }
 }

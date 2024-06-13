@@ -1,4 +1,4 @@
-import {blogCollection} from "../../db/mongo-db";
+import {BlogModel} from "../../db/mongo/mongo-db";
 import {InputBlogQueryType, OutputBlogQueryType, OutputBlogType} from "../../types/input-output-types/blog-type";
 import {ObjectId} from "mongodb";
 
@@ -7,13 +7,13 @@ export const blogsMongoQueryRepository = {
         const search = query.searchNameTerm
             ? {name: {$regex: query.searchNameTerm, $options: 'i'}}
             : {}
-        const items = await blogCollection
+        const items = await BlogModel
             .find(search)
-            .sort(query.sortBy, query.sortDirection)
+            .sort({[`${query.sortBy}`]: query.sortDirection})
             .skip((query.pageNumber - 1) * query.pageSize)
             .limit(query.pageSize)
-            .toArray()
-        const totalCount = await blogCollection.countDocuments(search)
+            .lean()
+        const totalCount = await BlogModel.countDocuments(search)
         return {
             pagesCount: Math.ceil(totalCount / query.pageSize),
             page: query.pageNumber,
@@ -31,7 +31,7 @@ export const blogsMongoQueryRepository = {
     },
 
     async findById(id: string): Promise<OutputBlogType | null> {
-        const blog = await blogCollection.findOne({_id: new ObjectId(id)})
+        const blog = await BlogModel.findOne({_id: new ObjectId(id)}).lean()
         if (blog) {
             return {
                 id: blog._id.toString(),

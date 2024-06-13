@@ -1,6 +1,6 @@
 import {app} from './app'
 import {SETTINGS} from "./settings";
-import {connectToDB} from "./db/mongo-db";
+import {connectToDB} from "./db/mongo/mongo-db";
 import {addRoutes} from "./routes";
 
 const startApp = async () => {

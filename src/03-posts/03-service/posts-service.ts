@@ -15,7 +15,7 @@ export const postsService = {
         }
         const insertedPost = await postsMongoRepository.create(createdPost)
         return {
-            id: insertedPost.insertedId.toString(),
+            id: insertedPost.id.toString(),
             title: createdPost.title,
             shortDescription: createdPost.shortDescription,
             content: createdPost.content,
@@ -35,7 +35,7 @@ export const postsService = {
         }
         const insertedPost = await postsMongoRepository.create(createdPost)
         return {
-            id: insertedPost.insertedId.toString(),
+            id: insertedPost.id.toString(),
             title: createdPost.title,
             shortDescription: createdPost.shortDescription,
             content: createdPost.content,
@@ -47,7 +47,7 @@ export const postsService = {
 
     async update(id: string, input: InputPostType): Promise<boolean> {
         const result = await postsMongoRepository.update(id, input)
-        return !!result.matchedCount
+        return result.matchedCount === 1
     },
 
     async delete(id: string): Promise<boolean> {

@@ -1,11 +1,11 @@
-import {refreshTokenBlacklistCollection} from "../../db/mongo-db";
+import {RefreshTokenBlacklistModel} from "../../db/mongo/mongo-db";
 
 export const refreshTokenMongoRepository = {
     async addTokenInBlacklist(token: string) {
-        await refreshTokenBlacklistCollection.insertOne({token: token})
+        await RefreshTokenBlacklistModel.create({token: token})
     },
 
     async isTokenInBlacklist(token: string) {
-        return await refreshTokenBlacklistCollection.findOne({token: token})
+        return RefreshTokenBlacklistModel.findOne({token: token}).lean()
     }
 }

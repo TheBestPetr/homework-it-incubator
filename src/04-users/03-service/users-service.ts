@@ -17,7 +17,7 @@ export const usersService = {
         }
         const insertedUser = await usersMongoRepository.create(createdUser)
         return {
-            id: insertedUser.insertedId.toString(),
+            id: insertedUser.id.toString(),
             login: createdUser.login,
             email: createdUser.email,
             createdAt: createdUser.createdAt

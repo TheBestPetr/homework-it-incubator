@@ -18,7 +18,7 @@ export const commentsService = {
         }
         const insertedComment = await commentsMongoRepository.create(newComment)
         return {
-            id: insertedComment.insertedId.toString(),
+            id: insertedComment.id.toString(),
             content: content.content,
             commentatorInfo: {
                 userId: user!.userId,
@@ -30,7 +30,7 @@ export const commentsService = {
 
     async update(input: InputCommentType, commentId: string): Promise<boolean> {
         const result = await commentsMongoRepository.update(input, commentId)
-        return !!result.matchedCount
+        return result.matchedCount === 1
     },
 
     async isUserCanDoThis(userId: string, commentId: string): Promise<boolean> {

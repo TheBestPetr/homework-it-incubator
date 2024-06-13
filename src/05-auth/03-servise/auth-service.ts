@@ -9,7 +9,7 @@ import {usersMongoRepository} from "../../04-users/04-repository/users-mongo-rep
 import {nodemailerService} from "../../application/nodemaile-service/nodemailer-service";
 import {jwtService} from "../../application/jwt-service/jwt-service";
 import {refreshTokenMongoRepository} from "../04-repository/refresh-token-mongo-repository";
-import {TokensType} from "../../types/applicationTypes/token-type";
+import {TokensType} from "../../types/applicationTypes/tokens-type";
 import {devicesService} from "../../07-security/03-service/devices-service";
 import {DeviceDBType} from "../../types/db-types/device-db-type";
 import {devicesMongoRepository} from "../../07-security/04-repository/devices-mongo-repository";
@@ -159,17 +159,15 @@ export const authService = {
         return false
     },
 
-    async newPasswordConfirmation(password: string, recoveryCode: string) {
+    async newPasswordConfirmation(password: string, recoveryCode: string): Promise<boolean> {
         const user = await usersMongoQueryRepository.findByPasswordRecoveryCode(recoveryCode)
-        const oldPasswordHash = user?.passwordHash
-        if (!user) {
-            return false
+        if (user) {
+            user.passwordRecovery!.recoveryCode = undefined
+            user.passwordRecovery!.expirationDate = undefined
+            const newPasswordHash = await bcryptService.generateHash(password)
+            const result = await usersMongoRepository.updatePasswordRecovery(user._id.toString(), newPasswordHash, user)
+            return result.matchedCount === 1
         }
-        const newPasswordHash = await bcryptService.generateHash(password)
-        if (oldPasswordHash === newPasswordHash) {
-            return false
-        }
-        await usersMongoRepository.updatePasswordRecovery(user._id.toString(), newPasswordHash)
-        return true
+        return false
     }
 }

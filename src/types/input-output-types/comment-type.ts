@@ -1,7 +1,12 @@
 import {SortDirection} from "mongodb";
+import {CommentatorType, LikesType} from "../db-types/comment-db-type";
 
 export type InputCommentType = {
     content: string
+}
+
+export type InputLikeType = {
+
 }
 
 export type OutputCommentType = {
@@ -9,11 +14,7 @@ export type OutputCommentType = {
     content: string
     commentatorInfo: CommentatorType
     createdAt: string
-}
-
-export type CommentatorType = {
-    userId: string
-    userLogin: string
+    //likesInfo: LikesType
 }
 
 export type InputCommentQueryType = {
