@@ -3,10 +3,10 @@ import {UserDbType} from "../../types/db-types/user-db-type";
 import {usersMongoRepository} from "../04-repository/users-mongo-repository";
 import {bcryptService} from "../../application/bcrypt-service/bcrypt-service";
 
-export const usersService = {
+class UsersService {
     async createSuperUser(input: InputUserType): Promise<OutputUserType> {
         const passwordHash = await bcryptService.generateHash(input.password)
-        const createdUser: UserDbType = {
+        const createdUser: UserDbType = { //todo something
             login: input.login,
             passwordHash: passwordHash,
             email: input.email,
@@ -22,10 +22,12 @@ export const usersService = {
             email: createdUser.email,
             createdAt: createdUser.createdAt
         }
-    },
+    }
 
     async delete(id: string): Promise<boolean> {
         const result = await usersMongoRepository.delete(id)
         return result.deletedCount === 1
     }
 }
+
+export const usersService = new UsersService()

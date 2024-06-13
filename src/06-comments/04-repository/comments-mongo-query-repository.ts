@@ -2,7 +2,7 @@ import {InputCommentQueryType, OutputCommentQueryType, OutputCommentType} from "
 import {CommentModel} from "../../db/mongo/mongo-db";
 import {ObjectId} from "mongodb";
 
-export const commentsMongoQueryRepository = {
+class CommentsMongoQueryRepository {
     async findById(id: string): Promise<OutputCommentType | null> {
         const comment = await CommentModel.findOne({_id: new ObjectId(id)}).lean()
         if (comment) {
@@ -17,7 +17,7 @@ export const commentsMongoQueryRepository = {
             }
         }
         return null
-    },
+    }
 
     async findCommentsByPostId(postId: string, query: InputCommentQueryType): Promise<OutputCommentQueryType> {
         const items = await CommentModel
@@ -44,3 +44,5 @@ export const commentsMongoQueryRepository = {
         }
     }
 }
+
+export const commentsMongoQueryRepository = new CommentsMongoQueryRepository()

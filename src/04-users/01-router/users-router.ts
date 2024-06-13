@@ -1,19 +1,19 @@
 import {Router} from "express";
-import {createUserController, deleteUserController, getUsers} from "../02-controllers/users-controller";
 import {userBodyValidation} from "../../validators/users-validator";
 import {errorsValidationResultMiddleware} from "../../middlewares/errors-validation-middleware";
 import {authBasicMiddleware} from "../../middlewares/auth-basic-middleware";
+import {usersController} from "../02-controllers/users-controller";
 
 export const usersRouter = Router()
 
 usersRouter.get('/',
     authBasicMiddleware,
-    getUsers)
+    usersController.findUsers)
 usersRouter.post('/',
     authBasicMiddleware,
     userBodyValidation,
     errorsValidationResultMiddleware,
-    createUserController)
+    usersController.createUserController)
 usersRouter.delete('/:id',
     authBasicMiddleware,
-    deleteUserController)
+    usersController.deleteUserController)

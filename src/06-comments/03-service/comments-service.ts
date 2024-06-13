@@ -4,10 +4,10 @@ import {CommentDbType} from "../../types/db-types/comment-db-type";
 import {commentsMongoRepository} from "../04-repository/comments-mongo-repository";
 import {commentsMongoQueryRepository} from "../04-repository/comments-mongo-query-repository";
 
-export const commentsService = {
+class CommentsService {
     async create(content: InputCommentType, commentatorId: string, postId: string): Promise<OutputCommentType> {
         const user = await usersMongoQueryRepository.findById(commentatorId)
-        const newComment: CommentDbType = {
+        const newComment: CommentDbType = { //todo something
             postId: postId,
             content: content.content,
             commentatorInfo: {
@@ -26,21 +26,23 @@ export const commentsService = {
             },
             createdAt: newComment.createdAt
         }
-    },
+    }
 
     async update(input: InputCommentType, commentId: string): Promise<boolean> {
         const result = await commentsMongoRepository.update(input, commentId)
         return result.matchedCount === 1
-    },
+    }
 
     async isUserCanDoThis(userId: string, commentId: string): Promise<boolean> {
         const comment = await commentsMongoQueryRepository.findById(commentId)
         return userId === comment?.commentatorInfo.userId;
 
-    },
+    }
 
     async delete(id: string) {
         const result = await commentsMongoRepository.delete(id)
         return result.deletedCount === 1
     }
 }
+
+export const commentsService = new CommentsService()

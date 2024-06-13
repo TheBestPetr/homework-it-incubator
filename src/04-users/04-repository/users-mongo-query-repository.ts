@@ -1,6 +1,5 @@
-import {InputUserQueryType, OutputUserQueryType} from "../../types/input-output-types/user-type";
+import {InputUserQueryType, OutputIType, OutputUserQueryType} from "../../types/input-output-types/user-type";
 import {UserModel} from "../../db/mongo/mongo-db";
-import {meDBType} from "../../types/db-types/me-db-type";
 import {ObjectId} from "mongodb";
 
 class UsersMongoQueryRepository{
@@ -36,7 +35,7 @@ class UsersMongoQueryRepository{
         return UserModel.findOne({$or: [{'login': loginOrEmail}, {'email': loginOrEmail}]}).lean()
     }
 
-    async findById(userId: string): Promise<meDBType | null> {
+    async findById(userId: string): Promise<OutputIType | null> {
         const user = await UserModel.findOne({_id: new ObjectId(userId)}).lean()
         if (user) {
             return {

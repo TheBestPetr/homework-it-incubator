@@ -13,6 +13,12 @@ export type OutputUserType = {
     createdAt: string
 }
 
+export type OutputIType = {
+    email: string
+    login: string
+    userId: string
+}
+
 export type InputUserQueryType = {
     sortBy: string
     sortDirection: SortDirection

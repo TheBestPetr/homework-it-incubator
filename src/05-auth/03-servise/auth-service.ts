@@ -48,7 +48,7 @@ class AuthService {
 
     async registerUser(input: InputUserType): Promise<boolean> {
         const passwordHash = await bcryptService.generateHash(input.password)
-        const createdUser: UserDbType = {
+        const createdUser: UserDbType = { //todo something
             login: input.login,
             passwordHash: passwordHash,
             email: input.email,
