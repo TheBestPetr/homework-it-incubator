@@ -3,16 +3,18 @@ import {BlogModel} from "../../db/mongo/mongo-db";
 import {ObjectId} from "mongodb";
 import {BlogDBType} from "../../types/db-types/blog-db-type";
 
-export const blogsMongoRepository = {
+class BlogsMongoRepository {
     async create(input: BlogDBType) {
         return BlogModel.create({...input})
-    },
+    }
 
     async update(id: string, input: InputBlogType) {
         return BlogModel.updateOne({_id: new ObjectId(id)}, {$set: {...input}})
-    },
+    }
 
     async delete(id: string) {
         return BlogModel.deleteOne({_id: new ObjectId(id)})
     }
 }
+
+export const blogsMongoRepository = new BlogsMongoRepository()

@@ -2,7 +2,7 @@ import {PostModel} from "../../db/mongo/mongo-db";
 import {InputPostQueryType, OutputPostQueryType, OutputPostType} from "../../types/input-output-types/post-type";
 import {ObjectId} from "mongodb";
 
-export const postsMongoQueryRepository = {
+class PostsMongoQueryRepository {
     async find(query: InputPostQueryType): Promise<OutputPostQueryType> {
         const items = await PostModel
             .find()
@@ -26,7 +26,7 @@ export const postsMongoQueryRepository = {
                 createdAt: post.createdAt
             }))
         }
-    },
+    }
 
     async findPostsByBlogId(query: InputPostQueryType, blogId: string): Promise<OutputPostQueryType> {
         const items = await PostModel
@@ -51,7 +51,7 @@ export const postsMongoQueryRepository = {
                 createdAt: post.createdAt
             }))
         }
-    },
+    }
 
     async findById(id: string): Promise<OutputPostType | null> {
         const post = await PostModel.findOne({_id: new ObjectId(id)}).lean()
@@ -70,3 +70,5 @@ export const postsMongoQueryRepository = {
         }
     }
 }
+
+export const postsMongoQueryRepository = new PostsMongoQueryRepository()

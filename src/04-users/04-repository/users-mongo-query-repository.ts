@@ -3,7 +3,7 @@ import {UserModel} from "../../db/mongo/mongo-db";
 import {meDBType} from "../../types/db-types/me-db-type";
 import {ObjectId} from "mongodb";
 
-export const usersMongoQueryRepository = {
+class UsersMongoQueryRepository{
     async find(query: InputUserQueryType): Promise<OutputUserQueryType> {
         const searchWithEmail = query.searchEmailTerm
             ? {email: {$regex: query.searchEmailTerm, $options: 'i'}}
@@ -30,11 +30,11 @@ export const usersMongoQueryRepository = {
                 createdAt: user.createdAt
             }))
         }
-    },
+    }
 
     async findByLoginOrEmail(loginOrEmail: string) {
         return UserModel.findOne({$or: [{'login': loginOrEmail}, {'email': loginOrEmail}]}).lean()
-    },
+    }
 
     async findById(userId: string): Promise<meDBType | null> {
         const user = await UserModel.findOne({_id: new ObjectId(userId)}).lean()
@@ -46,7 +46,7 @@ export const usersMongoQueryRepository = {
             }
         }
         return null
-    },
+    }
 
     async findByEmailConfirmationCode(code: string) {
         const user = await UserModel.findOne({'emailConfirmation.confirmationCode': code}).lean()
@@ -54,7 +54,7 @@ export const usersMongoQueryRepository = {
             return user
         }
         return null
-    },
+    }
 
     async findByPasswordRecoveryCode (code: string) {
         const user = await UserModel.findOne({'passwordRecovery.recoveryCode': code}).lean()
@@ -64,3 +64,5 @@ export const usersMongoQueryRepository = {
         return null
     }
 }
+
+export const usersMongoQueryRepository = new UsersMongoQueryRepository()

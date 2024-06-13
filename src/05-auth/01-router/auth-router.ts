@@ -1,15 +1,5 @@
 import {Router} from "express";
-import {
-    createNewTokensController,
-    getUserInfo,
-    loginUser,
-    newPasswordConfirmation,
-    passwordRecovery,
-    userLogout,
-    userRegistration,
-    userRegistrationConfirmation,
-    userRegistrationEmailResending
-} from "../02-controllers/auth-controller";
+import {authController} from "../02-controllers/auth-controller";
 import {
     authConfirmRegistrationBodyValidation,
     authEmailBodyValidation,
@@ -28,44 +18,44 @@ authRouter.post('/login',
     reqIpCounterMiddleware,
     authLoginBodyValidation,
     errorsValidationResultMiddleware,
-    loginUser)
+    authController.loginUser)
 
 authRouter.get('/me',
     authBearerMiddleware,
-    getUserInfo)
+    authController.getUserInfo)
 
 authRouter.post('/registration',
     reqIpCounterMiddleware,
     authRegistrationBodyValidation,
     errorsValidationResultMiddleware,
-    userRegistration)
+    authController.userRegistration)
 
 authRouter.post('/registration-confirmation',
     reqIpCounterMiddleware,
     authConfirmRegistrationBodyValidation,
     errorsValidationResultMiddleware,
-    userRegistrationConfirmation)
+    authController.userRegistrationConfirmation)
 
 authRouter.post('/registration-email-resending',
     reqIpCounterMiddleware,
     authResendingEmailValidation,
     errorsValidationResultMiddleware,
-    userRegistrationEmailResending)
+    authController.userRegistrationEmailResending)
 
 authRouter.post('/refresh-token',
-    createNewTokensController)
+    authController.createNewTokensController)
 
 authRouter.post('/logout',
-    userLogout)
+    authController.userLogout)
 
 authRouter.post('/new-password',
     reqIpCounterMiddleware,
     authNewPasswordBodyValidation,
     errorsValidationResultMiddleware,
-    newPasswordConfirmation)
+    authController.newPasswordConfirmation)
 
 authRouter.post('/password-recovery',
     reqIpCounterMiddleware,
     authEmailBodyValidation,
     errorsValidationResultMiddleware,
-    passwordRecovery)
+    authController.passwordRecovery)

@@ -1,17 +1,13 @@
 import {Router} from "express";
-import {
-    getAllDevicesWithActiveSession,
-    terminateAllDevicesSession,
-    terminateSpecifiedDeviceSession
-} from "../02-controllers/devices-controller";
+import {devicesController} from "../02-controllers/devices-controller";
 
 export const devicesRouter = Router()
 
 devicesRouter.get('/',
-    getAllDevicesWithActiveSession)
+    devicesController.getAllDevicesWithActiveSession)
 
 devicesRouter.delete('/',
-    terminateAllDevicesSession)
+    devicesController.terminateAllDevicesSession)
 
 devicesRouter.delete('/:deviceId',
-    terminateSpecifiedDeviceSession)
+    devicesController.terminateSpecifiedDeviceSession)

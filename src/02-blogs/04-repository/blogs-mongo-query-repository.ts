@@ -2,7 +2,7 @@ import {BlogModel} from "../../db/mongo/mongo-db";
 import {InputBlogQueryType, OutputBlogQueryType, OutputBlogType} from "../../types/input-output-types/blog-type";
 import {ObjectId} from "mongodb";
 
-export const blogsMongoQueryRepository = {
+class BlogsMongoQueryRepository {
     async find(query: InputBlogQueryType): Promise<OutputBlogQueryType> {
         const search = query.searchNameTerm
             ? {name: {$regex: query.searchNameTerm, $options: 'i'}}
@@ -28,7 +28,7 @@ export const blogsMongoQueryRepository = {
                 createdAt: blog.createdAt
             }))
         }
-    },
+    }
 
     async findById(id: string): Promise<OutputBlogType | null> {
         const blog = await BlogModel.findOne({_id: new ObjectId(id)}).lean()
@@ -44,5 +44,7 @@ export const blogsMongoQueryRepository = {
         } else {
             return null
         }
-    },
+    }
 }
+
+export const blogsMongoQueryRepository = new BlogsMongoQueryRepository()

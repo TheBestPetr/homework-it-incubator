@@ -11,11 +11,10 @@ import {jwtService} from "../../application/jwt-service/jwt-service";
 import {refreshTokenMongoRepository} from "../04-repository/refresh-token-mongo-repository";
 import {TokensType} from "../../types/applicationTypes/tokens-type";
 import {devicesService} from "../../07-security/03-service/devices-service";
-import {DeviceDBType} from "../../types/db-types/device-db-type";
 import {devicesMongoRepository} from "../../07-security/04-repository/devices-mongo-repository";
-import {devicesMongoQueryRepository} from "../../07-security/04-repository/devices-mongo-query-repository";
+import {DeviceClass} from "../../classes/device-class";
 
-export const authService = {
+class AuthService {
     async checkCredentials(input: InputLoginType): Promise<string | null> {
         const user = await usersMongoQueryRepository.findByLoginOrEmail(input.loginOrEmail)
         if (user) {
@@ -25,27 +24,27 @@ export const authService = {
             }
         }
         return null
-    },
+    }
 
     async loginUser(userId: string, ip: string, deviceName: string): Promise<TokensType> {
         const newDeviceId = randomUUID().toString()
         const accessToken = await jwtService.createAccessJWTToken(userId)
         const refreshToken = await jwtService.createRefreshJWTToken(userId, newDeviceId)
         const iatNExp = await jwtService.getTokenIatNExp(refreshToken)
-        const newDevice: DeviceDBType = {
-            userId: userId,
-            deviceId: newDeviceId,
-            iat: new Date(iatNExp!.iat * 1000).toISOString(),
-            deviceName: deviceName,
-            ip: ip,
-            exp: new Date(iatNExp!.exp * 1000).toISOString()
-        }
-        await devicesService.addDevice(newDevice)
+        const newDevice = new DeviceClass(
+            userId,
+            newDeviceId,
+            new Date(iatNExp!.iat * 1000).toISOString(),
+            deviceName,
+            ip,
+            new Date(iatNExp!.exp * 1000).toISOString()
+        )
+        await devicesService.createDevice(newDevice)
         return {
             accessToken: accessToken,
             refreshToken: refreshToken
         }
-    },
+    }
 
     async registerUser(input: InputUserType): Promise<boolean> {
         const passwordHash = await bcryptService.generateHash(input.password)
@@ -70,7 +69,7 @@ export const authService = {
                 console.error('Send email error', error)
             })
         return true
-    },
+    }
 
     async confirmUserEmail(confirmationCode: string): Promise<boolean> {
         const user = await usersMongoQueryRepository.findByEmailConfirmationCode(confirmationCode)
@@ -82,7 +81,7 @@ export const authService = {
             return result.matchedCount === 1
         }
         return false
-    },
+    }
 
     async confirmUserEmailResending(email: string): Promise<boolean> {
         const user = await usersMongoQueryRepository.findByLoginOrEmail(email)
@@ -102,14 +101,14 @@ export const authService = {
             return true
         }
         return false
-    },
+    }
 
     async createNewTokens(refreshToken: string): Promise<TokensType | null> {
         const isTokenInBlacklist = await refreshTokenMongoRepository.isTokenInBlacklist(refreshToken)
         const userId = await jwtService.getUserIdByToken(refreshToken)
         const deviceId = await jwtService.getDeviceIdByToken(refreshToken)
         const oldIat = await jwtService.getTokenIatNExp(refreshToken)
-        const isDeviceExist = await devicesMongoQueryRepository.findSessionByDeviceId(deviceId)
+        const isDeviceExist = await devicesMongoRepository.findSessionByDeviceId(deviceId)
         if (!userId || isTokenInBlacklist || !isDeviceExist) {
             return null
         }
@@ -122,20 +121,20 @@ export const authService = {
             accessToken: newAccessToken,
             refreshToken: newRefreshToken
         }
-    },
+    }
 
     async logoutUser(refreshToken: string): Promise<boolean> {
         const userId = await jwtService.getUserIdByToken(refreshToken)
         const isTokenInBlacklist = await refreshTokenMongoRepository.isTokenInBlacklist(refreshToken)
         const deviceId = await jwtService.getDeviceIdByToken(refreshToken)
-        const isDeviceExist = await devicesMongoQueryRepository.findSessionByDeviceId(deviceId)
+        const isDeviceExist = await devicesMongoRepository.findSessionByDeviceId(deviceId)
         if (!userId || isTokenInBlacklist || !isDeviceExist) {
             return false
         }
         await devicesMongoRepository.deleteSessionByDeviceId(deviceId)
         await refreshTokenMongoRepository.addTokenInBlacklist(refreshToken)
         return true
-    },
+    }
 
     async passwordRecovery(email: string): Promise<boolean> {
         const user = await usersMongoQueryRepository.findByLoginOrEmail(email)
@@ -157,7 +156,7 @@ export const authService = {
             }
         }
         return false
-    },
+    }
 
     async newPasswordConfirmation(password: string, recoveryCode: string): Promise<boolean> {
         const user = await usersMongoQueryRepository.findByPasswordRecoveryCode(recoveryCode)
@@ -171,3 +170,5 @@ export const authService = {
         return false
     }
 }
+
+export const authService = new AuthService()

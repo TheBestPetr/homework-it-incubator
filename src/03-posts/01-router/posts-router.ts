@@ -1,11 +1,5 @@
 import {Router} from "express"
-import {
-    createPostController,
-    deletePostController,
-    findPostController,
-    getPosts,
-    updatePostController
-} from "../02-controllers/posts-controller";
+import {postsController} from "../02-controllers/posts-controller";
 import {authBasicMiddleware} from "../../middlewares/auth-basic-middleware";
 import {errorsValidationResultMiddleware} from "../../middlewares/errors-validation-middleware";
 import {postBodyValidation} from "../../validators/posts-validator";
@@ -16,22 +10,22 @@ import {authBearerMiddleware} from "../../middlewares/auth-bearer-middleware";
 export const postsRouter = Router()
 
 postsRouter.get('/',
-    getPosts)
+    postsController.findPosts)
 postsRouter.post('/',
     authBasicMiddleware,
     postBodyValidation,
     errorsValidationResultMiddleware,
-    createPostController)
+    postsController.createPostController)
 postsRouter.get('/:id',
-    findPostController)
+    postsController.findPostById)
 postsRouter.put('/:id',
     authBasicMiddleware,
     postBodyValidation,
     errorsValidationResultMiddleware,
-    updatePostController)
+    postsController.updatePostController)
 postsRouter.delete('/:id',
     authBasicMiddleware,
-    deletePostController)
+    postsController.deletePostController)
 postsRouter.post('/:postId/comments',
     authBearerMiddleware,
     commentBodyValidation,

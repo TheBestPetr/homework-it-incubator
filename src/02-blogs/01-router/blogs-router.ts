@@ -1,40 +1,34 @@
 import {Router} from "express";
-import {
-    createBlogController,
-    deleteBlogController,
-    findBlogController,
-    getBlogs,
-    updateBlogController
-} from "../02-controllers/blogs-controller";
+import {blogsController} from "../02-controllers/blogs-controller";
 import {authBasicMiddleware} from "../../middlewares/auth-basic-middleware";
 import {errorsValidationResultMiddleware} from "../../middlewares/errors-validation-middleware";
-import {createPostForBlogIdParams, getPostsByBlogIdParams} from "../../03-posts/02-controllers/posts-controller";
+import {postsController} from "../../03-posts/02-controllers/posts-controller";
 import {postBodyValidationForBlogIdParams} from "../../validators/posts-validator";
 import {blogBodyValidation} from "../../validators/blogs-validator";
 
 export const blogsRouter = Router()
 
 blogsRouter.get('/',
-    getBlogs)
+    blogsController.findBlogs)
 blogsRouter.post('/',
     authBasicMiddleware,
     blogBodyValidation,
     errorsValidationResultMiddleware,
-    createBlogController)
+    blogsController.createBlogController)
 blogsRouter.get('/:id',
-    findBlogController)
+    blogsController.findBlogById)
 blogsRouter.put('/:id',
     authBasicMiddleware,
     blogBodyValidation,
     errorsValidationResultMiddleware,
-    updateBlogController)
+    blogsController.updateBlogController)
 blogsRouter.delete('/:id',
     authBasicMiddleware,
-    deleteBlogController)
+    blogsController.deleteBlogController)
 blogsRouter.get('/:blogId/posts',
-    getPostsByBlogIdParams)
+    postsController.findPostsByParamsBlogId)
 blogsRouter.post('/:blogId/posts',
     authBasicMiddleware,
     postBodyValidationForBlogIdParams,
     errorsValidationResultMiddleware,
-    createPostForBlogIdParams)
+    postsController.createPostByParamsBlogId)
