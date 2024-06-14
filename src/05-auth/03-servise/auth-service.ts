@@ -9,7 +9,7 @@ import {UsersMongoRepository} from "../../04-users/04-repository/users-mongo-rep
 import {NodemailerService} from "../../application/nodemaile-service/nodemailer-service";
 import {JwtService} from "../../application/jwt-service/jwt-service";
 import {RefreshTokenMongoRepository} from "../04-repository/refresh-token-mongo-repository";
-import {TokensType} from "../../types/applicationTypes/tokens-type";
+import {TokensType} from "../../types/application-db-types/tokens-type";
 import {DevicesService} from "../../07-security/03-service/devices-service";
 import {DevicesMongoRepository} from "../../07-security/04-repository/devices-mongo-repository";
 import {DeviceClass} from "../../classes/device-class";

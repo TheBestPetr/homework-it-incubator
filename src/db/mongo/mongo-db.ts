@@ -4,7 +4,8 @@ import {PostDBType} from "../../types/db-types/post-db-type"
 import {UserDbType} from "../../types/db-types/user-db-type"
 import {CommentDbType} from "../../types/db-types/comment-db-type"
 import {DeviceDBType} from "../../types/db-types/device-db-type";
-import {ReqCountDbType} from "../../types/applicationTypes/req-db-type";
+import {ReqCountDbType} from "../../types/application-db-types/req-db-type";
+import {RefreshTokenBlacklistDbType} from "../../types/application-db-types/tokens-type";
 import mongoose from "mongoose";
 import {blogSchema} from "./schemas/blog-schema";
 import {postSchema} from "./schemas/post-schema";
@@ -13,7 +14,6 @@ import {commentSchema} from "./schemas/comment-schema";
 import {deviceSchema} from "./schemas/device-schema";
 import {refreshTokenBlacklistSchema} from "./schemas/refresh-token-blacklist-schema";
 import {reqCountSchema} from "./schemas/req-count-schema";
-import {RefreshTokenBlacklistDbType} from "../../types/applicationTypes/tokens-type";
 
 // const client: MongoClient = new MongoClient(SETTINGS.MONGO_URL)
 // export const db: Db = client.db(SETTINGS.DB_NAME)
