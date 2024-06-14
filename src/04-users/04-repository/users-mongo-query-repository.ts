@@ -2,7 +2,7 @@ import {InputUserQueryType, OutputIType, OutputUserQueryType} from "../../types/
 import {UserModel} from "../../db/mongo/mongo-db";
 import {ObjectId} from "mongodb";
 
-class UsersMongoQueryRepository{
+export class UsersMongoQueryRepository {
     async find(query: InputUserQueryType): Promise<OutputUserQueryType> {
         const searchWithEmail = query.searchEmailTerm
             ? {email: {$regex: query.searchEmailTerm, $options: 'i'}}
@@ -55,7 +55,7 @@ class UsersMongoQueryRepository{
         return null
     }
 
-    async findByPasswordRecoveryCode (code: string) {
+    async findByPasswordRecoveryCode(code: string) {
         const user = await UserModel.findOne({'passwordRecovery.recoveryCode': code}).lean()
         if (user) {
             return user
@@ -63,5 +63,3 @@ class UsersMongoQueryRepository{
         return null
     }
 }
-
-export const usersMongoQueryRepository = new UsersMongoQueryRepository()

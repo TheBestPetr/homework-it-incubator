@@ -8,12 +8,14 @@ export const usersRouter = Router()
 
 usersRouter.get('/',
     authBasicMiddleware,
-    usersController.findUsers)
+    usersController.findUsers.bind(usersController))
+
 usersRouter.post('/',
     authBasicMiddleware,
     userBodyValidation,
     errorsValidationResultMiddleware,
-    usersController.createUserController)
+    usersController.createUserController.bind(usersController))
+
 usersRouter.delete('/:id',
     authBasicMiddleware,
-    usersController.deleteUserController)
+    usersController.deleteUserController.bind(usersController))

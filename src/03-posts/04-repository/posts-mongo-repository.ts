@@ -3,7 +3,7 @@ import {PostModel} from "../../db/mongo/mongo-db";
 import {ObjectId} from "mongodb";
 import {PostDBType} from "../../types/db-types/post-db-type";
 
-class PostsMongoRepository {
+export class PostsMongoRepository {
     async create(input: PostDBType) {
         return PostModel.create(input)
     }
@@ -21,5 +21,3 @@ class PostsMongoRepository {
         return PostModel.deleteOne({_id: new ObjectId(id)})
     }
 }
-
-export const postsMongoRepository = new PostsMongoRepository()

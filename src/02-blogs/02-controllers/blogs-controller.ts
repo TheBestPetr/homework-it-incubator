@@ -6,15 +6,23 @@ import {
     InputBlogQueryType
 } from "../../types/input-output-types/blog-type";
 import {ObjectId} from "mongodb";
-import {blogsService} from "../03-service/blogs-service";
-import {blogsMongoQueryRepository} from "../04-repository/blogs-mongo-query-repository";
+import {BlogsService} from "../03-service/blogs-service";
+import {BlogsMongoQueryRepository} from "../04-repository/blogs-mongo-query-repository";
 import {sortNPagingBlogQuery} from "../../helpers/query-helper";
 
 class BlogsController {
+    private blogsMongoQueryRepository: BlogsMongoQueryRepository
+    private blogsService: BlogsService
+
+    constructor() {
+        this.blogsMongoQueryRepository = new BlogsMongoQueryRepository()
+        this.blogsService = new BlogsService()
+    }
+
     async findBlogs(req: Request<{}, {}, {}, InputBlogQueryType>,
                     res: Response<OutputBlogQueryType>) {
         const query = sortNPagingBlogQuery(req.query)
-        const blogs = await blogsMongoQueryRepository.find(query)
+        const blogs = await this.blogsMongoQueryRepository.find(query)
         res.status(200).send(blogs)
     }
 
@@ -24,7 +32,7 @@ class BlogsController {
             res.sendStatus(404)
             return
         }
-        const foundBlog = await blogsMongoQueryRepository.findById(req.params.id)
+        const foundBlog = await this.blogsMongoQueryRepository.findById(req.params.id)
         if (foundBlog) {
             res.status(200).send(foundBlog)
         } else {
@@ -34,7 +42,7 @@ class BlogsController {
 
     async createBlogController(req: Request<{}, {}, InputBlogType>,
                                res: Response<OutputBlogType>) {
-        const newBlog = await blogsService.create(req.body)
+        const newBlog = await this.blogsService.create(req.body)
         res.status(201).send(newBlog)
     }
 
@@ -44,7 +52,7 @@ class BlogsController {
             res.sendStatus(404)
             return
         }
-        const updatedBlog = await blogsService.update(req.params.id, req.body)
+        const updatedBlog = await this.blogsService.update(req.params.id, req.body)
         if (updatedBlog) {
             res.sendStatus(204)
         }
@@ -57,7 +65,7 @@ class BlogsController {
             res.sendStatus(404)
             return
         }
-        const isDelete = await blogsService.delete(req.params.id)
+        const isDelete = await this.blogsService.delete(req.params.id)
         if (isDelete) {
             res.sendStatus(204)
         } else {

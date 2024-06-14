@@ -1,5 +1,5 @@
 import {body} from "express-validator";
-import {usersMongoQueryRepository} from "../04-users/04-repository/users-mongo-query-repository";
+import {UsersMongoQueryRepository} from "../04-users/04-repository/users-mongo-query-repository";
 
 export const authLoginBodyValidation = [
     body('loginOrEmail')
@@ -18,6 +18,7 @@ export const authRegistrationBodyValidation = [
         .notEmpty()
         .isLength({min: 3, max: 10})
         .custom(async value => {
+            const usersMongoQueryRepository = new UsersMongoQueryRepository()
             const isExist = await usersMongoQueryRepository.findByLoginOrEmail(value)
             if (isExist) {
                 throw new Error()
@@ -40,6 +41,7 @@ export const authRegistrationBodyValidation = [
         .isString()
         .notEmpty()
         .custom(async value => {
+            const usersMongoQueryRepository = new UsersMongoQueryRepository()
             const isExist = await usersMongoQueryRepository.findByLoginOrEmail(value)
             if (isExist) {
                 throw new Error()
@@ -54,6 +56,7 @@ export const authConfirmRegistrationBodyValidation = [
         .isString()
         .notEmpty()
         .custom(async code => {
+            const usersMongoQueryRepository = new UsersMongoQueryRepository()
             const user = await usersMongoQueryRepository.findByEmailConfirmationCode(code)
             if (!user || user!.emailConfirmation.expirationDate! < new Date().toISOString() || user!.emailConfirmation.isConfirmed) {
                 throw new Error()
@@ -67,6 +70,7 @@ export const authResendingEmailValidation = [
         .isString()
         .notEmpty()
         .custom(async email => {
+            const usersMongoQueryRepository = new UsersMongoQueryRepository()
             const user = await usersMongoQueryRepository.findByLoginOrEmail(email)
             if (!user || user!.emailConfirmation.isConfirmed) {
                 throw new Error()
@@ -98,6 +102,7 @@ export const authNewPasswordBodyValidation = [
         .isString()
         .notEmpty()
         .custom(async code => {
+            const usersMongoQueryRepository = new UsersMongoQueryRepository()
             const user = await usersMongoQueryRepository.findByPasswordRecoveryCode(code)
             if (!user || user!.passwordRecovery!.expirationDate! < new Date().toISOString()) {
                 throw new Error()

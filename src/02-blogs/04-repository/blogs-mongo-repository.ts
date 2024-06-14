@@ -3,7 +3,7 @@ import {BlogModel} from "../../db/mongo/mongo-db";
 import {ObjectId} from "mongodb";
 import {BlogDBType} from "../../types/db-types/blog-db-type";
 
-class BlogsMongoRepository {
+export class BlogsMongoRepository {
     async create(input: BlogDBType) {
         return BlogModel.create({...input})
     }
@@ -16,5 +16,3 @@ class BlogsMongoRepository {
         return BlogModel.deleteOne({_id: new ObjectId(id)})
     }
 }
-
-export const blogsMongoRepository = new BlogsMongoRepository()

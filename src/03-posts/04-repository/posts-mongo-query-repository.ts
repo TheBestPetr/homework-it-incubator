@@ -2,7 +2,7 @@ import {PostModel} from "../../db/mongo/mongo-db";
 import {InputPostQueryType, OutputPostQueryType, OutputPostType} from "../../types/input-output-types/post-type";
 import {ObjectId} from "mongodb";
 
-class PostsMongoQueryRepository {
+export class PostsMongoQueryRepository {
     async find(query: InputPostQueryType): Promise<OutputPostQueryType> {
         const items = await PostModel
             .find()
@@ -70,5 +70,3 @@ class PostsMongoQueryRepository {
         }
     }
 }
-
-export const postsMongoQueryRepository = new PostsMongoQueryRepository()

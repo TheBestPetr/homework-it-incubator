@@ -1,8 +1,14 @@
-import {blogsMongoRepository} from "../04-repository/blogs-mongo-repository";
+import {BlogsMongoRepository} from "../04-repository/blogs-mongo-repository";
 import {InputBlogType, OutputBlogType} from "../../types/input-output-types/blog-type";
 import {BlogClass} from "../../classes/blog-class";
 
-class BlogsService {
+export class BlogsService {
+    private blogsMongoRepository: BlogsMongoRepository
+
+    constructor() {
+        this.blogsMongoRepository = new BlogsMongoRepository()
+    }
+
     async create(input: InputBlogType): Promise<OutputBlogType> {
         const createdBlog = new BlogClass(
             input.name,
@@ -11,7 +17,7 @@ class BlogsService {
             new Date().toISOString(),
             false
         )
-        const insertedBlog = await blogsMongoRepository.create(createdBlog)
+        const insertedBlog = await this.blogsMongoRepository.create(createdBlog)
         return {
             id: insertedBlog.id.toString(),
             name: createdBlog.name,
@@ -23,14 +29,12 @@ class BlogsService {
     }
 
     async update(id: string, input: InputBlogType): Promise<boolean> {
-        const result = await blogsMongoRepository.update(id, input)
+        const result = await this.blogsMongoRepository.update(id, input)
         return result.matchedCount === 1
     }
 
     async delete(id: string): Promise<boolean> {
-        const result = await blogsMongoRepository.delete(id)
+        const result = await this.blogsMongoRepository.delete(id)
         return result.deletedCount === 1
     }
 }
-
-export const blogsService = new BlogsService()

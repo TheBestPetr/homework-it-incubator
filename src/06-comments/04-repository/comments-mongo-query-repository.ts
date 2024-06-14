@@ -1,8 +1,12 @@
-import {InputCommentQueryType, OutputCommentQueryType, OutputCommentType} from "../../types/input-output-types/comment-type";
+import {
+    InputCommentQueryType,
+    OutputCommentQueryType,
+    OutputCommentType
+} from "../../types/input-output-types/comment-type";
 import {CommentModel} from "../../db/mongo/mongo-db";
 import {ObjectId} from "mongodb";
 
-class CommentsMongoQueryRepository {
+export class CommentsMongoQueryRepository {
     async findById(id: string): Promise<OutputCommentType | null> {
         const comment = await CommentModel.findOne({_id: new ObjectId(id)}).lean()
         if (comment) {
@@ -44,5 +48,3 @@ class CommentsMongoQueryRepository {
         }
     }
 }
-
-export const commentsMongoQueryRepository = new CommentsMongoQueryRepository()

@@ -1,12 +1,20 @@
 import {Request, Response} from "express";
 import {OutputDeviceType} from "../../types/input-output-types/device-type";
-import {devicesService} from "../03-service/devices-service";
-import {devicesMongoRepository} from "../04-repository/devices-mongo-repository";
+import {DevicesService} from "../03-service/devices-service";
+import {DevicesMongoRepository} from "../04-repository/devices-mongo-repository";
 
 class DevicesController {
+    private devicesService: DevicesService
+    private devicesMongoRepository: DevicesMongoRepository
+
+    constructor() {
+        this.devicesService = new DevicesService()
+        this.devicesMongoRepository = new DevicesMongoRepository()
+    }
+
     async getAllDevicesWithActiveSession(req: Request,
                                          res: Response<OutputDeviceType[]>) {
-        const activeSessions = await devicesMongoRepository.findActiveSessions(req.cookies.refreshToken)
+        const activeSessions = await this.devicesMongoRepository.findActiveSessions(req.cookies.refreshToken)
         if (!activeSessions) {
             res.sendStatus(401)
             return
@@ -20,16 +28,17 @@ class DevicesController {
             res.sendStatus(401)
             return
         }
-        const isSessionsTerminated = await devicesService.terminateAllSessions(req.cookies.refreshToken)
+        const isSessionsTerminated = await this.devicesService.terminateAllSessions(req.cookies.refreshToken)
         if (isSessionsTerminated) {
             res.sendStatus(204)
             return
         }
         res.sendStatus(404)
     }
-    async terminateSpecifiedDeviceSession(req: Request<{deviceId: string}>,
+
+    async terminateSpecifiedDeviceSession(req: Request<{ deviceId: string }>,
                                           res: Response) {
-        const sessionToTerminate = await devicesService.findSessionToTerminate(req.params.deviceId)
+        const sessionToTerminate = await this.devicesService.findSessionToTerminate(req.params.deviceId)
         if (!sessionToTerminate) {
             res.sendStatus(404)
             return
@@ -38,7 +47,7 @@ class DevicesController {
             res.sendStatus(401)
             return
         }
-        const isUserCanTerminateSession = await devicesService.isUserCanTerminateSession(req.cookies.refreshToken, req.params.deviceId)
+        const isUserCanTerminateSession = await this.devicesService.isUserCanTerminateSession(req.cookies.refreshToken, req.params.deviceId)
         if (!isUserCanTerminateSession) {
             res.sendStatus(403)
             return

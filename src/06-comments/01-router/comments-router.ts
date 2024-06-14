@@ -7,17 +7,17 @@ import {authBearerMiddleware} from "../../middlewares/auth-bearer-middleware";
 export const commentsRouter = Router()
 
 commentsRouter.get('/:id',
-    commentsController.findCommentById)
+    commentsController.findCommentById.bind(commentsController))
 
 commentsRouter.put('/:commentId',
     authBearerMiddleware,
     commentBodyValidation,
     errorsValidationResultMiddleware,
-    commentsController.updateCommentController)
+    commentsController.updateCommentController.bind(commentsController))
 
 commentsRouter.delete('/:commentId',
     authBearerMiddleware,
-    commentsController.deleteCommentController)
+    commentsController.deleteCommentController.bind(commentsController))
 
 commentsRouter.put('/:commentId/like-status',
     authBearerMiddleware,

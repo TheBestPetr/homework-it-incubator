@@ -1,5 +1,5 @@
 import {Request, Response, NextFunction} from "express";
-import {jwtService} from "../application/jwt-service/jwt-service";
+import {JwtService} from "../application/jwt-service/jwt-service";
 
 export const authBearerMiddleware = (req: Request,
                                      res: Response,
@@ -10,6 +10,7 @@ export const authBearerMiddleware = (req: Request,
         return
     }
     const bearer = bearerHeader.split(' ')
+    const jwtService = new JwtService()
     const userId = jwtService.getUserIdByToken(bearer[1])
     const splitBearer = bearer[1].split('.')
     if (bearer[0] !== 'Bearer' || bearer.length > 3 || !userId || splitBearer.length !== 3) {

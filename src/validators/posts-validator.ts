@@ -1,6 +1,6 @@
 import {body} from "express-validator";
 import {ObjectId} from "mongodb";
-import {blogsMongoQueryRepository} from "../02-blogs/04-repository/blogs-mongo-query-repository";
+import {BlogsMongoQueryRepository} from "../02-blogs/04-repository/blogs-mongo-query-repository";
 
 export const postBodyValidation = [
     body('title')
@@ -46,6 +46,7 @@ export const postBodyValidation = [
             if (!ObjectId.isValid(blogId)) {
                 throw new Error()
             }
+            const blogsMongoQueryRepository = new BlogsMongoQueryRepository()
             const isBlogExist = await blogsMongoQueryRepository.findById(blogId)
             if (!isBlogExist) {
                 throw new Error()
@@ -54,7 +55,7 @@ export const postBodyValidation = [
         })
 ]
 
-export const postBodyValidationForBlogIdParams = [
+export const postBodyValidationForParamsBlogId = [
     body('title')
         .isString()
         .notEmpty()

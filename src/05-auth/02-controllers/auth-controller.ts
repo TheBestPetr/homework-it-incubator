@@ -1,16 +1,26 @@
 import {Request, Response} from "express";
 import {InputLoginType} from "../../types/input-output-types/auth-type";
-import {authService} from "../03-servise/auth-service";
-import {jwtService} from "../../application/jwt-service/jwt-service";
-import {usersMongoQueryRepository} from "../../04-users/04-repository/users-mongo-query-repository";
+import {AuthService} from "../03-servise/auth-service";
+import {JwtService} from "../../application/jwt-service/jwt-service";
+import {UsersMongoQueryRepository} from "../../04-users/04-repository/users-mongo-query-repository";
 import {InputUserType, OutputIType} from "../../types/input-output-types/user-type";
 
 class AuthController {
+    private authService: AuthService
+    private usersMongoQueryRepository: UsersMongoQueryRepository
+    private jwtService: JwtService
+
+    constructor() {
+        this.authService = new AuthService()
+        this.usersMongoQueryRepository = new UsersMongoQueryRepository()
+        this.jwtService = new JwtService()
+    }
+
     async loginUser(req: Request<{}, {}, InputLoginType>,
                     res: Response) {
-        const userId = await authService.checkCredentials(req.body)
+        const userId = await this.authService.checkCredentials(req.body)
         if (userId) {
-            const tokens = await authService.loginUser(userId, req.ip!, req.headers['user-agent']!)
+            const tokens = await this.authService.loginUser(userId, req.ip!, req.headers['user-agent']!)
             res.cookie('refreshToken', tokens?.refreshToken, {httpOnly: true, secure: true})
             res.status(200).send({'accessToken': tokens.accessToken})
             return
@@ -20,9 +30,9 @@ class AuthController {
 
     async getUserInfo(req: Request,
                       res: Response<OutputIType | {}>) {
-        const userId = await jwtService.getUserIdByToken(req.headers.authorization!)
+        const userId = await this.jwtService.getUserIdByToken(req.headers.authorization!)
         if (userId) {
-            const user = await usersMongoQueryRepository.findById(userId)
+            const user = await this.usersMongoQueryRepository.findById(userId)
             if (user) {
                 res.status(200).send(user)
                 return
@@ -33,7 +43,7 @@ class AuthController {
 
     async userRegistration(req: Request<{}, {}, InputUserType>,
                            res: Response) {
-        const newUser = await authService.registerUser(req.body)
+        const newUser = await this.authService.registerUser(req.body)
         if (!newUser) {
             res.sendStatus(400)
             return
@@ -43,7 +53,7 @@ class AuthController {
 
     async userRegistrationConfirmation(req: Request<{}, {}, { 'code': string }>,
                                        res: Response) {
-        const isUserVerified = await authService.confirmUserEmail(req.body.code)
+        const isUserVerified = await this.authService.confirmUserEmail(req.body.code)
         if (isUserVerified) {
             res.sendStatus(204)
             return
@@ -53,7 +63,7 @@ class AuthController {
 
     async userRegistrationEmailResending(req: Request<{}, {}, { 'email': string }>,
                                          res: Response) {
-        const isUserVerified = await authService.confirmUserEmailResending(req.body.email)
+        const isUserVerified = await this.authService.confirmUserEmailResending(req.body.email)
         if (isUserVerified) {
             res.sendStatus(204)
             return
@@ -63,7 +73,7 @@ class AuthController {
 
     async createNewTokensController(req: Request,
                                     res: Response) {
-        const newTokens = await authService.createNewTokens(req.cookies.refreshToken)
+        const newTokens = await this.authService.createNewTokens(req.cookies.refreshToken)
         if (!newTokens) {
             res.sendStatus(401)
             return
@@ -74,7 +84,7 @@ class AuthController {
 
     async userLogout(req: Request,
                      res: Response) {
-        const isUserLogout = await authService.logoutUser(req.cookies.refreshToken)
+        const isUserLogout = await this.authService.logoutUser(req.cookies.refreshToken)
         if (isUserLogout) {
             res.sendStatus(204)
             return
@@ -85,7 +95,7 @@ class AuthController {
 
     async passwordRecovery(req: Request<{}, {}, { email: string }>,
                            res: Response) {
-        const isEmailSend = await authService.passwordRecovery(req.body.email)
+        const isEmailSend = await this.authService.passwordRecovery(req.body.email)
         if (!isEmailSend) {
             console.log('Email not be sand')
             res.sendStatus(204)
@@ -96,7 +106,7 @@ class AuthController {
 
     async newPasswordConfirmation(req: Request<{}, {}, { newPassword: string, recoveryCode: string }>,
                                   res: Response) {
-        const isNewPasswordConfirm = await authService.newPasswordConfirmation(req.body.newPassword, req.body.recoveryCode)
+        const isNewPasswordConfirm = await this.authService.newPasswordConfirmation(req.body.newPassword, req.body.recoveryCode)
         if (!isNewPasswordConfirm) {
             res.sendStatus(400)
             return

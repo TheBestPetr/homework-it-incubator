@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer'
 
-export const nodemailerService = {
+export class NodemailerService {
     async sendRegistrationEmail(email: string, subject: string, confirmationCode: string) {
         const transport = nodemailer.createTransport({
             service: 'gmail',
@@ -19,7 +19,7 @@ export const nodemailerService = {
                 </p>`
         })
         return !!info
-    },
+    }
 
     async sendPasswordRecoveryEmail(email: string, subject: string, confirmationCode: string) {
         const transport = nodemailer.createTransport({

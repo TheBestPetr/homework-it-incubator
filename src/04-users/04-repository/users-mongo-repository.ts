@@ -2,7 +2,7 @@ import {UserModel} from "../../db/mongo/mongo-db";
 import {UserDbType} from "../../types/db-types/user-db-type";
 import {ObjectId} from "mongodb";
 
-class UsersMongoRepository {
+export class UsersMongoRepository {
     async create(input: UserDbType) {
         return UserModel.create(input)
     }
@@ -36,5 +36,3 @@ class UsersMongoRepository {
         })
     }
 }
-
-export const usersMongoRepository = new UsersMongoRepository()

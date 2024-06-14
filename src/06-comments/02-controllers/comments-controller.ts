@@ -5,27 +5,39 @@ import {
     OutputCommentQueryType,
     OutputCommentType
 } from "../../types/input-output-types/comment-type";
-import {jwtService} from "../../application/jwt-service/jwt-service";
-import {postsMongoQueryRepository} from "../../03-posts/04-repository/posts-mongo-query-repository";
-import {commentsService} from "../03-service/comments-service";
-import {commentsMongoQueryRepository} from "../04-repository/comments-mongo-query-repository";
+import {JwtService} from "../../application/jwt-service/jwt-service";
+import {PostsMongoQueryRepository} from "../../03-posts/04-repository/posts-mongo-query-repository";
+import {CommentsService} from "../03-service/comments-service";
+import {CommentsMongoQueryRepository} from "../04-repository/comments-mongo-query-repository";
 import {sortNPagingCommentQuery} from "../../helpers/query-helper";
 import {ObjectId} from "mongodb";
 
 class CommentsController {
+    private commentsService: CommentsService
+    private commentsMongoQueryRepository: CommentsMongoQueryRepository
+    private postsMongoQueryRepository: PostsMongoQueryRepository
+    private jwtService: JwtService
+
+    constructor() {
+        this.commentsService = new CommentsService()
+        this.commentsMongoQueryRepository = new CommentsMongoQueryRepository()
+        this.postsMongoQueryRepository = new PostsMongoQueryRepository()
+        this.jwtService = new JwtService()
+    }
+
     async findCommentsByParamsPostId(req: Request<{ postId: string }, {}, Partial<InputCommentQueryType>>,
                                      res: Response<OutputCommentQueryType>) {
         if (!ObjectId.isValid(req.params.postId)) {
             res.sendStatus(404)
             return
         }
-        const isPostExist = await postsMongoQueryRepository.findById(req.params.postId)
+        const isPostExist = await this.postsMongoQueryRepository.findById(req.params.postId)
         if (!isPostExist) {
             res.sendStatus(404)
             return
         }
         const query = sortNPagingCommentQuery(req.query)
-        const comments = await commentsMongoQueryRepository.findCommentsByPostId(req.params.postId, query)
+        const comments = await this.commentsMongoQueryRepository.findCommentsByPostId(req.params.postId, query)
         if (comments) {
             res.status(200).send(comments)
         } else {
@@ -35,7 +47,7 @@ class CommentsController {
 
     async findCommentById(req: Request<{ id: string }>,
                           res: Response<OutputCommentType>) {
-        const comment = await commentsMongoQueryRepository.findById(req.params.id)
+        const comment = await this.commentsMongoQueryRepository.findById(req.params.id)
         if (!comment) {
             res.sendStatus(404)
             return
@@ -49,17 +61,17 @@ class CommentsController {
             res.sendStatus(404)
             return
         }
-        const post = await postsMongoQueryRepository.findById(req.params.postId)
+        const post = await this.postsMongoQueryRepository.findById(req.params.postId)
         if (!post) {
             res.sendStatus(404)
             return
         }
-        const commentatorId = await jwtService.getUserIdByToken(req.headers.authorization!)
+        const commentatorId = await this.jwtService.getUserIdByToken(req.headers.authorization!)
         if (!commentatorId) {
             res.sendStatus(404)
             return
         }
-        const comment = await commentsService.create(req.body, commentatorId, req.params.postId)
+        const comment = await this.commentsService.create(req.body, commentatorId, req.params.postId)
         res.status(201).send(comment)
     }
 
@@ -69,22 +81,22 @@ class CommentsController {
             res.sendStatus(404)
             return
         }
-        const comment = await commentsMongoQueryRepository.findById(req.params.commentId)
+        const comment = await this.commentsMongoQueryRepository.findById(req.params.commentId)
         if (!comment) {
             res.sendStatus(404)
             return
         }
-        const userId = await jwtService.getUserIdByToken(req.headers.authorization!)
+        const userId = await this.jwtService.getUserIdByToken(req.headers.authorization!)
         if (!userId) {
             res.sendStatus(401)
             return
         }
-        const isUserCanDoThis = await commentsService.isUserCanDoThis(userId, req.params.commentId)
+        const isUserCanDoThis = await this.commentsService.isUserCanDoThis(userId, req.params.commentId)
         if (!isUserCanDoThis) {
             res.sendStatus(403)
             return
         }
-        const updatedComment = await commentsService.update(req.body, req.params.commentId)
+        const updatedComment = await this.commentsService.update(req.body, req.params.commentId)
         if (!updatedComment) {
             res.sendStatus(404)
             return
@@ -98,22 +110,22 @@ class CommentsController {
             res.status(404).send()
             return
         }
-        const comment = await commentsMongoQueryRepository.findById(req.params.commentId)
+        const comment = await this.commentsMongoQueryRepository.findById(req.params.commentId)
         if (!comment) {
             res.sendStatus(404)
             return
         }
-        const userId = await jwtService.getUserIdByToken(req.headers.authorization!)
+        const userId = await this.jwtService.getUserIdByToken(req.headers.authorization!)
         if (!userId) {
             res.sendStatus(401)
             return
         }
-        const isUserCanDoThis = await commentsService.isUserCanDoThis(userId, req.params.commentId)
+        const isUserCanDoThis = await this.commentsService.isUserCanDoThis(userId, req.params.commentId)
         if (!isUserCanDoThis) {
             res.sendStatus(403)
             return
         }
-        const isDelete = await commentsService.delete(req.params.commentId)
+        const isDelete = await this.commentsService.delete(req.params.commentId)
         if (isDelete) {
             res.sendStatus(204)
         } else {

@@ -10,26 +10,32 @@ import {authBearerMiddleware} from "../../middlewares/auth-bearer-middleware";
 export const postsRouter = Router()
 
 postsRouter.get('/',
-    postsController.findPosts)
+    postsController.findPosts.bind(postsController))
+
 postsRouter.post('/',
     authBasicMiddleware,
     postBodyValidation,
     errorsValidationResultMiddleware,
-    postsController.createPostController)
+    postsController.createPostController.bind(postsController))
+
 postsRouter.get('/:id',
-    postsController.findPostById)
+    postsController.findPostById.bind(postsController))
+
 postsRouter.put('/:id',
     authBasicMiddleware,
     postBodyValidation,
     errorsValidationResultMiddleware,
-    postsController.updatePostController)
+    postsController.updatePostController.bind(postsController))
+
 postsRouter.delete('/:id',
     authBasicMiddleware,
-    postsController.deletePostController)
+    postsController.deletePostController.bind(postsController))
+
 postsRouter.post('/:postId/comments',
     authBearerMiddleware,
     commentBodyValidation,
     errorsValidationResultMiddleware,
     commentsController.createCommentController)
+
 postsRouter.get('/:postId/comments',
     commentsController.findCommentsByParamsPostId)

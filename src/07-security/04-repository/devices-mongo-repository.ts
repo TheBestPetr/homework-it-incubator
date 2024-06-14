@@ -1,16 +1,24 @@
 import {DeviceDBType} from "../../types/db-types/device-db-type";
 import {DeviceModel} from "../../db/mongo/mongo-db";
 import {OutputDeviceType} from "../../types/input-output-types/device-type";
-import {refreshTokenMongoRepository} from "../../05-auth/04-repository/refresh-token-mongo-repository";
-import {jwtService} from "../../application/jwt-service/jwt-service";
+import {RefreshTokenMongoRepository} from "../../05-auth/04-repository/refresh-token-mongo-repository";
+import {JwtService} from "../../application/jwt-service/jwt-service";
 
-class DevicesMongoRepository {
+export class DevicesMongoRepository {
+    private refreshTokenMongoRepository: RefreshTokenMongoRepository
+    private jwtService: JwtService
+
+    constructor() {
+        this.refreshTokenMongoRepository = new RefreshTokenMongoRepository()
+        this.jwtService = new JwtService()
+    }
+
     async create(input: DeviceDBType): Promise<boolean> {
         const result = await DeviceModel.create(input)
         return !!result
     }
 
-    async updateIatNExp(deviceId: string, oldIat: string, iat: string, exp: string ): Promise<boolean> {
+    async updateIatNExp(deviceId: string, oldIat: string, iat: string, exp: string): Promise<boolean> {
         const result = await DeviceModel.updateOne({deviceId: deviceId, iat: oldIat}, {$set: {iat: iat, exp: exp}})
         return !!result.matchedCount
     }
@@ -26,8 +34,8 @@ class DevicesMongoRepository {
     }
 
     async findActiveSessions(refreshToken: string): Promise<OutputDeviceType[] | null> {
-        const isTokenInBlackList = await refreshTokenMongoRepository.isTokenInBlacklist(refreshToken)
-        const userId = await jwtService.getUserIdByToken(refreshToken)
+        const isTokenInBlackList = await this.refreshTokenMongoRepository.isTokenInBlacklist(refreshToken)
+        const userId = await this.jwtService.getUserIdByToken(refreshToken)
         const activeSessions = await DeviceModel.find({userId: userId}).lean()
         if (!userId || !activeSessions || isTokenInBlackList) {
             return null
@@ -48,5 +56,3 @@ class DevicesMongoRepository {
         return null
     }
 }
-
-export const devicesMongoRepository = new DevicesMongoRepository()

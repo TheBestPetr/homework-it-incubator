@@ -1,12 +1,20 @@
-import {postsMongoRepository} from "../04-repository/posts-mongo-repository";
+import {PostsMongoRepository} from "../04-repository/posts-mongo-repository";
 import {InputBlogPostType, InputPostType, OutputPostType} from "../../types/input-output-types/post-type";
 import {ObjectId} from "mongodb";
-import {blogsMongoQueryRepository} from "../../02-blogs/04-repository/blogs-mongo-query-repository";
+import {BlogsMongoQueryRepository,} from "../../02-blogs/04-repository/blogs-mongo-query-repository";
 import {PostClass} from "../../classes/post-class";
 
-class PostsService {
+export class PostsService {
+    private postsMongoRepository: PostsMongoRepository
+    private blogsMongoQueryRepository: BlogsMongoQueryRepository
+
+    constructor() {
+        this.postsMongoRepository = new PostsMongoRepository()
+        this.blogsMongoQueryRepository = new BlogsMongoQueryRepository()
+    }
+
     async create(input: InputPostType): Promise<OutputPostType> {
-        const blog = await blogsMongoQueryRepository.findById(input.blogId)
+        const blog = await this.blogsMongoQueryRepository.findById(input.blogId)
         const createdPost = new PostClass(
             input.title,
             input.shortDescription,
@@ -15,7 +23,7 @@ class PostsService {
             blog!.name,
             new Date().toISOString()
         )
-        const insertedPost = await postsMongoRepository.create(createdPost)
+        const insertedPost = await this.postsMongoRepository.create(createdPost)
         return {
             id: insertedPost.id.toString(),
             title: createdPost.title,
@@ -28,7 +36,7 @@ class PostsService {
     }
 
     async createPostForBlogIdParams(blogId: string, input: InputBlogPostType): Promise<OutputPostType> {
-        const blog = await blogsMongoQueryRepository.findById(blogId)
+        const blog = await this.blogsMongoQueryRepository.findById(blogId)
         const createdPost = new PostClass(
             input.title,
             input.shortDescription,
@@ -37,7 +45,7 @@ class PostsService {
             blog!.name,
             new Date().toISOString()
         )
-        const insertedPost = await postsMongoRepository.create(createdPost)
+        const insertedPost = await this.postsMongoRepository.create(createdPost)
         return {
             id: insertedPost.id.toString(),
             title: createdPost.title,
@@ -50,14 +58,12 @@ class PostsService {
     }
 
     async update(id: string, input: InputPostType): Promise<boolean> {
-        const result = await postsMongoRepository.update(id, input)
+        const result = await this.postsMongoRepository.update(id, input)
         return result.matchedCount === 1
     }
 
     async delete(id: string): Promise<boolean> {
-        const result = await postsMongoRepository.delete(id)
+        const result = await this.postsMongoRepository.delete(id)
         return result.deletedCount === 1
     }
 }
-
-export const postsService = new PostsService()

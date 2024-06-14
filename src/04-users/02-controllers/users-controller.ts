@@ -6,21 +6,29 @@ import {
     OutputUserType
 } from "../../types/input-output-types/user-type";
 import {sortNPagingUserQuery} from "../../helpers/query-helper";
-import {usersMongoQueryRepository} from "../04-repository/users-mongo-query-repository";
-import {usersService} from "../03-service/users-service";
+import {UsersMongoQueryRepository} from "../04-repository/users-mongo-query-repository";
+import {UsersService} from "../03-service/users-service";
 import {ObjectId} from "mongodb";
 
 class UsersController {
+    private usersService: UsersService
+    private usersMongoQueryRepository: UsersMongoQueryRepository
+
+    constructor() {
+        this.usersService = new UsersService()
+        this.usersMongoQueryRepository = new UsersMongoQueryRepository()
+    }
+
     async findUsers(req: Request<{}, {}, {}, Partial<InputUserQueryType>>,
                     res: Response<OutputUserQueryType>) {
         const query = sortNPagingUserQuery(req.query)
-        const users = await usersMongoQueryRepository.find(query)
+        const users = await this.usersMongoQueryRepository.find(query)
         res.status(200).send(users)
     }
 
     async createUserController(req: Request<{}, {}, InputUserType>,
                                res: Response<OutputUserType>) {
-        const user = await usersService.createSuperUser(req.body)
+        const user = await this.usersService.createSuperUser(req.body)
         res.status(201).send(user)
     }
 
@@ -30,7 +38,7 @@ class UsersController {
             res.sendStatus(404)
             return
         }
-        const isDelete = await usersService.delete(req.params.id)
+        const isDelete = await this.usersService.delete(req.params.id)
         if (isDelete) {
             res.sendStatus(204)
         } else {

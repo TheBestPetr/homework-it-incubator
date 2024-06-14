@@ -2,7 +2,7 @@ import {BlogModel} from "../../db/mongo/mongo-db";
 import {InputBlogQueryType, OutputBlogQueryType, OutputBlogType} from "../../types/input-output-types/blog-type";
 import {ObjectId} from "mongodb";
 
-class BlogsMongoQueryRepository {
+export class BlogsMongoQueryRepository {
     async find(query: InputBlogQueryType): Promise<OutputBlogQueryType> {
         const search = query.searchNameTerm
             ? {name: {$regex: query.searchNameTerm, $options: 'i'}}
@@ -46,5 +46,3 @@ class BlogsMongoQueryRepository {
         }
     }
 }
-
-export const blogsMongoQueryRepository = new BlogsMongoQueryRepository()

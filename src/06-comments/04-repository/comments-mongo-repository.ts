@@ -3,7 +3,7 @@ import {CommentModel} from "../../db/mongo/mongo-db";
 import {ObjectId} from "mongodb";
 import {InputCommentType} from "../../types/input-output-types/comment-type";
 
-class CommentsMongoRepository {
+export class CommentsMongoRepository {
     async create(comment: CommentDbType) {
         return CommentModel.create(comment)
     }
@@ -16,5 +16,3 @@ class CommentsMongoRepository {
         return CommentModel.deleteOne({_id: new ObjectId(id)})
     }
 }
-
-export const commentsMongoRepository = new CommentsMongoRepository()

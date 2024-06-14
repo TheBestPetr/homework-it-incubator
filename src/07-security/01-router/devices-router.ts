@@ -4,10 +4,10 @@ import {devicesController} from "../02-controllers/devices-controller";
 export const devicesRouter = Router()
 
 devicesRouter.get('/',
-    devicesController.getAllDevicesWithActiveSession)
+    devicesController.getAllDevicesWithActiveSession.bind(devicesController))
 
 devicesRouter.delete('/',
-    devicesController.terminateAllDevicesSession)
+    devicesController.terminateAllDevicesSession.bind(devicesController))
 
 devicesRouter.delete('/:deviceId',
-    devicesController.terminateSpecifiedDeviceSession)
+    devicesController.terminateSpecifiedDeviceSession.bind(devicesController))
