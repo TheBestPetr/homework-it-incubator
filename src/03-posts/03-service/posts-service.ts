@@ -5,13 +5,10 @@ import {BlogsMongoQueryRepository,} from "../../02-blogs/04-repository/blogs-mon
 import {PostClass} from "../../classes/post-class";
 
 export class PostsService {
-    private postsMongoRepository: PostsMongoRepository
-    private blogsMongoQueryRepository: BlogsMongoQueryRepository
-
-    constructor() {
-        this.postsMongoRepository = new PostsMongoRepository()
-        this.blogsMongoQueryRepository = new BlogsMongoQueryRepository()
-    }
+    constructor(
+        protected postsMongoRepository: PostsMongoRepository,
+        protected blogsMongoQueryRepository: BlogsMongoQueryRepository
+    ) {}
 
     async create(input: InputPostType): Promise<OutputPostType> {
         const blog = await this.blogsMongoQueryRepository.findById(input.blogId)

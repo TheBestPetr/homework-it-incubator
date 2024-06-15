@@ -1,10 +1,10 @@
 import {Router} from "express";
-import {blogsController} from "../02-controllers/blogs-controller";
 import {authBasicMiddleware} from "../../middlewares/auth-basic-middleware";
 import {errorsValidationResultMiddleware} from "../../middlewares/errors-validation-middleware";
-import {postsController} from "../../03-posts/02-controllers/posts-controller";
 import {postBodyValidationForParamsBlogId} from "../../validators/posts-validator";
 import {blogBodyValidation} from "../../validators/blogs-validator";
+import {blogsController} from "../../application/composition-root/blogs-composition";
+import {postsController} from "../../application/composition-root/posts-composition";
 
 export const blogsRouter = Router()
 

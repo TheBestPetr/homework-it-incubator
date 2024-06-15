@@ -10,14 +10,11 @@ import {BlogsService} from "../03-service/blogs-service";
 import {BlogsMongoQueryRepository} from "../04-repository/blogs-mongo-query-repository";
 import {sortNPagingBlogQuery} from "../../helpers/query-helper";
 
-class BlogsController {
-    private blogsMongoQueryRepository: BlogsMongoQueryRepository
-    private blogsService: BlogsService
-
-    constructor() {
-        this.blogsMongoQueryRepository = new BlogsMongoQueryRepository()
-        this.blogsService = new BlogsService()
-    }
+export class BlogsController {
+    constructor(
+        protected blogsService: BlogsService,
+        protected blogsMongoQueryRepository: BlogsMongoQueryRepository
+    ) {}
 
     async findBlogs(req: Request<{}, {}, {}, InputBlogQueryType>,
                     res: Response<OutputBlogQueryType>) {
@@ -73,5 +70,3 @@ class BlogsController {
         }
     }
 }
-
-export const blogsController = new BlogsController()

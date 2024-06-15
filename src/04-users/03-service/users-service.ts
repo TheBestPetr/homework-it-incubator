@@ -4,13 +4,10 @@ import {UsersMongoRepository} from "../04-repository/users-mongo-repository";
 import {BcryptService} from "../../application/bcrypt-service/bcrypt-service";
 
 export class UsersService {
-    private usersMongoRepository: UsersMongoRepository
-    private bcryptService: BcryptService
-
-    constructor() {
-        this.usersMongoRepository = new UsersMongoRepository()
-        this.bcryptService = new BcryptService()
-    }
+    constructor(
+        protected usersMongoRepository: UsersMongoRepository,
+        protected bcryptService: BcryptService
+    ) {}
 
     async createSuperUser(input: InputUserType): Promise<OutputUserType> {
         const passwordHash = await this.bcryptService.generateHash(input.password)

@@ -3,14 +3,11 @@ import {OutputDeviceType} from "../../types/input-output-types/device-type";
 import {DevicesService} from "../03-service/devices-service";
 import {DevicesMongoRepository} from "../04-repository/devices-mongo-repository";
 
-class DevicesController {
-    private devicesService: DevicesService
-    private devicesMongoRepository: DevicesMongoRepository
-
-    constructor() {
-        this.devicesService = new DevicesService()
-        this.devicesMongoRepository = new DevicesMongoRepository()
-    }
+export class DevicesController {
+    constructor(
+        protected devicesService: DevicesService,
+        protected devicesMongoRepository: DevicesMongoRepository
+    ) {}
 
     async getAllDevicesWithActiveSession(req: Request,
                                          res: Response<OutputDeviceType[]>) {
@@ -55,5 +52,3 @@ class DevicesController {
         res.sendStatus(204)
     }
 }
-
-export const devicesController = new DevicesController()

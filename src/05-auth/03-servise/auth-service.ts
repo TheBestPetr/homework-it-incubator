@@ -15,25 +15,16 @@ import {DevicesMongoRepository} from "../../07-security/04-repository/devices-mo
 import {DeviceClass} from "../../classes/device-class";
 
 export class AuthService {
-    private refreshTokenMongoRepository: RefreshTokenMongoRepository
-    private usersMongoRepository: UsersMongoRepository
-    private usersMongoQueryRepository: UsersMongoQueryRepository
-    private devicesService: DevicesService
-    private devicesMongoRepository: DevicesMongoRepository
-    private bcryptService: BcryptService
-    private jwtService: JwtService
-    private nodemailerService: NodemailerService
-
-    constructor() {
-        this.refreshTokenMongoRepository = new RefreshTokenMongoRepository()
-        this.usersMongoRepository = new UsersMongoRepository()
-        this.usersMongoQueryRepository = new UsersMongoQueryRepository()
-        this.devicesService = new DevicesService()
-        this.devicesMongoRepository = new DevicesMongoRepository()
-        this.bcryptService = new BcryptService()
-        this.jwtService = new JwtService()
-        this.nodemailerService = new NodemailerService()
-    }
+    constructor(
+        protected refreshTokenMongoRepository: RefreshTokenMongoRepository,
+        protected usersMongoRepository: UsersMongoRepository,
+        protected usersMongoQueryRepository: UsersMongoQueryRepository,
+        protected devicesService: DevicesService,
+        protected devicesMongoRepository: DevicesMongoRepository,
+        protected bcryptService: BcryptService,
+        protected jwtService: JwtService,
+        protected nodemailerService: NodemailerService
+    ) {}
 
     async checkCredentials(input: InputLoginType): Promise<string | null> {
         const user = await this.usersMongoQueryRepository.findByLoginOrEmail(input.loginOrEmail)

@@ -1,8 +1,8 @@
 import {Router} from "express";
-import {commentsController} from "../02-controllers/comments-controller";
 import {commentBodyValidation} from "../../validators/comments-validator";
 import {errorsValidationResultMiddleware} from "../../middlewares/errors-validation-middleware";
 import {authBearerMiddleware} from "../../middlewares/auth-bearer-middleware";
+import {commentsController} from "../../application/composition-root/comments-composition";
 
 export const commentsRouter = Router()
 

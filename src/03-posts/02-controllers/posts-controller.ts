@@ -12,16 +12,12 @@ import {PostsMongoQueryRepository} from "../04-repository/posts-mongo-query-repo
 import {BlogsMongoQueryRepository} from "../../02-blogs/04-repository/blogs-mongo-query-repository";
 import {PostsService} from "../03-service/posts-service";
 
-class PostsController {
-    private postsService: PostsService
-    private postsMongoQueryRepository: PostsMongoQueryRepository
-    private blogsMongoQueryRepository: BlogsMongoQueryRepository
-
-    constructor() {
-        this.postsService = new PostsService()
-        this.postsMongoQueryRepository = new PostsMongoQueryRepository()
-        this.blogsMongoQueryRepository = new BlogsMongoQueryRepository()
-    }
+export class PostsController {
+    constructor(
+        protected postsService: PostsService,
+        protected postsMongoQueryRepository: PostsMongoQueryRepository,
+        protected blogsMongoQueryRepository: BlogsMongoQueryRepository
+    ) {}
 
     async findPosts(req: Request<{}, {}, {}, InputPostQueryType>,
                     res: Response<OutputPostQueryType>) {
@@ -113,5 +109,3 @@ class PostsController {
         }
     }
 }
-
-export const postsController = new PostsController()

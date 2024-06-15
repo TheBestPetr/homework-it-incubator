@@ -3,11 +3,7 @@ import {InputBlogType, OutputBlogType} from "../../types/input-output-types/blog
 import {BlogClass} from "../../classes/blog-class";
 
 export class BlogsService {
-    private blogsMongoRepository: BlogsMongoRepository
-
-    constructor() {
-        this.blogsMongoRepository = new BlogsMongoRepository()
-    }
+    constructor(protected blogsMongoRepository: BlogsMongoRepository) {}
 
     async create(input: InputBlogType): Promise<OutputBlogType> {
         const createdBlog = new BlogClass(

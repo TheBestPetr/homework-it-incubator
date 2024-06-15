@@ -10,14 +10,11 @@ import {UsersMongoQueryRepository} from "../04-repository/users-mongo-query-repo
 import {UsersService} from "../03-service/users-service";
 import {ObjectId} from "mongodb";
 
-class UsersController {
-    private usersService: UsersService
-    private usersMongoQueryRepository: UsersMongoQueryRepository
-
-    constructor() {
-        this.usersService = new UsersService()
-        this.usersMongoQueryRepository = new UsersMongoQueryRepository()
-    }
+export class UsersController {
+    constructor(
+        private usersService: UsersService,
+        private usersMongoQueryRepository: UsersMongoQueryRepository
+    ) {}
 
     async findUsers(req: Request<{}, {}, {}, Partial<InputUserQueryType>>,
                     res: Response<OutputUserQueryType>) {
@@ -46,5 +43,3 @@ class UsersController {
         }
     }
 }
-
-export const usersController = new UsersController()

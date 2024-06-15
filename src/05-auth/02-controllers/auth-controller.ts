@@ -5,16 +5,12 @@ import {JwtService} from "../../application/jwt-service/jwt-service";
 import {UsersMongoQueryRepository} from "../../04-users/04-repository/users-mongo-query-repository";
 import {InputUserType, OutputIType} from "../../types/input-output-types/user-type";
 
-class AuthController {
-    private authService: AuthService
-    private usersMongoQueryRepository: UsersMongoQueryRepository
-    private jwtService: JwtService
-
-    constructor() {
-        this.authService = new AuthService()
-        this.usersMongoQueryRepository = new UsersMongoQueryRepository()
-        this.jwtService = new JwtService()
-    }
+export class AuthController {
+    constructor(
+        protected authService: AuthService,
+        protected usersMongoQueryRepository: UsersMongoQueryRepository,
+        protected jwtService: JwtService
+    ) {}
 
     async loginUser(req: Request<{}, {}, InputLoginType>,
                     res: Response) {
@@ -114,6 +110,3 @@ class AuthController {
         res.sendStatus(204)
     }
 }
-
-
-export const authController = new AuthController()

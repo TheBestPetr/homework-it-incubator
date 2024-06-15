@@ -1,11 +1,11 @@
 import {Router} from "express"
-import {postsController} from "../02-controllers/posts-controller";
 import {authBasicMiddleware} from "../../middlewares/auth-basic-middleware";
 import {errorsValidationResultMiddleware} from "../../middlewares/errors-validation-middleware";
 import {postBodyValidation} from "../../validators/posts-validator";
-import {commentsController} from "../../06-comments/02-controllers/comments-controller";
 import {commentBodyValidation} from "../../validators/comments-validator";
 import {authBearerMiddleware} from "../../middlewares/auth-bearer-middleware";
+import {postsController} from "../../application/composition-root/posts-composition";
+import {commentsController} from "../../application/composition-root/comments-composition";
 
 export const postsRouter = Router()
 

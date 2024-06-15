@@ -3,13 +3,10 @@ import {DevicesMongoRepository} from "../04-repository/devices-mongo-repository"
 import {JwtService} from "../../application/jwt-service/jwt-service";
 
 export class DevicesService {
-    private devicesMongoRepository: DevicesMongoRepository
-    private jwtService: JwtService
-
-    constructor() {
-        this.devicesMongoRepository = new DevicesMongoRepository()
-        this.jwtService = new JwtService()
-    }
+    constructor(
+        protected devicesMongoRepository: DevicesMongoRepository,
+        protected jwtService: JwtService
+    ) {}
 
     async createDevice(input: DeviceDBType): Promise<boolean> {
         return await this.devicesMongoRepository.create(input)

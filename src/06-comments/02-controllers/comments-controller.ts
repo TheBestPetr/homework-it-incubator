@@ -12,18 +12,13 @@ import {CommentsMongoQueryRepository} from "../04-repository/comments-mongo-quer
 import {sortNPagingCommentQuery} from "../../helpers/query-helper";
 import {ObjectId} from "mongodb";
 
-class CommentsController {
-    private commentsService: CommentsService
-    private commentsMongoQueryRepository: CommentsMongoQueryRepository
-    private postsMongoQueryRepository: PostsMongoQueryRepository
-    private jwtService: JwtService
-
-    constructor() {
-        this.commentsService = new CommentsService()
-        this.commentsMongoQueryRepository = new CommentsMongoQueryRepository()
-        this.postsMongoQueryRepository = new PostsMongoQueryRepository()
-        this.jwtService = new JwtService()
-    }
+export class CommentsController {
+    constructor(
+        protected commentsService: CommentsService,
+        protected commentsMongoQueryRepository: CommentsMongoQueryRepository,
+        protected postsMongoQueryRepository: PostsMongoQueryRepository,
+        protected jwtService: JwtService
+    ) {}
 
     async findCommentsByParamsPostId(req: Request<{ postId: string }, {}, Partial<InputCommentQueryType>>,
                                      res: Response<OutputCommentQueryType>) {
@@ -133,5 +128,3 @@ class CommentsController {
         }
     }
 }
-
-export const commentsController = new CommentsController()

@@ -5,15 +5,11 @@ import {CommentsMongoRepository} from "../04-repository/comments-mongo-repositor
 import {CommentsMongoQueryRepository} from "../04-repository/comments-mongo-query-repository";
 
 export class CommentsService {
-    private commentsMongoRepository: CommentsMongoRepository
-    private commentsMongoQueryRepository: CommentsMongoQueryRepository
-    private usersMongoQueryRepository: UsersMongoQueryRepository
-
-    constructor() {
-        this.commentsMongoRepository = new CommentsMongoRepository()
-        this.commentsMongoQueryRepository = new CommentsMongoQueryRepository()
-        this.usersMongoQueryRepository = new UsersMongoQueryRepository()
-    }
+    constructor(
+        protected commentsMongoRepository: CommentsMongoRepository,
+        protected commentsMongoQueryRepository: CommentsMongoQueryRepository,
+        protected usersMongoQueryRepository: UsersMongoQueryRepository
+    ) {}
 
     async create(content: InputCommentType, commentatorId: string, postId: string): Promise<OutputCommentType> {
         const user = await this.usersMongoQueryRepository.findById(commentatorId)
