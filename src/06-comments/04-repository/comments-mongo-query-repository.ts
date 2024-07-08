@@ -6,13 +6,15 @@ import {
 import {CommentModel} from "../../db/mongo/mongo-db";
 import {ObjectId} from "mongodb";
 import {CommentLikesInfoMongoRepository} from "./comment-likes-info-mongo-repository";
+import {JwtService} from "../../application/jwt-service/jwt-service";
 
 export class CommentsMongoQueryRepository {
-    async findById(commentId: string, userId?: string): Promise<OutputCommentType | null> {
-
+    async findById(commentId: string, token?: string): Promise<OutputCommentType | null> {
         let status = null
-        if (userId) {
+        if (token) {
+            const jwtService = new JwtService()
             const commentLikesInfoMongoRepository = new CommentLikesInfoMongoRepository()
+            const userId = await jwtService.getUserIdByToken(token.split(' ')[1])
             status = await commentLikesInfoMongoRepository.isStatusExist(commentId, userId)
         }
         const comment = await CommentModel.findOne({_id: new ObjectId(commentId)}).lean()
