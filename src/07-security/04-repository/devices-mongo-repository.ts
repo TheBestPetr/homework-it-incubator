@@ -35,7 +35,7 @@ export class DevicesMongoRepository {
 
     async findActiveSessions(refreshToken: string): Promise<OutputDeviceType[] | null> {
         const isTokenInBlackList = await this.refreshTokenMongoRepository.isTokenInBlacklist(refreshToken)
-        const userId = await this.jwtService.getUserIdByToken(refreshToken)
+        const userId = this.jwtService.getUserIdByToken(refreshToken)
         const activeSessions = await DeviceModel.find({userId: userId}).lean()
         if (!userId || !activeSessions || isTokenInBlackList) {
             return null

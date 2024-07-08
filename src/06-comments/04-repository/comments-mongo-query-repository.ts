@@ -5,10 +5,17 @@ import {
 } from "../../types/input-output-types/comment-type";
 import {CommentModel} from "../../db/mongo/mongo-db";
 import {ObjectId} from "mongodb";
+import {CommentLikesInfoMongoRepository} from "./comment-likes-info-mongo-repository";
 
 export class CommentsMongoQueryRepository {
-    async findById(id: string): Promise<OutputCommentType | null> {
-        const comment = await CommentModel.findOne({_id: new ObjectId(id)}).lean()
+    async findById(commentId: string, userId?: string): Promise<OutputCommentType | null> {
+
+        let status = null
+        if (userId) {
+            const commentLikesInfoMongoRepository = new CommentLikesInfoMongoRepository()
+            status = await commentLikesInfoMongoRepository.isStatusExist(commentId, userId)
+        }
+        const comment = await CommentModel.findOne({_id: new ObjectId(commentId)}).lean()
         if (comment) {
             return {
                 id: comment._id.toString(),
@@ -17,7 +24,12 @@ export class CommentsMongoQueryRepository {
                     userId: comment.commentatorInfo.userId,
                     userLogin: comment.commentatorInfo.userLogin
                 },
-                createdAt: comment.createdAt
+                createdAt: comment.createdAt,
+                likesInfo: {
+                    likesCount: comment.likesInfo.likesCount,
+                    dislikesCount: comment.likesInfo.dislikesCount,
+                    myStatus: status? status : 'None'
+                }
             }
         }
         return null
@@ -43,7 +55,12 @@ export class CommentsMongoQueryRepository {
                     userId: comment.commentatorInfo.userId,
                     userLogin: comment.commentatorInfo.userLogin
                 },
-                createdAt: comment.createdAt
+                createdAt: comment.createdAt,
+                likesInfo: {
+                    likesCount: comment.likesInfo.likesCount,
+                    dislikesCount: comment.likesInfo.dislikesCount,
+                    myStatus: 'None'
+                }
             }))
         }
     }

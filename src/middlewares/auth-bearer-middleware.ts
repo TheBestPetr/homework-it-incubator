@@ -17,6 +17,6 @@ export const authBearerMiddleware = (req: Request,
         res.sendStatus(401)
         return
     }
-    req.headers.authorization = bearer[1]
+    req.headers.authorization = userId
     next()
 }

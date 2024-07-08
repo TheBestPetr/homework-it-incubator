@@ -4,8 +4,8 @@ import {errorsValidationResultMiddleware} from "../../middlewares/errors-validat
 import {postBodyValidation} from "../../validators/posts-validator";
 import {commentBodyValidation} from "../../validators/comments-validator";
 import {authBearerMiddleware} from "../../middlewares/auth-bearer-middleware";
-import {postsController} from "../../application/composition-root/posts-composition";
-import {commentsController} from "../../application/composition-root/comments-composition";
+import {postsController} from "../../classes/composition-root/posts-composition";
+import {commentsController} from "../../classes/composition-root/comments-composition";
 
 export const postsRouter = Router()
 
@@ -35,7 +35,7 @@ postsRouter.post('/:postId/comments',
     authBearerMiddleware,
     commentBodyValidation,
     errorsValidationResultMiddleware,
-    commentsController.createCommentController)
+    commentsController.createCommentController.bind(commentsController))
 
 postsRouter.get('/:postId/comments',
     commentsController.findCommentsByParamsPostId)

@@ -26,7 +26,7 @@ export class AuthController {
 
     async getUserInfo(req: Request,
                       res: Response<OutputIType | {}>) {
-        const userId = await this.jwtService.getUserIdByToken(req.headers.authorization!)
+        const userId = req.headers.authorization
         if (userId) {
             const user = await this.usersMongoQueryRepository.findById(userId)
             if (user) {

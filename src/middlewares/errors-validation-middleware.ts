@@ -6,7 +6,7 @@ export const errorsValidationResultMiddleware = (req: Request,
                                                  next: NextFunction) => {
     const errors: any = validationResult(req)
     if (!errors.isEmpty()) {
-        res.status(400).json({
+        res.status(400).send({
             errorsMessages: errors.array({onlyFirstError: true}).map((item: any) => ({
                 message: item.msg,
                 field: item.path

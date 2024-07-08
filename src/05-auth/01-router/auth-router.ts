@@ -10,7 +10,7 @@ import {
 import {authBearerMiddleware} from "../../middlewares/auth-bearer-middleware";
 import {errorsValidationResultMiddleware} from "../../middlewares/errors-validation-middleware";
 import {reqIpCounterMiddleware} from "../../middlewares/req-ip-counter-middleware";
-import {authController} from "../../application/composition-root/auth-composition";
+import {authController} from "../../classes/composition-root/auth-composition";
 
 export const authRouter = Router()
 

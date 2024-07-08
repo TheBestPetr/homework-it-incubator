@@ -1,5 +1,5 @@
 import {Router} from "express";
-import {devicesController} from "../../application/composition-root/devices-composition";
+import {devicesController} from "../../classes/composition-root/devices-composition";
 
 export const devicesRouter = Router()
 

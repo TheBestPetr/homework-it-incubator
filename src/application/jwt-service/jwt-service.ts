@@ -2,15 +2,15 @@ import jwt from 'jsonwebtoken'
 import {SETTINGS} from "../../settings";
 
 export class JwtService {
-    async createAccessJWTToken(userId: string) {
+    createAccessJWTToken(userId: string) {
         return jwt.sign({userId: userId}, SETTINGS.JWT_SECRET, {expiresIn: '10m'})
     }
 
-    async createRefreshJWTToken(userId: string, deviceId: string) {
+    createRefreshJWTToken(userId: string, deviceId: string) {
         return jwt.sign({userId: userId, deviceId: deviceId}, SETTINGS.JWT_SECRET, {expiresIn: '20m'})
     }
 
-    async getUserIdByToken(token: string) {
+    getUserIdByToken(token: string) {
         try {
             const result: any = jwt.verify(token, SETTINGS.JWT_SECRET)
             return result.userId.toString()
@@ -19,7 +19,7 @@ export class JwtService {
         }
     }
 
-    async getTokenIatNExp(token: string) {
+    getTokenIatNExp(token: string) {
         try {
             const result: any = jwt.verify(token, SETTINGS.JWT_SECRET)
             return {
@@ -31,7 +31,7 @@ export class JwtService {
         }
     }
 
-    async getDeviceIdByToken(token: string) {
+    getDeviceIdByToken(token: string) {
         try {
             const result: any = jwt.verify(token, SETTINGS.JWT_SECRET)
             return result.deviceId.toString()

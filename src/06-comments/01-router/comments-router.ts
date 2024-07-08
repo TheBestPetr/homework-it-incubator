@@ -1,8 +1,11 @@
 import {Router} from "express";
-import {commentBodyValidation} from "../../validators/comments-validator";
+import {
+    commentBodyValidation,
+    commentLikeStatusValidator,
+} from "../../validators/comments-validator";
 import {errorsValidationResultMiddleware} from "../../middlewares/errors-validation-middleware";
 import {authBearerMiddleware} from "../../middlewares/auth-bearer-middleware";
-import {commentsController} from "../../application/composition-root/comments-composition";
+import {commentsController} from "../../classes/composition-root/comments-composition";
 
 export const commentsRouter = Router()
 
@@ -21,4 +24,7 @@ commentsRouter.delete('/:commentId',
 
 commentsRouter.put('/:commentId/like-status',
     authBearerMiddleware,
+    commentLikeStatusValidator,
+    errorsValidationResultMiddleware,
+    commentsController.updateCommentLikeStatus.bind(commentsController)
 )

@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
 import {
     InputCommentQueryType,
-    InputCommentType,
+    InputCommentType, InputLikeType,
     OutputCommentQueryType,
     OutputCommentType
 } from "../../types/input-output-types/comment-type";
@@ -18,7 +18,8 @@ export class CommentsController {
         protected commentsMongoQueryRepository: CommentsMongoQueryRepository,
         protected postsMongoQueryRepository: PostsMongoQueryRepository,
         protected jwtService: JwtService
-    ) {}
+    ) {
+    }
 
     async findCommentsByParamsPostId(req: Request<{ postId: string }, {}, Partial<InputCommentQueryType>>,
                                      res: Response<OutputCommentQueryType>) {
@@ -42,7 +43,7 @@ export class CommentsController {
 
     async findCommentById(req: Request<{ id: string }>,
                           res: Response<OutputCommentType>) {
-        const comment = await this.commentsMongoQueryRepository.findById(req.params.id)
+        const comment = await this.commentsMongoQueryRepository.findById(req.params.id, req.headers.authorization)
         if (!comment) {
             res.sendStatus(404)
             return
@@ -52,7 +53,7 @@ export class CommentsController {
 
     async createCommentController(req: Request<{ postId: string }, {}, InputCommentType>,
                                   res: Response<OutputCommentType>) {
-        if (!req.params.postId || !ObjectId.isValid(req.params.postId) || !req.headers.authorization) {
+        if (!req.params.postId || !ObjectId.isValid(req.params.postId)) {
             res.sendStatus(404)
             return
         }
@@ -61,12 +62,7 @@ export class CommentsController {
             res.sendStatus(404)
             return
         }
-        const commentatorId = await this.jwtService.getUserIdByToken(req.headers.authorization!)
-        if (!commentatorId) {
-            res.sendStatus(404)
-            return
-        }
-        const comment = await this.commentsService.create(req.body, commentatorId, req.params.postId)
+        const comment = await this.commentsService.create(req.body, req.headers.authorization!, req.params.postId)
         res.status(201).send(comment)
     }
 
@@ -81,12 +77,7 @@ export class CommentsController {
             res.sendStatus(404)
             return
         }
-        const userId = await this.jwtService.getUserIdByToken(req.headers.authorization!)
-        if (!userId) {
-            res.sendStatus(401)
-            return
-        }
-        const isUserCanDoThis = await this.commentsService.isUserCanDoThis(userId, req.params.commentId)
+        const isUserCanDoThis = await this.commentsService.isUserCanDoThis(req.headers.authorization!, req.params.commentId)
         if (!isUserCanDoThis) {
             res.sendStatus(403)
             return
@@ -110,12 +101,7 @@ export class CommentsController {
             res.sendStatus(404)
             return
         }
-        const userId = await this.jwtService.getUserIdByToken(req.headers.authorization!)
-        if (!userId) {
-            res.sendStatus(401)
-            return
-        }
-        const isUserCanDoThis = await this.commentsService.isUserCanDoThis(userId, req.params.commentId)
+        const isUserCanDoThis = await this.commentsService.isUserCanDoThis(req.headers.authorization!, req.params.commentId)
         if (!isUserCanDoThis) {
             res.sendStatus(403)
             return
@@ -123,8 +109,27 @@ export class CommentsController {
         const isDelete = await this.commentsService.delete(req.params.commentId)
         if (isDelete) {
             res.sendStatus(204)
-        } else {
-            res.sendStatus(404)
+            return
         }
+        res.sendStatus(404)
+    }
+
+    async updateCommentLikeStatus(req: Request<{ commentId: string }, {}, InputLikeType>,
+                                  res: Response) {
+        if (!ObjectId.isValid(req.params.commentId) || !req.params.commentId) {
+            res.sendStatus(404)
+            return
+        }
+        const comment = await this.commentsMongoQueryRepository.findById(req.params.commentId)
+        if (!comment) {
+            res.sendStatus(404)
+            return
+        }
+        const isUpdate = await this.commentsService.updateLikeStatus(req.params.commentId, req.headers.authorization!, req.body.likeStatus)
+        if (isUpdate) {
+            res.sendStatus(204)
+            return
+        }
+        res.sendStatus(404)
     }
 }

@@ -14,6 +14,8 @@ import {commentSchema} from "./schemas/comment-schema";
 import {deviceSchema} from "./schemas/device-schema";
 import {refreshTokenBlacklistSchema} from "./schemas/refresh-token-blacklist-schema";
 import {reqCountSchema} from "./schemas/req-count-schema";
+import {commentLikesInfoSchema} from "./schemas/comment-like-info-schema";
+import {CommentDbLikesInfo} from "../../types/db-types/comment-like-info-db-type";
 
 // const client: MongoClient = new MongoClient(SETTINGS.MONGO_URL)
 // export const db: Db = client.db(SETTINGS.DB_NAME)
@@ -30,6 +32,7 @@ export const BlogModel = mongoose.model<BlogDBType>(SETTINGS.DB_COLLECTION_NAME.
 export const PostModel = mongoose.model<PostDBType>(SETTINGS.DB_COLLECTION_NAME.POST, postSchema)
 export const UserModel = mongoose.model<UserDbType>(SETTINGS.DB_COLLECTION_NAME.USER, userSchema)
 export const CommentModel = mongoose.model<CommentDbType>(SETTINGS.DB_COLLECTION_NAME.COMMENT, commentSchema)
+export const CommentLikeInfoModel = mongoose.model<CommentDbLikesInfo>(SETTINGS.DB_COLLECTION_NAME.COMMENT_LIKES_INFO, commentLikesInfoSchema)
 export const DeviceModel = mongoose.model<DeviceDBType>(SETTINGS.DB_COLLECTION_NAME.DEVICE, deviceSchema)
 export const RefreshTokenBlacklistModel = mongoose.model<RefreshTokenBlacklistDbType>(SETTINGS.DB_COLLECTION_NAME.REFRESH_TOKEN_BLACKLIST, refreshTokenBlacklistSchema)
 export const ReqCountModel = mongoose.model<ReqCountDbType>(SETTINGS.DB_COLLECTION_NAME.REQ_COUNT, reqCountSchema)

@@ -6,7 +6,6 @@ export type CommentatorType = {
 export type LikesType = {
     likesCount: number
     dislikesCount: number
-    myStatus: 'None' | 'Like' | 'Dislike'
 }
 
 export type CommentDbType = {
@@ -14,5 +13,5 @@ export type CommentDbType = {
     content: string
     commentatorInfo: CommentatorType
     createdAt: string
-    //likesInfo: LikesType
+    likesInfo: LikesType
 }

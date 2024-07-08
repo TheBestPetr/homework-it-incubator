@@ -3,8 +3,8 @@ import {authBasicMiddleware} from "../../middlewares/auth-basic-middleware";
 import {errorsValidationResultMiddleware} from "../../middlewares/errors-validation-middleware";
 import {postBodyValidationForParamsBlogId} from "../../validators/posts-validator";
 import {blogBodyValidation} from "../../validators/blogs-validator";
-import {blogsController} from "../../application/composition-root/blogs-composition";
-import {postsController} from "../../application/composition-root/posts-composition";
+import {blogsController} from "../../classes/composition-root/blogs-composition";
+import {postsController} from "../../classes/composition-root/posts-composition";
 
 export const blogsRouter = Router()
 

@@ -11,6 +11,7 @@ export const SETTINGS = {
         POST: process.env.POST_COLLECTION_NAME || '',
         USER: process.env.USER_COLLECTION_NAME || '',
         COMMENT: process.env.COMMENT_COLLECTION_NAME || '',
+        COMMENT_LIKES_INFO: process.env.COMMENT_LIKES_INFO_COLLECTION_NAME || '',
         DEVICE: process.env.DEVICE_COLLECTION_NAME || '',
         REFRESH_TOKEN_BLACKLIST: process.env.REFRESH_TOKEN_BLACKLIST_COLLECTION_NAME || '',
         REQ_COUNT: process.env.REQ_COUNT_COLLECTION_NAME || ''

@@ -2,7 +2,7 @@ import {Router} from "express";
 import {userBodyValidation} from "../../validators/users-validator";
 import {errorsValidationResultMiddleware} from "../../middlewares/errors-validation-middleware";
 import {authBasicMiddleware} from "../../middlewares/auth-basic-middleware";
-import {usersController} from "../../application/composition-root/users-composition";
+import {usersController} from "../../classes/composition-root/users-composition";
 
 export const usersRouter = Router()
 

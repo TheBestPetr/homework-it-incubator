@@ -1,27 +1,32 @@
-import {InputCommentType, OutputCommentType} from "../../types/input-output-types/comment-type";
+import {
+    InputCommentType,
+    LikeStatus,
+    OutputCommentType
+} from "../../types/input-output-types/comment-type";
 import {UsersMongoQueryRepository} from "../../04-users/04-repository/users-mongo-query-repository";
-import {CommentDbType} from "../../types/db-types/comment-db-type";
 import {CommentsMongoRepository} from "../04-repository/comments-mongo-repository";
 import {CommentsMongoQueryRepository} from "../04-repository/comments-mongo-query-repository";
+import {CommentClass} from "../../classes/comment-class";
+import {CommentLikesInfoMongoRepository} from "../04-repository/comment-likes-info-mongo-repository";
+import {CommentLikeInfoClass} from "../../classes/comment-like-info-class";
 
 export class CommentsService {
     constructor(
         protected commentsMongoRepository: CommentsMongoRepository,
         protected commentsMongoQueryRepository: CommentsMongoQueryRepository,
-        protected usersMongoQueryRepository: UsersMongoQueryRepository
+        protected usersMongoQueryRepository: UsersMongoQueryRepository,
+        protected commentLikeInfoMongoRepository: CommentLikesInfoMongoRepository
     ) {}
 
     async create(content: InputCommentType, commentatorId: string, postId: string): Promise<OutputCommentType> {
         const user = await this.usersMongoQueryRepository.findById(commentatorId)
-        const newComment: CommentDbType = { //todo something
-            postId: postId,
-            content: content.content,
-            commentatorInfo: {
-                userId: user!.userId,
-                userLogin: user!.login
-            },
-            createdAt: new Date().toISOString()
-        }
+        const newComment = new CommentClass(
+            postId,
+            content.content,
+            {userId: user!.userId, userLogin: user!.login},
+            new Date().toISOString(),
+            {likesCount: 0, dislikesCount: 0}
+        )
         const insertedComment = await this.commentsMongoRepository.create(newComment)
         return {
             id: insertedComment.id.toString(),
@@ -30,7 +35,12 @@ export class CommentsService {
                 userId: user!.userId,
                 userLogin: user!.login
             },
-            createdAt: newComment.createdAt
+            createdAt: newComment.createdAt,
+            likesInfo: {
+                likesCount: insertedComment.likesInfo.likesCount,
+                dislikesCount: insertedComment.likesInfo.dislikesCount,
+                myStatus: 'None'
+            }
         }
     }
 
@@ -45,8 +55,26 @@ export class CommentsService {
 
     }
 
-    async delete(id: string) {
+    async delete(id: string): Promise<boolean> {
         const result = await this.commentsMongoRepository.delete(id)
         return result.deletedCount === 1
+    }
+
+    async updateLikeStatus(commentId: string, userId: string, inputLikeStatus: LikeStatus): Promise<boolean> {
+        const oldLikeStatus = await this.commentLikeInfoMongoRepository.isStatusExist(commentId, userId)
+        if (!oldLikeStatus) {
+            const newCommentLikeInfo = new CommentLikeInfoClass(
+                commentId,
+                userId,
+                inputLikeStatus,
+                new Date().toISOString()
+            )
+            const createLikeInfo = await this.commentLikeInfoMongoRepository.createNewLikeInfo(newCommentLikeInfo)
+            const updateLikesCount = await this.commentsMongoRepository.updateAddCommentLikesCount(commentId, inputLikeStatus)
+            return createLikeInfo && updateLikesCount
+        }
+        const updateLikeInfo = await this.commentLikeInfoMongoRepository.updateCommentLikeInfo(commentId, userId, inputLikeStatus)
+        const updateLikesCount = await this.commentsMongoRepository.updateExistCommentLikesCount(commentId, oldLikeStatus, inputLikeStatus)
+        return updateLikeInfo && updateLikesCount
     }
 }

@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
 import {db} from "../db/db";
 import {
-    BlogModel,
+    BlogModel, CommentLikeInfoModel,
     CommentModel,
     DeviceModel,
     PostModel,
@@ -22,5 +22,6 @@ export const TestingAllData = async (req: Request, res: Response) => {
     await RefreshTokenBlacklistModel.deleteMany()
     await DeviceModel.deleteMany()
     await ReqCountModel.deleteMany()
+    await CommentLikeInfoModel.deleteMany()
     res.status(204).send('you delete all data')
 }

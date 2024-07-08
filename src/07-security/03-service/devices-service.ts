@@ -22,7 +22,7 @@ export class DevicesService {
     }
 
     async isUserCanTerminateSession(refreshToken: string, deviceId: string): Promise<boolean> {
-        const userId = await this.jwtService.getUserIdByToken(refreshToken)
+        const userId = this.jwtService.getUserIdByToken(refreshToken)
         const isSessionBelongsToUser = await this.devicesMongoRepository.findSessionByDeviceId(deviceId)
         if (userId !== isSessionBelongsToUser) {
             return false
@@ -31,7 +31,7 @@ export class DevicesService {
     }
 
     async terminateAllSessions(refreshToken: string): Promise<boolean> {
-        const deviceId = await this.jwtService.getDeviceIdByToken(refreshToken)
+        const deviceId = this.jwtService.getDeviceIdByToken(refreshToken)
         return await this.devicesMongoRepository.deleteAllSessions(deviceId)
     }
 }

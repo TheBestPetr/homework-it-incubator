@@ -13,3 +13,10 @@ export const commentBodyValidation = [
             }
         )
 ]
+
+export const commentLikeStatusValidator = [
+    body('likeStatus')
+        .isString()
+        .notEmpty()
+        .matches(/^(None|Like|Dislike)$/)
+]

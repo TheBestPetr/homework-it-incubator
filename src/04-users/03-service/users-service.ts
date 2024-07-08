@@ -1,7 +1,7 @@
 import {InputUserType, OutputUserType} from "../../types/input-output-types/user-type";
-import {UserDbType} from "../../types/db-types/user-db-type";
 import {UsersMongoRepository} from "../04-repository/users-mongo-repository";
 import {BcryptService} from "../../application/bcrypt-service/bcrypt-service";
+import {UserClass} from "../../classes/user-class";
 
 export class UsersService {
     constructor(
@@ -11,15 +11,14 @@ export class UsersService {
 
     async createSuperUser(input: InputUserType): Promise<OutputUserType> {
         const passwordHash = await this.bcryptService.generateHash(input.password)
-        const createdUser: UserDbType = { //todo something
-            login: input.login,
-            passwordHash: passwordHash,
-            email: input.email,
-            createdAt: new Date().toISOString(),
-            emailConfirmation: {
-                isConfirmed: true
-            }
-        }
+        const createdUser = new UserClass(
+            input.login,
+            passwordHash,
+            undefined,
+            input.email,
+            new Date().toISOString(),
+            {confirmationCode: undefined, expirationDate: undefined, isConfirmed: true}
+        )
         const insertedUser = await this.usersMongoRepository.create(createdUser)
         return {
             id: insertedUser.id.toString(),
