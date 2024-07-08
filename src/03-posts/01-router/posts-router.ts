@@ -38,4 +38,4 @@ postsRouter.post('/:postId/comments',
     commentsController.createCommentController.bind(commentsController))
 
 postsRouter.get('/:postId/comments',
-    commentsController.findCommentsByParamsPostId)
+    commentsController.findCommentsByParamsPostId.bind(commentsController))

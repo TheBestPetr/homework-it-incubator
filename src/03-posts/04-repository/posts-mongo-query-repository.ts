@@ -65,8 +65,7 @@ export class PostsMongoQueryRepository {
                 blogName: post.blogName,
                 createdAt: post.createdAt
             }
-        } else {
-            return null
         }
+        return null
     }
 }

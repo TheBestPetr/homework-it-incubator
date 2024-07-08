@@ -5,7 +5,6 @@ import {
     OutputCommentQueryType,
     OutputCommentType
 } from "../../types/input-output-types/comment-type";
-import {JwtService} from "../../application/jwt-service/jwt-service";
 import {PostsMongoQueryRepository} from "../../03-posts/04-repository/posts-mongo-query-repository";
 import {CommentsService} from "../03-service/comments-service";
 import {CommentsMongoQueryRepository} from "../04-repository/comments-mongo-query-repository";
@@ -17,7 +16,6 @@ export class CommentsController {
         protected commentsService: CommentsService,
         protected commentsMongoQueryRepository: CommentsMongoQueryRepository,
         protected postsMongoQueryRepository: PostsMongoQueryRepository,
-        protected jwtService: JwtService
     ) {
     }
 
@@ -130,6 +128,6 @@ export class CommentsController {
             res.sendStatus(204)
             return
         }
-        res.sendStatus(404)
+        res.sendStatus(500)
     }
 }
