@@ -30,21 +30,52 @@ export class CommentsMongoQueryRepository {
                 likesInfo: {
                     likesCount: comment.likesInfo.likesCount,
                     dislikesCount: comment.likesInfo.dislikesCount,
-                    myStatus: status? status : 'None'
+                    myStatus: status ? status : 'None'
                 }
             }
         }
         return null
     }
 
-    async findCommentsByPostId(postId: string, query: InputCommentQueryType): Promise<OutputCommentQueryType> {
+    async findCommentsByPostId(postId: string, query: InputCommentQueryType, token?: string): Promise<OutputCommentQueryType> {
         const items = await CommentModel
             .find({postId: postId})
             .sort({[`${query.sortBy}`]: query.sortDirection})
             .skip((query.pageNumber - 1) * query.pageSize)
             .limit(query.pageSize)
             .lean()
+        let status = null
         const totalCount = await CommentModel.countDocuments({postId: postId})
+        if (token) {
+            const jwtService = new JwtService()
+            const commentLikesInfoMongoRepository = new CommentLikesInfoMongoRepository()
+            const userId = await jwtService.getUserIdByToken(token.split(' ')[1])
+            const itemsWithMyStatus = await Promise.all(items.map(async comment => {
+                    status = await commentLikesInfoMongoRepository.isStatusExist(comment._id.toString(), userId)
+                    return {
+                        id: comment._id.toString(),
+                        content: comment.content,
+                        commentatorInfo: {
+                            userId: comment.commentatorInfo.userId,
+                            userLogin: comment.commentatorInfo.userLogin
+                        },
+                        createdAt: comment.createdAt,
+                        likesInfo: {
+                            likesCount: comment.likesInfo.likesCount,
+                            dislikesCount: comment.likesInfo.dislikesCount,
+                            myStatus: status ? status : 'None'
+                        }
+                    }
+                })
+            )
+            return {
+                pagesCount: Math.ceil(totalCount / query.pageSize),
+                page: query.pageNumber,
+                pageSize: query.pageSize,
+                totalCount: totalCount,
+                items: itemsWithMyStatus
+            }
+        }
         return {
             pagesCount: Math.ceil(totalCount / query.pageSize),
             page: query.pageNumber,

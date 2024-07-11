@@ -31,7 +31,7 @@ export class CommentsController {
             return
         }
         const query = sortNPagingCommentQuery(req.query)
-        const comments = await this.commentsMongoQueryRepository.findCommentsByPostId(req.params.postId, query)
+        const comments = await this.commentsMongoQueryRepository.findCommentsByPostId(req.params.postId, query, req.headers.authorization)
         if (comments) {
             res.status(200).send(comments)
         } else {
