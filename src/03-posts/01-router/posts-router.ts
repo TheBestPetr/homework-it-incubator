@@ -43,4 +43,5 @@ postsRouter.get('/:postId/comments',
 postsRouter.put('/:id/like-status',
     authBearerMiddleware,
     likeStatusValidator,
+    errorsValidationResultMiddleware,
     postsController.updatePostLikeStatus.bind(postsController))

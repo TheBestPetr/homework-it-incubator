@@ -88,22 +88,72 @@ export class PostsMongoQueryRepository {
             .skip((query.pageNumber - 1) * query.pageSize)
             .limit(query.pageSize)
             .lean()
+        let postLikesInfo = null
         const totalCount = await PostModel.countDocuments({blogId: blogId})
-        return {
-            pagesCount: Math.ceil(totalCount / query.pageSize),
-            page: query.pageNumber,
-            pageSize: query.pageSize,
-            totalCount: totalCount,
-            //@ts-ignore todo mapping
-            items: items.map(post => ({
+        if (token) {
+            const jwtService = new JwtService()
+            const postLikesInfoMongoRepository = new PostLikesInfoMongoRepository()
+            const userId = await jwtService.getUserIdByToken(token.split(' ')[1])
+            const itemsWitsStatusNNewestLikes = await Promise.all(items.map(async post => {
+                postLikesInfo = await postLikesInfoMongoRepository.findLikesInfo(post._id.toString(), userId)
+                const newestLikes = await postLikesInfoMongoRepository.findNewestLikes(post._id.toString())
+                return {
+                    id: post._id.toString(),
+                    title: post.title,
+                    shortDescription: post.shortDescription,
+                    content: post.content,
+                    blogId: post.blogId,
+                    blogName: post.blogName,
+                    createdAt: post.createdAt,
+                    extendedLikesInfo: {
+                        likesCount: post.likesInfo.likesCount,
+                        dislikesCount: post.likesInfo.dislikesCount,
+                        myStatus: postLikesInfo?.status ? postLikesInfo.status : 'None',
+                        newestLikes: newestLikes?.map(like => ({
+                            addedAt: like.createdAt,
+                            userId: like.userId,
+                            login: like.userLogin
+                        }))
+                    }
+                }
+            }))
+            return {
+                pagesCount: Math.ceil(totalCount / query.pageSize),
+                page: query.pageNumber,
+                pageSize: query.pageSize,
+                totalCount: totalCount,
+                items: itemsWitsStatusNNewestLikes
+            }
+        }
+        const itemsWithNewestLikes = await Promise.all(items.map(async post => {
+            const postLikesInfoMongoRepository = new PostLikesInfoMongoRepository()
+            const newestLikes = await postLikesInfoMongoRepository.findNewestLikes(post._id.toString())
+            return {
                 id: post._id.toString(),
                 title: post.title,
                 shortDescription: post.shortDescription,
                 content: post.content,
                 blogId: post.blogId,
                 blogName: post.blogName,
-                createdAt: post.createdAt
-            }))
+                createdAt: post.createdAt,
+                extendedLikesInfo: {
+                    likesCount: post.likesInfo.likesCount,
+                    dislikesCount: post.likesInfo.dislikesCount,
+                    myStatus: 'None',
+                    newestLikes: newestLikes?.map(like => ({
+                        addedAt: like.createdAt,
+                        userId: like.userId,
+                        login: like.userLogin
+                    }))
+                }
+            }
+        }))
+        return {
+            pagesCount: Math.ceil(totalCount / query.pageSize),
+            page: query.pageNumber,
+            pageSize: query.pageSize,
+            totalCount: totalCount,
+            items: itemsWithNewestLikes
         }
     }
 
