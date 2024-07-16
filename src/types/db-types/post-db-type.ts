@@ -1,3 +1,5 @@
+import {LikesType} from "./comment-db-type";
+
 export type PostDBType = {
     title: string
     shortDescription: string
@@ -5,4 +7,5 @@ export type PostDBType = {
     blogId: string
     blogName: string
     createdAt: string
+    likesInfo: LikesType
 }

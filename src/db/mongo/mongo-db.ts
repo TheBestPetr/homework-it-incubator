@@ -16,6 +16,8 @@ import {refreshTokenBlacklistSchema} from "./schemas/refresh-token-blacklist-sch
 import {reqCountSchema} from "./schemas/req-count-schema";
 import {commentLikesInfoSchema} from "./schemas/comment-like-info-schema";
 import {CommentDbLikesInfo} from "../../types/db-types/comment-like-info-db-type";
+import {PostDbLikesInfo} from "../../types/db-types/post-like-info-db-type";
+import {postLikesInfoSchema} from "./schemas/post-like-info-schema";
 
 // const client: MongoClient = new MongoClient(SETTINGS.MONGO_URL)
 // export const db: Db = client.db(SETTINGS.DB_NAME)
@@ -30,6 +32,7 @@ import {CommentDbLikesInfo} from "../../types/db-types/comment-like-info-db-type
 
 export const BlogModel = mongoose.model<BlogDBType>(SETTINGS.DB_COLLECTION_NAME.BLOG, blogSchema)
 export const PostModel = mongoose.model<PostDBType>(SETTINGS.DB_COLLECTION_NAME.POST, postSchema)
+export const PostLikeInfoModel = mongoose.model<PostDbLikesInfo>(SETTINGS.DB_COLLECTION_NAME.POST_LIKES_INFO, postLikesInfoSchema)
 export const UserModel = mongoose.model<UserDbType>(SETTINGS.DB_COLLECTION_NAME.USER, userSchema)
 export const CommentModel = mongoose.model<CommentDbType>(SETTINGS.DB_COLLECTION_NAME.COMMENT, commentSchema)
 export const CommentLikeInfoModel = mongoose.model<CommentDbLikesInfo>(SETTINGS.DB_COLLECTION_NAME.COMMENT_LIKES_INFO, commentLikesInfoSchema)

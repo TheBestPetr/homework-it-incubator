@@ -50,7 +50,7 @@ export class CommentsMongoQueryRepository {
             const jwtService = new JwtService()
             const commentLikesInfoMongoRepository = new CommentLikesInfoMongoRepository()
             const userId = await jwtService.getUserIdByToken(token.split(' ')[1])
-            const itemsWithMyStatus = await Promise.all(items.map(async comment => {
+            const itemsWithStatus = await Promise.all(items.map(async comment => {
                     status = await commentLikesInfoMongoRepository.isStatusExist(comment._id.toString(), userId)
                     return {
                         id: comment._id.toString(),
@@ -73,7 +73,7 @@ export class CommentsMongoQueryRepository {
                 page: query.pageNumber,
                 pageSize: query.pageSize,
                 totalCount: totalCount,
-                items: itemsWithMyStatus
+                items: itemsWithStatus
             }
         }
         return {

@@ -11,18 +11,20 @@ import {sortNPagingPostQuery} from "../../helpers/query-helper";
 import {PostsMongoQueryRepository} from "../04-repository/posts-mongo-query-repository";
 import {BlogsMongoQueryRepository} from "../../02-blogs/04-repository/blogs-mongo-query-repository";
 import {PostsService} from "../03-service/posts-service";
+import {InputLikeType} from "../../types/input-output-types/comment-type";
 
 export class PostsController {
     constructor(
         protected postsService: PostsService,
         protected postsMongoQueryRepository: PostsMongoQueryRepository,
         protected blogsMongoQueryRepository: BlogsMongoQueryRepository
-    ) {}
+    ) {
+    }
 
     async findPosts(req: Request<{}, {}, {}, InputPostQueryType>,
                     res: Response<OutputPostQueryType>) {
         const query = sortNPagingPostQuery(req.query)
-        const posts = await this.postsMongoQueryRepository.find(query)
+        const posts = await this.postsMongoQueryRepository.find(query, req.headers.authorization)
         return res.status(200).json(posts)
     }
 
@@ -34,7 +36,7 @@ export class PostsController {
             return
         }
         const query = sortNPagingPostQuery(req.query)
-        const posts = await this.postsMongoQueryRepository.findPostsByBlogId(query, req.params.blogId)
+        const posts = await this.postsMongoQueryRepository.findPostsByBlogId(query, req.params.blogId, req.headers.authorization)
         if (posts) {
             res.status(200).send(posts)
         } else {
@@ -48,7 +50,7 @@ export class PostsController {
             res.sendStatus(404)
             return
         }
-        const foundPost = await this.postsMongoQueryRepository.findById(req.params.id)
+        const foundPost = await this.postsMongoQueryRepository.findById(req.params.id, req.headers.authorization)
         if (foundPost) {
             res.status(200).json(foundPost)
         } else {
@@ -107,5 +109,24 @@ export class PostsController {
         } else {
             res.sendStatus(404)
         }
+    }
+
+    async updatePostLikeStatus(req: Request<{ id: string }, {}, InputLikeType>,
+                               res: Response) {
+        if (!ObjectId.isValid(req.params.id)) {
+            res.sendStatus(404)
+            return
+        }
+        const post = await this.postsMongoQueryRepository.findById(req.params.id)
+        if (!post) {
+            res.sendStatus(404)
+            return
+        }
+        const isUpdate = await this.postsService.updateLikeStatus(req.params.id, req.headers.authorization!, req.body.likeStatus)
+        if (isUpdate) {
+            res.sendStatus(204)
+            return
+        }
+        res.sendStatus(505)
     }
 }

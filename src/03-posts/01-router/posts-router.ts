@@ -2,7 +2,7 @@ import {Router} from "express"
 import {authBasicMiddleware} from "../../middlewares/auth-basic-middleware";
 import {errorsValidationResultMiddleware} from "../../middlewares/errors-validation-middleware";
 import {postBodyValidation} from "../../validators/posts-validator";
-import {commentBodyValidation} from "../../validators/comments-validator";
+import {commentBodyValidation, likeStatusValidator} from "../../validators/comments-validator";
 import {authBearerMiddleware} from "../../middlewares/auth-bearer-middleware";
 import {postsController} from "../../classes/composition-root/posts-composition";
 import {commentsController} from "../../classes/composition-root/comments-composition";
@@ -39,3 +39,8 @@ postsRouter.post('/:postId/comments',
 
 postsRouter.get('/:postId/comments',
     commentsController.findCommentsByParamsPostId.bind(commentsController))
+
+postsRouter.put('/:id/like-status',
+    authBearerMiddleware,
+    likeStatusValidator,
+    postsController.updatePostLikeStatus.bind(postsController))

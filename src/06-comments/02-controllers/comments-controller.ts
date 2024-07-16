@@ -128,6 +128,6 @@ export class CommentsController {
             res.sendStatus(204)
             return
         }
-        res.sendStatus(500)
+        res.sendStatus(505)
     }
 }

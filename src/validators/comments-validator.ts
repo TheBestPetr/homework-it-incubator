@@ -14,7 +14,7 @@ export const commentBodyValidation = [
         )
 ]
 
-export const commentLikeStatusValidator = [
+export const likeStatusValidator = [
     body('likeStatus')
         .isString()
         .notEmpty()

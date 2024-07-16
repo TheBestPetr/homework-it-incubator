@@ -1,4 +1,18 @@
 import {SortDirection} from "mongodb";
+import {LikeStatus} from "./comment-type";
+
+export type LikeDetailsType = {
+    addedAt: string
+    userId: string
+    login: string
+}
+
+export type ExtendedLikesInfoType = {
+    likesCount: number
+    dislikesCount: number
+    myStatus: LikeStatus
+    newestLikes?: LikeDetailsType[]
+}
 
 export type OutputPostType = {
     id: string
@@ -8,6 +22,7 @@ export type OutputPostType = {
     blogId: string
     blogName: string
     createdAt: string
+    extendedLikesInfo: ExtendedLikesInfoType
 }
 
 export type InputPostType = {

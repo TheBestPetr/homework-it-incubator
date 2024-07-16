@@ -5,6 +5,11 @@ export class PostClass {
         public content: string,
         public blogId: string,
         public blogName: string,
-        public createdAt: string) {
+        public createdAt: string,
+        public likesInfo: {
+            likesCount: number,
+            dislikesCount: number
+        }
+    ) {
     }
 }

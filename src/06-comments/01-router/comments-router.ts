@@ -1,7 +1,6 @@
 import {Router} from "express";
 import {
-    commentBodyValidation,
-    commentLikeStatusValidator,
+    commentBodyValidation, likeStatusValidator,
 } from "../../validators/comments-validator";
 import {errorsValidationResultMiddleware} from "../../middlewares/errors-validation-middleware";
 import {authBearerMiddleware} from "../../middlewares/auth-bearer-middleware";
@@ -24,7 +23,7 @@ commentsRouter.delete('/:commentId',
 
 commentsRouter.put('/:commentId/like-status',
     authBearerMiddleware,
-    commentLikeStatusValidator,
+    likeStatusValidator,
     errorsValidationResultMiddleware,
     commentsController.updateCommentLikeStatus.bind(commentsController)
 )

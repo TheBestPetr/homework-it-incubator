@@ -9,6 +9,7 @@ export const SETTINGS = {
     DB_COLLECTION_NAME: {
         BLOG: process.env.BLOG_COLLECTION_NAME || '',
         POST: process.env.POST_COLLECTION_NAME || '',
+        POST_LIKES_INFO: process.env.POST_LIKES_INFO_COLLECTION_NAME || '',
         USER: process.env.USER_COLLECTION_NAME || '',
         COMMENT: process.env.COMMENT_COLLECTION_NAME || '',
         COMMENT_LIKES_INFO: process.env.COMMENT_LIKES_INFO_COLLECTION_NAME || '',

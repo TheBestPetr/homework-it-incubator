@@ -3,7 +3,7 @@ import {db} from "../db/db";
 import {
     BlogModel, CommentLikeInfoModel,
     CommentModel,
-    DeviceModel,
+    DeviceModel, PostLikeInfoModel,
     PostModel,
     RefreshTokenBlacklistModel,
     ReqCountModel,
@@ -23,5 +23,6 @@ export const TestingAllData = async (req: Request, res: Response) => {
     await DeviceModel.deleteMany()
     await ReqCountModel.deleteMany()
     await CommentLikeInfoModel.deleteMany()
+    await PostLikeInfoModel.deleteMany()
     res.status(204).send('you delete all data')
 }
