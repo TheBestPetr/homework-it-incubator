@@ -3,7 +3,7 @@ import {PostLikeInfoModel} from "../../db/mongo/mongo-db";
 import {PostDbLikesInfo} from "../../types/db-types/post-like-info-db-type";
 
 export class PostLikesInfoMongoRepository {
-    async findLikesInfo(postId: string, userId: string): Promise<null | PostDbLikesInfo> {
+    async findLikesInfo(postId: string, userId: string): Promise<PostDbLikesInfo | null> {
         const result = await PostLikeInfoModel.findOne({postId: postId, userId: userId})
         if (result) {
             return result
@@ -24,7 +24,7 @@ export class PostLikesInfoMongoRepository {
 
     async findNewestLikes(postId: string): Promise<PostDbLikesInfo[] | null> {
         const newestLikes = await PostLikeInfoModel
-            .find({postId: postId})
+            .find({postId: postId, status: 'Like'})
             .sort({createdAt: -1})
             .limit(3)
             .lean()

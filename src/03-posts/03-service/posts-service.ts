@@ -86,14 +86,14 @@ export class PostsService {
         const postLikesInfo = await this.postLikeInfoMongoRepository.findLikesInfo(postId, userId)
         const user = await this.usersMongoQueryRepository.findById(userId)
         if (!postLikesInfo?.status) {
-            const newCommentLikeInfo = new PostLikeInfoClass(
+            const newPostLikeInfo = new PostLikeInfoClass(
                 postId,
                 userId,
                 user!.login,
                 inputLikeStatus,
                 new Date().toISOString()
             )
-            const createLikeInfo = await this.postLikeInfoMongoRepository.createNewLikeInfo(newCommentLikeInfo)
+            const createLikeInfo = await this.postLikeInfoMongoRepository.createNewLikeInfo(newPostLikeInfo)
             const updateLikesCount = await this.postsMongoRepository.updateAddPostLikesCount(postId, inputLikeStatus)
             return createLikeInfo && updateLikesCount
         }

@@ -44,14 +44,13 @@ export class CommentsMongoQueryRepository {
             .skip((query.pageNumber - 1) * query.pageSize)
             .limit(query.pageSize)
             .lean()
-        let status = null
         const totalCount = await CommentModel.countDocuments({postId: postId})
         if (token) {
             const jwtService = new JwtService()
             const commentLikesInfoMongoRepository = new CommentLikesInfoMongoRepository()
             const userId = await jwtService.getUserIdByToken(token.split(' ')[1])
             const itemsWithStatus = await Promise.all(items.map(async comment => {
-                    status = await commentLikesInfoMongoRepository.isStatusExist(comment._id.toString(), userId)
+                    const status = await commentLikesInfoMongoRepository.isStatusExist(comment._id.toString(), userId)
                     return {
                         id: comment._id.toString(),
                         content: comment.content,

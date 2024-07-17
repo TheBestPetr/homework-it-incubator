@@ -3,6 +3,7 @@ import {InputPostQueryType, OutputPostQueryType, OutputPostType} from "../../typ
 import {ObjectId} from "mongodb";
 import {JwtService} from "../../application/jwt-service/jwt-service";
 import {PostLikesInfoMongoRepository} from "./post-likes-info-mongo-repository";
+import {LikeStatus} from "../../types/input-output-types/comment-type";
 
 export class PostsMongoQueryRepository {
     async find(query: InputPostQueryType, token?: string): Promise<OutputPostQueryType> {
@@ -12,14 +13,13 @@ export class PostsMongoQueryRepository {
             .skip((query.pageNumber - 1) * query.pageSize)
             .limit(query.pageSize)
             .lean()
-        let postLikesInfo = null
         const totalCount = await PostModel.countDocuments()
         if (token) {
             const jwtService = new JwtService()
             const postLikesInfoMongoRepository = new PostLikesInfoMongoRepository()
             const userId = await jwtService.getUserIdByToken(token.split(' ')[1])
             const itemsWitsStatusNNewestLikes = await Promise.all(items.map(async post => {
-                postLikesInfo = await postLikesInfoMongoRepository.findLikesInfo(post._id.toString(), userId)
+                const postLikesInfo = await postLikesInfoMongoRepository.findLikesInfo(post._id.toString(), userId)
                 const newestLikes = await postLikesInfoMongoRepository.findNewestLikes(post._id.toString())
                 return {
                     id: post._id.toString(),
@@ -52,6 +52,7 @@ export class PostsMongoQueryRepository {
         const itemsWithNewestLikes = await Promise.all(items.map(async post => {
             const postLikesInfoMongoRepository = new PostLikesInfoMongoRepository()
             const newestLikes = await postLikesInfoMongoRepository.findNewestLikes(post._id.toString())
+            const status: LikeStatus = 'None'
             return {
                 id: post._id.toString(),
                 title: post.title,
@@ -63,7 +64,7 @@ export class PostsMongoQueryRepository {
                 extendedLikesInfo: {
                     likesCount: post.likesInfo.likesCount,
                     dislikesCount: post.likesInfo.dislikesCount,
-                    myStatus: 'None',
+                    myStatus: status,
                     newestLikes: newestLikes?.map(like => ({
                         addedAt: like.createdAt,
                         userId: like.userId,
@@ -88,14 +89,13 @@ export class PostsMongoQueryRepository {
             .skip((query.pageNumber - 1) * query.pageSize)
             .limit(query.pageSize)
             .lean()
-        let postLikesInfo = null
         const totalCount = await PostModel.countDocuments({blogId: blogId})
         if (token) {
             const jwtService = new JwtService()
             const postLikesInfoMongoRepository = new PostLikesInfoMongoRepository()
             const userId = await jwtService.getUserIdByToken(token.split(' ')[1])
             const itemsWitsStatusNNewestLikes = await Promise.all(items.map(async post => {
-                postLikesInfo = await postLikesInfoMongoRepository.findLikesInfo(post._id.toString(), userId)
+                const postLikesInfo = await postLikesInfoMongoRepository.findLikesInfo(post._id.toString(), userId)
                 const newestLikes = await postLikesInfoMongoRepository.findNewestLikes(post._id.toString())
                 return {
                     id: post._id.toString(),
@@ -128,6 +128,7 @@ export class PostsMongoQueryRepository {
         const itemsWithNewestLikes = await Promise.all(items.map(async post => {
             const postLikesInfoMongoRepository = new PostLikesInfoMongoRepository()
             const newestLikes = await postLikesInfoMongoRepository.findNewestLikes(post._id.toString())
+            const status: LikeStatus = 'None'
             return {
                 id: post._id.toString(),
                 title: post.title,
@@ -139,7 +140,7 @@ export class PostsMongoQueryRepository {
                 extendedLikesInfo: {
                     likesCount: post.likesInfo.likesCount,
                     dislikesCount: post.likesInfo.dislikesCount,
-                    myStatus: 'None',
+                    myStatus: status,
                     newestLikes: newestLikes?.map(like => ({
                         addedAt: like.createdAt,
                         userId: like.userId,
