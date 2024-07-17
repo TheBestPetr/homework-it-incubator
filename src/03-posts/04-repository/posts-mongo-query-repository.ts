@@ -37,7 +37,7 @@ export class PostsMongoQueryRepository {
                             addedAt: like.createdAt,
                             userId: like.userId,
                             login: like.userLogin
-                        }))
+                        })) || []
                     }
                 }
             }))
@@ -69,7 +69,7 @@ export class PostsMongoQueryRepository {
                         addedAt: like.createdAt,
                         userId: like.userId,
                         login: like.userLogin
-                    }))
+                    })) || []
                 }
             }
         }))
@@ -113,7 +113,7 @@ export class PostsMongoQueryRepository {
                             addedAt: like.createdAt,
                             userId: like.userId,
                             login: like.userLogin
-                        }))
+                        })) || []
                     }
                 }
             }))
@@ -145,7 +145,7 @@ export class PostsMongoQueryRepository {
                         addedAt: like.createdAt,
                         userId: like.userId,
                         login: like.userLogin
-                    }))
+                    })) || []
                 }
             }
         }))
@@ -186,7 +186,7 @@ export class PostsMongoQueryRepository {
                         addedAt: like.createdAt,
                         userId: like.userId,
                         login: like.userLogin
-                    }))
+                    })) || []
                 }
             }
         }

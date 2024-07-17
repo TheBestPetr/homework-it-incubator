@@ -40,6 +40,7 @@ export class PostsService {
                 likesCount: insertedPost.likesInfo.likesCount,
                 dislikesCount: insertedPost.likesInfo.dislikesCount,
                 myStatus: 'None',
+                newestLikes: []
             }
         }
     }
@@ -68,6 +69,7 @@ export class PostsService {
                 likesCount: insertedPost.likesInfo.likesCount,
                 dislikesCount: insertedPost.likesInfo.dislikesCount,
                 myStatus: 'None',
+                newestLikes: []
             }
         }
     }

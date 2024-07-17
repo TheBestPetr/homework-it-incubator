@@ -11,7 +11,7 @@ export type ExtendedLikesInfoType = {
     likesCount: number
     dislikesCount: number
     myStatus: LikeStatus
-    newestLikes?: LikeDetailsType[]
+    newestLikes: LikeDetailsType[] | []
 }
 
 export type OutputPostType = {
