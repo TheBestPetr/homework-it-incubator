@@ -23,5 +23,4 @@ export type UserDbType = {
     email: string
     createdAt: string
     emailConfirmation: EmailConfirmationType
-    postLikeInfo?: postLikeInfoType
 }

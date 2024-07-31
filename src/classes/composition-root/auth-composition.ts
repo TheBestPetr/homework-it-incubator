@@ -29,5 +29,4 @@ const authService = new AuthService(
 export const authController = new AuthController(
     authService,
     usersMongoQueryRepository,
-    jwtService
 )

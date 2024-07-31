@@ -1,7 +1,6 @@
 import {Request, Response} from "express";
 import {InputLoginType} from "../../types/input-output-types/auth-type";
 import {AuthService} from "../03-servise/auth-service";
-import {JwtService} from "../../application/jwt-service/jwt-service";
 import {UsersMongoQueryRepository} from "../../04-users/04-repository/users-mongo-query-repository";
 import {InputUserType, OutputIType} from "../../types/input-output-types/user-type";
 
@@ -9,7 +8,6 @@ export class AuthController {
     constructor(
         protected authService: AuthService,
         protected usersMongoQueryRepository: UsersMongoQueryRepository,
-        protected jwtService: JwtService
     ) {}
 
     async loginUser(req: Request<{}, {}, InputLoginType>,
